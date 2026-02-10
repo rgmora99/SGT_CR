@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica FacturaElectronica_V4.3.xsd">
+  <Clave>50601082500310171352000300001010000505582119089891</Clave>
+  <CodigoActividad>523304</CodigoActividad>
+  <NumeroConsecutivo>00300001010000505582</NumeroConsecutivo>
+  <FechaEmision>2025-08-01T00:00:00-06:00</FechaEmision>
+  <Emisor>
+    <Nombre>Unimart Alfa S.A.</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101713520</Numero>
+    </Identificacion>
+    <NombreComercial>Unimart.com</NombreComercial>
+    <Ubicacion>
+      <Provincia>1</Provincia>
+      <Canton>01</Canton>
+      <Distrito>09</Distrito>
+      <Barrio>13</Barrio>
+      <OtrasSenas>Calle 128, Via 104</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>41007616</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>hola@unimart.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>Diana Hernandez Garita</Nombre>
+    <Identificacion>
+      <Tipo>01</Tipo>
+      <Numero>118140010</Numero>
+    </Identificacion>
+    <Ubicacion>
+      <Provincia>3</Provincia>
+      <Canton>01</Canton>
+      <Distrito>01</Distrito>
+      <Barrio>01</Barrio>
+      <OtrasSenas>Calle contiguo al Mcdonalds de Concepcion, ultima cada a mano izquierda</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>86065382</NumTelefono>
+    </Telefono>
+    <CorreoElectronico>ruleymorac@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <PlazoCredito>0</PlazoCredito>
+  <MedioPago>04</MedioPago>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <Codigo>3899910000000</Codigo>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>RERE.09000.0198.68</Codigo>
+      </CodigoComercial>
+      <Cantidad>1</Cantidad>
+      <UnidadMedida>1</UnidadMedida>
+      <Detalle>Soprano Vaso Térmico Everest, 850 Ml</Detalle>
+      <PrecioUnitario>16548.67</PrecioUnitario>
+      <MontoTotal>16548.67</MontoTotal>
+      <SubTotal>16548.67</SubTotal>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13</Tarifa>
+        <Monto>2151.33</Monto>
+      </Impuesto>
+      <ImpuestoNeto>2151.33</ImpuestoNeto>
+      <MontoTotalLinea>18700</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <Codigo>6802100000000</Codigo>
+      <Cantidad>1</Cantidad>
+      <UnidadMedida>1</UnidadMedida>
+      <Detalle>Shipping: Unimart Delivery - Mismo Día</Detalle>
+      <PrecioUnitario>2831.86</PrecioUnitario>
+      <MontoTotal>2831.86</MontoTotal>
+      <SubTotal>2831.86</SubTotal>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13</Tarifa>
+        <Monto>368.14</Monto>
+      </Impuesto>
+      <ImpuestoNeto>368.14</ImpuestoNeto>
+      <MontoTotalLinea>3200</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>1</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0</TotalServGravados>
+    <TotalServExentos>0</TotalServExentos>
+    <TotalServExonerado>0</TotalServExonerado>
+    <TotalMercanciasGravadas>19380.53</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0</TotalMercanciasExentas>
+    <TotalMercExonerada>0</TotalMercExonerada>
+    <TotalGravado>19380.53</TotalGravado>
+    <TotalExento>0</TotalExento>
+    <TotalExonerado>0</TotalExonerado>
+    <TotalVenta>19380.53</TotalVenta>
+    <TotalVentaNeta>19380.53</TotalVentaNeta>
+    <TotalImpuesto>2519.47</TotalImpuesto>
+    <TotalComprobante>21900</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto codigo="ID">943573</OtroTexto>
+    <OtroTexto codigo="REF">#554289</OtroTexto>
+    <OtroTexto>Generado por: www.comprobanteselectronicoscr.com</OtroTexto>
+  </Otros><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-939294338"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"/><ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/><ds:DigestValue>uKsSC43kzOxDYtjx4ipSmiDpaZvUDvBztX/2ew3Y1cFdSikDHURrBeOjIchF+5eJQz2U27Jy86lRMo5zlBvW+Q==</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-631432967"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/><ds:DigestValue>Ih0l8SyyRnQnMdl4vnz+T2MHtu7aIoodc2RftzN1TZ3Aqz1vWwWfuGB7zmf6wuuCXihek83OQTaApp1WtcNw7A==</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>SxdPYg2iATq8ynHDZzY5kIgMEd6ERCfLu29UAEZgewGauO8mcKaBZPpH8hazrDAM2a1FyMrREICRrtIY9bENJfjqP6+M9kh0hGdiyVwwLLGdR0A8QTte/BE+lWpl9PCOQOp/1SiC4TRI31M24ukR17oqYZ1MPc5yKUbFCnB/4N7HDvcXlj/nhSM00F9eJqwLLSfC/bwnIRH7bA5z5Z8Q2OCYX/Q0vXJa8vLtNUYUsfg9P6zSimrSS6tSIMrVeJHttO5kqjcGe0RzaWo+JfVTDOCxGurOLaKlczhZsG0BUZFoEA4mNHp++RWvJpv6ZTewQC7tMg1ZfPLX25lXHPxvOw==</ds:SignatureValue><ds:KeyInfo><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>k6dMtS35gTOPQZ57xPlzFuXM/iilXgx2D76wZSzRK9/Sw/pChxIGKxQDiaMX44HzlJTgIGcerm7A7gKdH104WnH9iXClkKMcTyZ45KTFSccDNL4iUNLCIvUwVUbwi4yWCtQ9eXTtwrdqAhWzF1fsQg+eP4vxFU386qmnfWVMCYwJWko6+01ZFHkh3qQG+k9rUMMY1s9CvjBcqD7bCwW6jqP86ymwooI+890zq1bwKGM2AbqHPsKRUMBgvRneNR2Smmi0NpzmqrxhDMUU6DDkwX1K3x+NcZHXoS+mzusKi9qWpJfanDppObBuH3DUP5pfHWdxliLQ33h030zsGconKw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue><ds:X509Data><ds:X509IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1648770599767</ds:X509SerialNumber></ds:X509IssuerSerial><ds:X509SubjectName>CN=UNIMART ALFA SOCIEDAD ANONIMA, OU=CPJ, O=PERSONA JURIDICA, C=CR, 2.5.4.5=#131043504A2D332D3130312D373133353230</ds:X509SubjectName><ds:X509Certificate>MIIFHjCCAwagAwIBAgIGAX/iYstXMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjIwMzMxMjM0OTU5WhcNMjYwMzMwMjM0OTU5WjB5MRkwFwYDVQQFExBDUEotMy0xMDEtNzEzNTIwMQswCQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElDQTEMMAoGA1UECwwDQ1BKMSYwJAYDVQQDDB1VTklNQVJUIEFMRkEgU09DSUVEQUQgQU5PTklNQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJOnTLUt+YEzj0Gee8T5cxblzP4opV4Mdg++sGUs0Svf0sP6QocSBisUA4mjF+OB85SU4CBnHq5uwO4CnR9dOFpx/YlwpZCjHE8meOSkxUnHAzS+IlDSwiL1MFVG8IuMlgrUPXl07cK3agIVsxdX7EIPnj+L8RVN/Oqpp31lTAmMCVpKOvtNWRR5Id6kBvpPa1DDGNbPQr4wXKg+2wsFuo6j/OspsKKCPvPdM6tW8ChjNgG6hz7CkVDAYL0Z3jUdkppotDac5qq8YQzFFOgw5MF9St8fjXGR16Evps7rCovalqSX2pw6aTmwbh9w1D+aXx1ncZYi0N94dN9M7BnKJysCAwEAAaOByjCBxzAfBgNVHSMEGDAWgBQ7bVf11nzpnhACIEHjvRrMz7NOlTAdBgNVHQ4EFgQU+IySYsJlCuDMQJq0MjPuKjs49ZwwCwYDVR0PBAQDAgbAMBMGA1UdJQQMMAoGCCsGAQUFBwMEMGMGCCsGAQUFBwEBBFcwVTBTBggrBgEFBQcwAoZHaHR0cHM6Ly9wa2kuY29tcHJvYmFudGVzZWxlY3Ryb25pY29zLmdvLmNyL3Byb2QvaW50ZXJtZWRpYXRlLXBqLXBlbS5jcnQwDQYJKoZIhvcNAQELBQADggIBACoDGQpnas9X/n5XG4WpYzzJdXSYEDX4ocF5oofou4sQwajk7A2VYjXumEHJ6WLJaIpyDIDkSB/MLHj14MSx0aBQyGelPA/G9frtsRVn1TdDBqo5WJ437/Oc1yclavDOWqZwZnNIf+TA0pr2CydNRMGHxjx5N/h8jPGueTS/q5dYnF8G7iPK3GKaRnHXwli+k8xUuJZa1SicVBwAYUHNSLk5gABoNLq7Pdyvn8yIWU8UPee0csNVIkCSaISKwC6Pi3d4BrPvUiN70Ya5zzrA8ugtHSTcs3lZFgbVuYdqYcXBVFjvY7ckaX6lIR7AO0tOEj59rDmyjdXuGdIhBCfqeGRz+1xw/forvdoIwf+2PfCBaKVOvvD07ul0dfnnh9vw/JsEAXWe+f01BExRIb3er3t6FJ4VYXD/rP2Fzyu3adTuYH8LQyAFKsdVuEahGRxZKy6dkhBKd1r2JZ7+q+9etPonRhLRL/aMPYurX4CtrPl0Jgs2F6oS+KVQ30EQsiL+h89DE6WiNNTnK8Ha9fDwAGCh0H5uXeqARzLbkq+bNWcS7WCGaoi1D8bNTXCJwrr42it5XdUnse9S9cMYwgTbPFLT+vYEGZYlvyRcL/bkUFoTQygj56oHqWDFetYGs48NZQuqtHJ6xqa+hcuf4V03bAZg90Vaxb1SfnmA35nA1sdf</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xadesv141="http://uri.etsi.org/01903/v1.4.1#" Target="#Signature-939294338"><xades:SignedProperties Id="SignedProperties-631432967"><xades:SignedSignatureProperties><xades:SigningTime>2025-08-01T17:58:13.600Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/><ds:DigestValue>xyh+ZpEN2bjKI/QylFrxl7AJDNICHjORegkM0DqxguH3rawqsrsTricHaSBXYRAjzHdTMHUSVcmzVrdz0woyaQ==</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1648770599767</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature>
+</FacturaElectronica>

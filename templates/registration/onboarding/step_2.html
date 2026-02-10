@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil fiscal</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+
+<div class="login-page">
+  <div class="login-card">
+
+    <h5 class="text-center mb-2">Perfil fiscal</h5>
+    <p class="text-muted text-center mb-4">
+      Necesitamos esta información para calcular impuestos y obligaciones.
+    </p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      {% if negocio %}
+        <div class="alert alert-light border small mb-3">
+          <strong>Negocio:</strong> {{ negocio.nombre_comercial }}
+        </div>
+      {% endif %}
+
+      <!-- Tipo de identificación -->
+      <div class="form-group text-left">
+        <label>Tipo de identificación</label>
+        {{ form.tipo_identificacion }}
+        {% if form.tipo_identificacion.errors %}
+          <small class="text-danger">{{ form.tipo_identificacion.errors.0 }}</small>
+        {% endif %}
+      </div>
+
+      <!-- Identificación -->
+      <div class="form-group text-left">
+        <label>Identificación</label>
+        {{ form.identificacion }}
+        {% if form.identificacion.errors %}
+          <small class="text-danger">{{ form.identificacion.errors.0 }}</small>
+        {% endif %}
+      </div>
+
+      <!-- Régimen IVA -->
+      <div class="form-group text-left">
+        <label>Régimen IVA</label>
+        {{ form.regimen_iva }}
+        {% if form.regimen_iva.errors %}
+          <small class="text-danger">{{ form.regimen_iva.errors.0 }}</small>
+        {% endif %}
+      </div>
+
+      <!-- Aplica IVA -->
+      <div class="form-group form-check text-left">
+        {{ form.aplica_iva }}
+        <label class="form-check-label" for="{{ form.aplica_iva.id_for_label }}">
+          ¿Aplica IVA?
+        </label>
+      </div>
+
+      <!-- Porcentaje IVA -->
+      <div class="form-group text-left" id="grupo-porc-iva">
+        <label>Porcentaje IVA (%)</label>
+        {{ form.porc_iva }}
+        <small class="text-muted">Ejemplo: 13</small>
+        {% if form.porc_iva.errors %}
+          <small class="text-danger d-block">{{ form.porc_iva.errors.0 }}</small>
+        {% endif %}
+      </div>
+
+      <!-- Periodicidad IVA -->
+      <div class="form-group text-left">
+        <label>Periodicidad del IVA</label>
+        {{ form.periodo_iva }}
+        {% if form.periodo_iva.errors %}
+          <small class="text-danger">{{ form.periodo_iva.errors.0 }}</small>
+        {% endif %}
+      </div>
+
+      <!-- Declara renta -->
+      <div class="form-group form-check text-left">
+        {{ form.declara_renta }}
+        <label class="form-check-label" for="{{ form.declara_renta.id_for_label }}">
+          ¿Declara renta?
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mt-3">
+        Finalizar
+      </button>
+    </form>
+
+    <div class="text-center mt-3 small">
+      <a href="{% url 'accounts:onboarding_negocio' %}">← Volver</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- =========================
+     JS – LÓGICA IVA
+========================== -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const aplicaIVA = document.getElementById("{{ form.aplica_iva.id_for_label }}");
+  const grupoPorcIVA = document.getElementById("grupo-porc-iva");
+  const inputPorcIVA = document.getElementById("{{ form.porc_iva.id_for_label }}");
+
+  function actualizarIVA() {
+    if (aplicaIVA.checked) {
+      grupoPorcIVA.style.display = "block";
+      inputPorcIVA.required = true;
+
+      // Autollenar 13 si está vacío
+      if (!inputPorcIVA.value) {
+        inputPorcIVA.value = "13";
+      }
+    } else {
+      grupoPorcIVA.style.display = "none";
+      inputPorcIVA.required = false;
+      inputPorcIVA.value = "";
+    }
+  }
+
+  aplicaIVA.addEventListener("change", actualizarIVA);
+
+  // Ejecutar al cargar
+  actualizarIVA();
+});
+</script>
+
+</body>
+</html>

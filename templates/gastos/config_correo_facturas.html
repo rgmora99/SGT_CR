@@ -1,0 +1,73 @@
+{% extends "base/menu.html" %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static '/css/gastos/config_correo_facturas.css' %}">
+
+<div class="container-fluid">
+  <div class="hero-header mb-4">
+    <h2>Conexión de correo</h2>
+    <p>Configura el correo donde llegan tus facturas de compra (XML/PDF).</p>
+  </div>
+
+  <div class="card correo-card">
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label>Servidor IMAP</label>
+          {{ form.imap_host }}
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label>Puerto</label>
+          {{ form.imap_port }}
+        </div>
+
+        <div class="col-md-3 mb-3 d-flex align-items-end">
+          <div class="form-check">
+            {{ form.imap_ssl }}
+            <label class="form-check-label ms-1">SSL</label>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label>Correo</label>
+          {{ form.email }}
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label>Usuario (IMAP)</label>
+          {{ form.username }}
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label>Contraseña / App Password</label>
+          {{ form.password }}
+          <small class="text-muted">Recomendado: App Password si es Gmail/Outlook.</small>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label>Carpeta</label>
+          {{ form.carpeta }}
+          <small class="text-muted">Ej: INBOX</small>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <div class="form-check">
+            {{ form.activo }}
+            <label class="form-check-label ms-1">Activo</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <a class="btn btn-light" href="{% url 'gastos:bandeja_facturas' %}">Volver</a>
+        <button class="btn btn-primary">Guardar y probar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

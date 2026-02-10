@@ -1,0 +1,180 @@
+/* =========================================================
+   LOGIN – PLATAFORMA INSTITUCIONAL
+   Correos de Costa Rica (Libro de Marca)
+========================================================= */
+
+/* =========================
+   VARIABLES DE MARCA
+========================= */
+:root {
+  --ccr-azul: #003057;
+  --ccr-azul-sec: #115E67;
+  --ccr-verde: #78BE21;
+  --ccr-verde-claro: #C4D600;
+  --ccr-celeste: #00AFD7;
+
+  --bg-general: #f7f9fc;
+  --texto-principal: #1f2937;
+  --texto-secundario: #6b7280;
+}
+
+/* =========================
+   BASE
+========================= */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Inter", "Century Gothic", sans-serif;
+  background: var(--bg-general);
+}
+
+/* =========================
+   CONTENEDOR LOGIN
+========================= */
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+/* Overlay institucional */
+.login-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,48,87,0.55) 0%,
+    rgba(17,94,103,0.45) 50%,
+    rgba(120,190,33,0.25) 100%
+  );
+  z-index: 0;
+}
+
+/* =========================
+   TARJETA LOGIN
+========================= */
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 2.2rem 2.4rem;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+  border: 1px solid rgba(0,0,0,0.05);
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   LOGO
+========================= */
+.login-card img {
+  max-height: 70px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+/* =========================
+   TEXTOS
+========================= */
+.text-navy {
+  color: var(--ccr-azul);
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--ccr-azul);
+  font-size: 0.9rem;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.input-group-text {
+  background: #f1f5f9;
+  border: 1px solid #d1d5db;
+  border-radius: 10px 0 0 10px;
+  color: var(--ccr-azul);
+}
+
+.form-control {
+  border: 1px solid #d1d5db;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.95rem;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.form-control:focus {
+  border-color: var(--ccr-verde);
+  box-shadow: 0 0 0 2px rgba(120,190,33,0.25);
+}
+
+/* =========================
+   BOTÓN PRINCIPAL
+========================= */
+.btn-primary {
+  background: var(--ccr-azul);
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all .25s ease;
+}
+
+.btn-primary:hover {
+  background: var(--ccr-verde);
+  color: var(--ccr-azul);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* =========================
+   TOGGLE PASSWORD
+========================= */
+.toggle-pass {
+  background: #f1f5f9;
+  border: 1px solid #d1d5db;
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  color: var(--texto-secundario);
+}
+
+.toggle-pass:hover {
+  color: var(--ccr-azul);
+}
+
+/* =========================
+   FOOTER
+========================= */
+.login-footer {
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--texto-secundario);
+  text-align: center;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 576px) {
+  .login-card {
+    padding: 1.6rem 1.6rem;
+  }
+}

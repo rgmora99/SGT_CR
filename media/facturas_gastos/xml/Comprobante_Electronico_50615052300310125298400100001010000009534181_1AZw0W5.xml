@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica https://www.hacienda.go.cr/ATV/ComprobanteElectronico/docs/esquemas/2016/v4.3/FacturaElectronica_V4.3.xsd">
+<Clave>50615052300310125298400100001010000009534181872545</Clave>
+<CodigoActividad>851909</CodigoActividad>
+<NumeroConsecutivo>00100001010000009534</NumeroConsecutivo>
+<FechaEmision>2023-05-15T14:20:47</FechaEmision>
+<Emisor>
+<Nombre>Roma Graf Imagenes Medicas S.A.</Nombre>
+<Identificacion>
+<Tipo>02</Tipo>
+<Numero>3101252984</Numero>
+</Identificacion>
+<NombreComercial>Roma Graf Imagenes Medicas S.A.</NombreComercial>
+<Ubicacion>
+<Provincia>1</Provincia>
+<Canton>18</Canton>
+<Distrito>03</Distrito>
+<OtrasSenas>Plaza Cronos tercer piso, ala este.</OtrasSenas>
+</Ubicacion>
+<Telefono>
+<CodigoPais>506</CodigoPais>
+<NumTelefono>22712552</NumTelefono>
+</Telefono>
+<Fax>
+<CodigoPais>0</CodigoPais>
+<NumTelefono>0</NumTelefono>
+</Fax>
+<CorreoElectronico>rosasolorzanou@yahoo.com</CorreoElectronico>
+</Emisor>
+<Receptor>
+<Nombre>OLGA MIRIAM CALVO MORA</Nombre>
+<Identificacion>
+<Tipo>01</Tipo>
+<Numero>108060798</Numero>
+</Identificacion>
+<Ubicacion>
+<Provincia>1</Provincia>
+<Canton>01</Canton>
+<Distrito>01</Distrito>
+<Barrio>01</Barrio>
+<OtrasSenas>01</OtrasSenas>
+</Ubicacion>
+<Telefono>
+<CodigoPais>506</CodigoPais>
+<NumTelefono>83396964</NumTelefono>
+</Telefono>
+<CorreoElectronico>ruleymorac@gmail.com</CorreoElectronico>
+</Receptor>
+<CondicionVenta>01</CondicionVenta>
+<PlazoCredito>0</PlazoCredito>
+<MedioPago>02</MedioPago>
+<DetalleServicio>
+<LineaDetalle>
+<NumeroLinea>1</NumeroLinea>
+<Codigo>9310205020102</Codigo>
+<CodigoComercial>
+<Tipo>04</Tipo>
+<Codigo>28</Codigo>
+</CodigoComercial>
+<Cantidad>1</Cantidad>
+<UnidadMedida>Sp</UnidadMedida>
+<Detalle>- BAAF- Biopsia Aguja Fina</Detalle>
+<PrecioUnitario>90000</PrecioUnitario>
+<MontoTotal>90000</MontoTotal>
+<SubTotal>90000</SubTotal>
+<Impuesto><Codigo>01</Codigo><CodigoTarifa>04</CodigoTarifa><Tarifa>4</Tarifa><Monto>3600</Monto></Impuesto><MontoTotalLinea>93600</MontoTotalLinea>
+</LineaDetalle>
+</DetalleServicio>
+
+<ResumenFactura>
+<CodigoTipoMoneda>
+<CodigoMoneda>CRC</CodigoMoneda>
+<TipoCambio>1</TipoCambio>
+</CodigoTipoMoneda>
+<TotalServGravados>90000</TotalServGravados>
+<TotalServExentos>0</TotalServExentos>
+<TotalServExonerado>0</TotalServExonerado>
+<TotalMercanciasGravadas>0</TotalMercanciasGravadas>
+<TotalMercanciasExentas>0</TotalMercanciasExentas>
+<TotalMercExonerada>0</TotalMercExonerada>
+<TotalGravado>90000</TotalGravado>
+<TotalExento>0</TotalExento>
+<TotalExonerado>0</TotalExonerado>
+<TotalVenta>90000</TotalVenta>
+<TotalDescuentos>0</TotalDescuentos>
+<TotalVentaNeta>90000</TotalVentaNeta>
+<TotalImpuesto>3600</TotalImpuesto>
+<TotalIVADevuelto>3600</TotalIVADevuelto>
+<TotalOtrosCargos>0</TotalOtrosCargos>
+<TotalComprobante>90000</TotalComprobante>
+</ResumenFactura>
+<Otros>
+<OtroTexto></OtroTexto>
+
+</Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-8918ec6f-b70e-4fb3-bcfb-5d6a0a988bbc"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-1986c821-9e8f-4d32-a83c-129eb85bd5aa" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>L3qfQv31Z2OJ1qOu7cpisc0g2GhjzIRUH0rOX0y2vic=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-8918ec6f-b70e-4fb3-bcfb-5d6a0a988bbc"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>c8e0fx7pgO2djHi9MyftU48f+6JoF6LbmEDOisq0S7c=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-8918ec6f-b70e-4fb3-bcfb-5d6a0a988bbc"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>XyU6gLDQQsfCf87Q9yTUZJ9xEqJ+4TSoFadUHV6Ix9I=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-8918ec6f-b70e-4fb3-bcfb-5d6a0a988bbc">ayZfLZNuOc+FznAvOeZ3qBBRrfhiX82Oqv6tjYc9hmVyl3OXLJHaQ/sk3oH5qrxvfdZoXSnZ2zRoPH3j7w2g/74TWeCo7FoGNJazSSEf4Vvz/NTChzRuQyrkaCXNythNyaH+bpQ1fCstlSUsjhVy2WYcQ1n5Vo2DfPgsRz+FR7qO0gdYS27LIDvRHc9fAjGq4zo00sFD5LJmeeX7WJv4g2JqmdHGhbPW7jPNBrCcsDjJbtG0JSzkw6vHItSQ504hOhw8C830Zzep4HYwZFXQy/ic9GyGNyGGKPVHOabasyxH5lDiQ09Frv5Uwhl4Ngax7aPxkKE+8+s02amUGuR3+Q==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-8918ec6f-b70e-4fb3-bcfb-5d6a0a988bbc"><ds:X509Data><ds:X509Certificate>MIIFLTCCAxWgAwIBAgIGAX3dfzAmMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjExMjIxMTQ1NzE5WhcNMjUxMjIwMTQ1NzE5WjCBhzEZMBcGA1UEBRMQQ1BKLTMtMTAxLTI1Mjk4NDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjE0MDIGA1UEAwwrUk9NQSBHUkFGIElNQUdFTkVTIE1FRElDQVMgU09DSUVEQUQgQU5PTklNQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAIDOnaRdtfze34KMoQ2KHxT2Ujco9k72nZF1M/9T3OgYII1vgXLIWZ4qOKlcckqN1OJJjxFPzlgzlOcioIXReHkfZVbXQK88SMOshiLa7yxJx9s7F2+dp1G0oJdZLP+srMQh2j6ijdw9bAjN7GjPHxK6dqJPLv6dV9Qk357e34ayw5fyev2R4bI+tzwNHrx71UYsqagzIC8NebFDAFLasr63YQdCA/6tekNJDN4OW48XLzzB+/O+g0RbNW28k44Q6VsFrkA199SLzCGCKguUYhI4zS7aRoZwT09kc87qsiXkWJ0BTwiz9MqlH6Tm3Vlv28DABLNk/tGHxF6KavViP1UCAwEAAaOByjCBxzAfBgNVHSMEGDAWgBQ7bVf11nzpnhACIEHjvRrMz7NOlTAdBgNVHQ4EFgQUWyBbn0gitvXobaa92ExRNmYGVfMwCwYDVR0PBAQDAgbAMBMGA1UdJQQMMAoGCCsGAQUFBwMEMGMGCCsGAQUFBwEBBFcwVTBTBggrBgEFBQcwAoZHaHR0cHM6Ly9wa2kuY29tcHJvYmFudGVzZWxlY3Ryb25pY29zLmdvLmNyL3Byb2QvaW50ZXJtZWRpYXRlLXBqLXBlbS5jcnQwDQYJKoZIhvcNAQELBQADggIBACmIw11Rpzt6mFjJJZkn+XwPwzxixtMSfZIzXU4s/YoxJFaA8CCyvnoNetf7tEh+IMm/UhQUINtqo6mZicaDNUpq6wVdVKCRGtRU+u7OusJ3vfOY86dXEY5t9o2DIA4PkN2Nn/sloVeU2ynNOyRM9nV5jmsBPCZY45evGy85UxyiINUIJ6SOMirmKHIKB3QPUfo2qinwdj5H5zSFrXmJaD3+zilJyKo75gMlIIyGabbFQ7y7kHv+MCbO15ql71KBKYDvr+QQzGlW8ynoOBBZpp9BC14gdZfTHvfgbPTeKbh9UA2Ir7MuO0yS48Nm3oVimEXqbodzcStb0xC2isjFO/RN/5lu1sEkpttCOv4jo3wc4xuN9pxbKRifV1vcTONQwYYUkqrCW/N7n9G9p5o356FewEml2Cjpf2W+qwiZACB8iBXZmh4t85Bf8jwouCQWXYPZdKhUwpe5jfatlbtTxvn+OdZwsHVBdzl6EodYl6EBqePA3VNfVOBTNTb7+XwUAL4XcVjcUA5dexwBh8uSDzFkQuoGD1SUbxK30yuVy2rIaJq2Nr//igDNfksKiAm4J9PPgCI/2/bUoTnNrBvNuByvhaI0ASJLhYhnhDE9anp1qZvB/ImIdjfVWyc21RQ93LNbELTEPHgae1iqdAW/39cwxFyupxomngnG/hXLEDX7</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>gM6dpF21/N7fgoyhDYofFPZSNyj2TvadkXUz/1Pc6BggjW+BcshZnio4qVxySo3U4kmPEU/OWDOU5yKghdF4eR9lVtdArzxIw6yGItrvLEnH2zsXb52nUbSgl1ks/6ysxCHaPqKN3D1sCM3saM8fErp2ok8u/p1X1CTfnt7fhrLDl/J6/ZHhsj63PA0evHvVRiypqDMgLw15sUMAUtqyvrdhB0ID/q16Q0kM3g5bjxcvPMH7876DRFs1bbyTjhDpWwWuQDX31IvMIYIqC5RiEjjNLtpGhnBPT2RzzuqyJeRYnQFPCLP0yqUfpObdWW/bwMAEs2T+0YfEXopq9WI/VQ==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-063c45e1-6b68-49fc-b3d3-50dc8518ac8d"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-2b6c7fe1-c75d-4722-b123-1c6dcbeda662" Target="#Signature-8918ec6f-b70e-4fb3-bcfb-5d6a0a988bbc"><xades:SignedProperties Id="SignedProperties-Signature-8918ec6f-b70e-4fb3-bcfb-5d6a0a988bbc"><xades:SignedSignatureProperties><xades:SigningTime>2023-05-15T14:20:49-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>/52wUAycQmZLE9WMqifpS594HnUh67o3M6Do0ecUh0s=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1640098639910</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.2/ResolucionComprobantesElectronicosDGT-R-48-2016_4.2.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>NmI5Njk1ZThkNzI0MmIzMGJmZDAyNDc4YjUwNzkzODM2NTBiOWUxNTBkMmI2YjgzYzZjM2I5NTZlNDQ4OWQzMQ==</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-1986c821-9e8f-4d32-a83c-129eb85bd5aa"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

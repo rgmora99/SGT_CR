@@ -1,0 +1,70 @@
+:root {
+  --brand-navy: #003057;
+  --brand-green: #78BE21;
+  --brand-gray: #6b7280;
+  --brand-bg: #f8f9fc;
+}
+
+body {
+  background-color: var(--brand-bg);
+  font-family: 'Inter', sans-serif;
+}
+
+.page-title {
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.text-muted { color: var(--brand-gray) !important; }
+
+/* ==== Tabs ==== */
+.nav-tabs .nav-link {
+  color: var(--brand-navy);
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  transition: all .2s ease;
+}
+.nav-tabs .nav-link.active {
+  background-color: var(--brand-navy);
+  color: #fff;
+}
+
+/* ==== Cards & Tables ==== */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  border: none;
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--brand-navy);
+}
+.table-hover tbody tr:hover {
+  background-color: rgba(0,48,87,0.05);
+}
+
+/* ==== Buttons ==== */
+.btn-primary {
+  background-color: var(--brand-navy);
+  border: none;
+  border-radius: 10px;
+}
+.btn-primary:hover {
+  background-color: var(--brand-green);
+  color: var(--brand-navy);
+}
+
+/* ==== Dynamic Permission Table ==== */
+#contenedorPermisos th, #contenedorPermisos td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+#contenedorPermisos input[type="checkbox"] {
+  transform: scale(1.1);
+}
+
+/* ==== Compact spacing ==== */
+.page-content {
+  padding: 0 1rem 2rem 1rem;
+}

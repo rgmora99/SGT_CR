@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='utf-8'?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica"><Clave>50605022500310148359700100051010000079241100079241</Clave><CodigoActividad>523205</CodigoActividad><NumeroConsecutivo>00100051010000079241</NumeroConsecutivo><FechaEmision>2025-02-05T17:33:46+00:00</FechaEmision><Emisor><Nombre>SISAL CR SOCIEDAD ANONIMA</Nombre><Identificacion><Tipo>02</Tipo><Numero>3101483597</Numero></Identificacion><Ubicacion><Provincia>1</Provincia><Canton>02</Canton><Distrito>03</Distrito><OtrasSenas>600 m oeste Peaje escazú ruta 27 Centro Comercial Avenida Escazú Torre 204 locales 102 y 103</OtrasSenas></Ubicacion><Telefono><CodigoPais>506</CodigoPais><NumTelefono>44043842</NumTelefono></Telefono><CorreoElectronico>forever21.curridabat@ar-holdings.com</CorreoElectronico></Emisor><Receptor><Nombre>Ruley Gustavo  Mora  Calvo .</Nombre><Identificacion><Tipo>01</Tipo><Numero>117580572</Numero></Identificacion><CorreoElectronico>ruleymorac@gmail.com</CorreoElectronico></Receptor><CondicionVenta>01</CondicionVenta><MedioPago>02</MedioPago><DetalleServicio><LineaDetalle><NumeroLinea>1</NumeroLinea><Codigo>2820301020000</Codigo><CodigoComercial><Tipo>04</Tipo><Codigo>144545</Codigo></CodigoComercial><Cantidad>1.00</Cantidad><UnidadMedida>Unid</UnidadMedida><Detalle>Camiseta M/C Ed Sublimada Casa</Detalle><PrecioUnitario>10619.47</PrecioUnitario><MontoTotal>10619.4700</MontoTotal><SubTotal>10619.4700</SubTotal><Impuesto><Codigo>01</Codigo><CodigoTarifa>08</CodigoTarifa><Tarifa>13.00</Tarifa><Monto>1380.53</Monto></Impuesto><ImpuestoNeto>1380.53</ImpuestoNeto><MontoTotalLinea>12000.00</MontoTotalLinea></LineaDetalle></DetalleServicio><ResumenFactura><CodigoTipoMoneda><CodigoMoneda>CRC</CodigoMoneda><TipoCambio>1.00000</TipoCambio></CodigoTipoMoneda><TotalServGravados>0</TotalServGravados><TotalMercanciasGravadas>10619.47</TotalMercanciasGravadas><TotalGravado>10619.47</TotalGravado><TotalExento>0</TotalExento><TotalVenta>10619.47</TotalVenta><TotalVentaNeta>10619.47</TotalVentaNeta><TotalImpuesto>1380.53</TotalImpuesto><TotalComprobante>12000.00</TotalComprobante></ResumenFactura><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a-ref0" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>Sde+6CgoNjfOkt6t0nVAKsMt8uWHKiuTfa7H/WoVSHk=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a-keyinfo">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>fTFRCahyIkTx+AfHDAZWVKPwhXRmZ4FrsPK/Ung/Lg8=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a-signedprops" Type="http://uri.etsi.org/01903#SignedProperties">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>dvSETiQ93HpEK/zlsVLFZ+ZC2VgKgSQSpX3ElZVcPyM=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a-sigvalue">kYitED618Z1IAO0Xw/ie7tI5ivWWWYb928LqddzZhQwUvU+ZsuFXdhbSsgTvSbca
+QFN3qoyBRO5Xz2udgI6nls7W5Igv00VgIXxUKZce9Uec0Eur+HbtWgFww8yVQu0V
+KpeXZT5paL6uqb+h5q3g7NjLXj+XXTtHvkBH2tsK+uOup3nEvrjh+xlgmmK2+xRD
+qCJNYj4qtvuuF+gJodrhEcbDLEINpyCmXp0vQCvwc69dPCdpo7NdTRnPq1bfW2MX
+b+Xv5vALilnAzciPDs0V78+hKu+cloDor7EhUxWPpVAFIS84KLKy0lXA3V6mXGyi
+Ft9ybcc1VnyoXmFUpi82xQ==</ds:SignatureValue>
+<ds:KeyInfo Id="xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a-keyinfo">
+<ds:X509Data>
+<ds:X509Certificate>MIIFGjCCAwKgAwIBAgIGAYV9bzklMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYT
+AkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANE
+R1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjMwMTA0MTUzODM5
+WhcNMjcwMTAzMTUzODM5WjB1MRkwFwYDVQQFExBDUEotMy0xMDEtNDgzNTk3MQsw
+CQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElDQTEMMAoGA1UECwwD
+Q1BKMSIwIAYDVQQDDBlTSVNBTCBDUiBTT0NJRURBRCBBTk9OSU1BMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnOQSnjiAWKC3WISuGWl6WTxPr3wcMI99
+8XFzJ1izLgI/NIvSsaYnapJhT8FTrDGWSIHGbJpFLTRWXvXyFJk9zcp4S1W5qyHn
+VdaOXplj8HOBlnm5vkq1NJXLFWOHiZ70tfBLofTTGohTbanYw7Hrah7zOipy02jE
+fXkFnDz5ywubIXmFCb/WhABF7BB3CbS18pN44DfAG50G8N+6KQIV1QG25HILJyjA
+SsPUcXmCJvNqf/Na0Npb3kDy40NdH9qmsQFtnzzYt0OpCKIC+Y8gqZ8EsOz/A/vf
+1Kvs4SE1p7havgtr4vzI6LtRa6rLONl/2FERJpU8bu0+ras9XCSvQwIDAQABo4HK
+MIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBTz
+DAvR3FnKghxmpMHd7e0OoFXmUzALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5j
+b21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUt
+cGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEAXUsiRT6PjLTzvH6SKWe+n/jf
+yIo0uKtGdWZQ/0gI60qQWo0wuT4bt/73S9Ezmbu3MJ1M6zfBhJoIfeXMkVNNdyyC
+mqNOirdejfspUnxXosWK9LS5XjCarRUfqk1D/+9dxjPyvCuc1goreGXGxKpAFeUS
+oxF6zHN9GRWM0xkZLXRiwMc9kLa/3mqw0mT4g0LO2GCXdXqPbp3zcfxp7Tvs6+pH
+54bOPs7zryYbQPfUTYFqKbhAV2IOgTY4z/ZUeW2W8hP76i/UGrEyTXt/3TIS9pdo
+sh8E0IqlsrOIp575R81ee3h78QhStvXEDVe9dxx3FoScVy5zIb6mkoV/VCQXMw/i
+EIaD/w8t8OASk9JToYGXsPxMZiQ24+z2u4arupwtecb51naLBMOObZGBOYeoBuIp
+wusmpFxSXl4BTt2lvE+mZghrtegbBInfaU9RuncMkzR5alYAbI4AmpIo6xuTpT4U
+Zi1NzyVOC6dCHuipmm2/ZSJ8xZHxAiVcYHm/mDNaikfp5MSJdRuXrvQH4PoSiJLf
+8FNCkxcu/G470RAiFDgUdvp2rlmMqAsFjqYhBTpi3oyFZxAXrgqOrc5JYdR1dGrF
+XUXB7MMo8UipCRAv46ibeqnftSu0KQRzGEVbaqkFE/yrDBK0wAV3SBDenSbl8aMq
+07wYTzYmc6C6WcK+GV4=</ds:X509Certificate>
+<ds:X509IssuerSerial>
+<ds:X509IssuerName>C=CR,O=MINISTERIO DE HACIENDA,OU=DGT,CN=CA PERSONA JURIDICA</ds:X509IssuerName>
+<ds:X509SerialNumber>1672846719269</ds:X509SerialNumber>
+</ds:X509IssuerSerial>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>nOQSnjiAWKC3WISuGWl6WTxPr3wcMI998XFzJ1izLgI/NIvSsaYnapJhT8FTrDGW
+SIHGbJpFLTRWXvXyFJk9zcp4S1W5qyHnVdaOXplj8HOBlnm5vkq1NJXLFWOHiZ70
+tfBLofTTGohTbanYw7Hrah7zOipy02jEfXkFnDz5ywubIXmFCb/WhABF7BB3CbS1
+8pN44DfAG50G8N+6KQIV1QG25HILJyjASsPUcXmCJvNqf/Na0Npb3kDy40NdH9qm
+sQFtnzzYt0OpCKIC+Y8gqZ8EsOz/A/vf1Kvs4SE1p7havgtr4vzI6LtRa6rLONl/
+2FERJpU8bu0+ras9XCSvQw==</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a"><xades:SignedProperties Id="xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a-signedprops"><xades:SignedSignatureProperties><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>PnmPQyv7KG7ybC+74R0AAOlacxLkrmT1Jo0/F4ZdHg0=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>C=CR,O=MINISTERIO DE HACIENDA,OU=DGT,CN=CA PERSONA JURIDICA</ds:X509IssuerName><ds:X509SerialNumber>1672846719269</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.2/ResolucionComprobantesElectronicosDGT-R-48-2016_4.2.pdf</xades:Identifier><xades:Description/></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>eUGBLxo7SaqxaR+CGU5DCjUc514GOiOU9S0Smy5W7HE=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier><xades:SignerRole><xades:ClaimedRoles><xades:ClaimedRole>ObligadoTributario</xades:ClaimedRole></xades:ClaimedRoles></xades:SignerRole></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#xmldsig-f31d09a0-c80b-44dd-bd30-bdc9a475bf1a-ref0"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

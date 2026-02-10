@@ -1,0 +1,200 @@
+
+:root {
+  --brand-navy: #003057;
+  --brand-green: #78BE21;
+  --brand-bg: #f7f9fc;
+  --brand-gray: #6b7280;
+}
+
+/* ===== Fondo general ===== */
+.catalogo-nuevo-page {
+  background: linear-gradient(180deg, #f8f9fc 0%, #f1f4f9 100%);
+  min-height: 100vh;
+  padding: 1rem 1.5rem 2rem;
+  font-family: 'Inter', sans-serif;
+  animation: fadeIn .4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Encabezado ===== */
+.catalogo-nuevo-page .header-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}
+
+.catalogo-nuevo-page .page-title {
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.catalogo-nuevo-page p.text-muted {
+  font-size: 0.95rem;
+  color: var(--brand-gray);
+}
+
+/* ===== Wizard visual ===== */
+.catalogo-nuevo-page .wizard-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.catalogo-nuevo-page .wizard-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalogo-nuevo-page .wizard-step {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #cfd8dc;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s ease;
+}
+
+.catalogo-nuevo-page .wizard-step.active {
+  background: var(--brand-green);
+  box-shadow: 0 0 0 4px rgba(120,190,33,0.25);
+}
+
+.catalogo-nuevo-page .wizard-line {
+  width: 70px;
+  height: 3px;
+  background: #c5c5c5;
+  transition: background .3s ease;
+}
+
+.catalogo-nuevo-page .wizard-step.active + .wizard-line {
+  background: var(--brand-green);
+}
+
+.catalogo-nuevo-page .wizard-labels span {
+  margin: 0 2rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+  transition: color .3s;
+}
+
+.catalogo-nuevo-page .wizard-labels span.active {
+  color: var(--brand-navy);
+  font-weight: 600;
+}
+
+/* ===== Card ===== */
+.catalogo-nuevo-page .form-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  padding: 1rem;
+  transition: all .3s;
+}
+
+.catalogo-nuevo-page .form-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.catalogo-nuevo-page .card-header h5 {
+  font-weight: 600;
+  color: var(--brand-navy);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.catalogo-nuevo-page .card-header small {
+  color: var(--brand-gray);
+}
+
+/* ===== Formularios ===== */
+.catalogo-nuevo-page .form-label {
+  font-weight: 500;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.catalogo-nuevo-page .form-control,
+.catalogo-nuevo-page .form-select {
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  transition: all .2s ease;
+  font-size: 0.95rem;
+}
+
+.catalogo-nuevo-page .form-control:focus,
+.catalogo-nuevo-page .form-select:focus {
+  border-color: var(--brand-green);
+  box-shadow: 0 0 0 2px rgba(120,190,33,0.25);
+}
+
+/* ===== Botones ===== */
+.catalogo-nuevo-page .btn {
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all .2s ease;
+}
+
+.catalogo-nuevo-page .btn-primary {
+  background-color: var(--brand-navy);
+  border: none;
+}
+
+.catalogo-nuevo-page .btn-primary:hover {
+  background-color: #002244;
+}
+
+.catalogo-nuevo-page .btn-outline-secondary {
+  border: 1px solid rgba(0,0,0,0.2);
+  color: var(--brand-navy);
+}
+
+.catalogo-nuevo-page .btn-outline-secondary:hover {
+  background-color: rgba(0,48,87,0.08);
+}
+
+.catalogo-nuevo-page .btn-success {
+  background-color: var(--brand-green);
+  border: none;
+}
+
+.catalogo-nuevo-page .btn-success:hover {
+  background-color: #5ba61c;
+}
+
+/* ===== Steps visibles ===== */
+.step-content {
+  display: none;
+  animation: fadeIn .4s ease;
+}
+
+.step-content.active {
+  display: block;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 992px) {
+  .catalogo-nuevo-page .wizard-line { width: 50px; }
+  .catalogo-nuevo-page .wizard-labels span { margin: 0 1.2rem; font-size: 0.85rem; }
+}
+
+@media (max-width: 576px) {
+  .catalogo-nuevo-page .wizard-line { width: 30px; }
+  .catalogo-nuevo-page .wizard-step { width: 28px; height: 28px; font-size: 0.8rem; }
+  .catalogo-nuevo-page .form-card { margin: 0 0.5rem; }
+  .catalogo-nuevo-page .page-title { font-size: 1.3rem; }
+}

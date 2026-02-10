@@ -1,0 +1,219 @@
+{% extends "base/menu.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/alertas/alerta.css' %}">
+<link rel="stylesheet" href="{% static 'css/alertas/alerta_wizard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="alerta-nueva-page">
+
+  <!-- ===== Encabezado ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-4 header-section">
+    <div>
+      <h2 class="page-title mb-0">Registrar Nueva Alerta</h2>
+      <p class="text-muted mb-0">
+        Crea una alerta personalizada vinculada a un contrato, con fecha de aviso y prioridad.
+      </p>
+    </div>
+    <a href="{% url 'alertas:listar' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i> Volver
+    </a>
+  </div>
+
+  <!-- ===== Wizard visual ===== -->
+  <div class="wizard-progress mb-4 text-center">
+    <div class="wizard-steps d-flex justify-content-center align-items-center">
+      <div class="wizard-step active" data-step="1">
+        <span>1</span>
+        <small>Datos Generales</small>
+      </div>
+      <div class="wizard-line"></div>
+      <div class="wizard-step" data-step="2">
+        <span>2</span>
+        <small>Asociación</small>
+      </div>
+      <div class="wizard-line"></div>
+      <div class="wizard-step" data-step="3">
+        <span>3</span>
+        <small>Configuración</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Formulario ===== -->
+  <form id="formAlerta" method="post" novalidate>
+    {% csrf_token %}
+
+    <!-- STEP 1️⃣ DATOS GENERALES -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content active" id="step-1">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold mb-0">
+          <i class="bi bi-bell me-2 text-warning"></i> Datos Generales de la Alerta
+        </h5>
+        <small class="text-muted">
+          Completa la información básica de la alerta a registrar.
+        </small>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">Tipo de alerta</label>
+            <select name="tipo_alerta" class="form-select" required>
+              <option disabled selected>Seleccione...</option>
+              <option value="VENCIMIENTO">Vencimiento de contrato</option>
+              <option value="PRORROGA">Prórroga próxima</option>
+              <option value="FACTURA">Factura pendiente</option>
+              <option value="RECEPCION">Recepción pendiente</option>
+              <option value="OTRO">Otro</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Prioridad</label>
+            <select name="prioridad" class="form-select" required>
+              <option disabled selected>Seleccione...</option>
+              <option value="ALTA">Alta</option>
+              <option value="MEDIA">Media</option>
+              <option value="BAJA">Baja</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Fecha de aviso</label>
+            <input type="date" name="fecha_aviso" class="form-control" required>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" class="form-control" rows="3"
+              placeholder="Ej. Contrato CTR-2025-014 vence en 10 días"></textarea>
+          </div>
+
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+          <button type="button" class="btn btn-primary next-step">
+            Siguiente <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2️⃣ ASOCIACIÓN -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content" id="step-2">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold mb-0">
+          <i class="bi bi-link-45deg me-2 text-success"></i> Asociación
+        </h5>
+        <small class="text-muted">
+          Asocia esta alerta a un contrato o proveedor.
+        </small>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label">Contrato asociado</label>
+            <input type="text" name="contrato" class="form-control">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Proveedor</label>
+            <input type="text" name="proveedor" class="form-control">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Gerencia responsable</label>
+            <select name="gerencia" class="form-select">
+              <option disabled selected>Seleccione...</option>
+              <option>Logística</option>
+              <option>Tecnologías</option>
+              <option>Proveeduría</option>
+              <option>Administración</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Responsable interno</label>
+            <input type="text" name="responsable" class="form-control">
+          </div>
+
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-outline-secondary prev-step">
+            <i class="bi bi-arrow-left me-1"></i> Anterior
+          </button>
+          <button type="button" class="btn btn-primary next-step">
+            Siguiente <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3️⃣ CONFIGURACIÓN -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content" id="step-3">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold mb-0">
+          <i class="bi bi-gear me-2 text-info"></i> Configuración
+        </h5>
+        <small class="text-muted">
+          Define cuándo y cómo se notificará esta alerta.
+        </small>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+
+          <div class="col-md-4">
+            <label class="form-label">Medio de notificación</label>
+            <select name="medio" class="form-select">
+              <option value="CORREO">Correo electrónico</option>
+              <option value="TEAMS">Teams</option>
+              <option value="SISTEMA">Sistema interno</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Días de antelación</label>
+            <input type="number" name="dias_antelacion" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Estado inicial</label>
+            <select name="estado" class="form-select">
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="ATENDIDA">Atendida</option>
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Observaciones</label>
+            <textarea name="observaciones" class="form-control" rows="3"></textarea>
+          </div>
+
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-outline-secondary prev-step">
+            <i class="bi bi-arrow-left me-1"></i> Anterior
+          </button>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-circle me-1"></i> Guardar Alerta
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="{% static 'js/alertas/alerta_nueva.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.4/facturaElectronica FacturaElectronica_V4.4.xsd">
+	<Clave>50613112500310178275000400004010000000115164386388</Clave>
+	<ProveedorSistemas>3102920775</ProveedorSistemas>
+	<CodigoActividadEmisor>4540.0</CodigoActividadEmisor>
+	<NumeroConsecutivo>00400004010000000115</NumeroConsecutivo>
+	<FechaEmision>2025-11-13T11:38:01-06:00</FechaEmision>
+	<Emisor>
+		<Nombre>Apex Moto S.A</Nombre>
+		<Identificacion>
+			<Tipo>02</Tipo>
+			<Numero>3101782750</Numero>
+		</Identificacion>
+		<NombreComercial>Moto Apex</NombreComercial>
+		<Ubicacion>
+			<Provincia>1</Provincia>
+			<Canton>02</Canton>
+			<Distrito>03</Distrito>
+			<Barrio>Guachipelín</Barrio>
+			<OtrasSenas>Contiguo a la Gasolinera FILL N GO en la KTM</OtrasSenas>
+		</Ubicacion>
+		<Telefono>
+			<CodigoPais>506</CodigoPais>
+			<NumTelefono>40106600</NumTelefono>
+		</Telefono>
+		<CorreoElectronico>info@motoapexcr.com</CorreoElectronico>
+	</Emisor>
+	<Receptor>
+		<Nombre>Ruley Mora Calvo</Nombre>
+		<Identificacion>
+			<Tipo>01</Tipo>
+			<Numero>117580572</Numero>
+		</Identificacion>
+		<CorreoElectronico>Ruleymorac@gmail.com</CorreoElectronico>
+	</Receptor>
+	<CondicionVenta>01</CondicionVenta>
+	<PlazoCredito>0</PlazoCredito>
+	<DetalleServicio>
+		<LineaDetalle>
+			<NumeroLinea>1</NumeroLinea>
+			<CodigoCABYS>4994100009900</CodigoCABYS>
+			<CodigoComercial>
+				<Tipo>04</Tipo>
+				<Codigo>JG571014</Codigo>
+			</CodigoComercial>
+			<Cantidad>1.0</Cantidad>
+			<UnidadMedida>Unid</UnidadMedida>
+			<Detalle>[JG571014] FILTRO ACEITE - KTM - 200 DUKE (18-24)</Detalle>
+			<PrecioUnitario>10.79</PrecioUnitario>
+			<MontoTotal>10.79</MontoTotal>
+			<SubTotal>10.79</SubTotal>
+			<BaseImponible>10.79</BaseImponible>
+			<Impuesto>
+				<Codigo>01</Codigo>
+				<CodigoTarifaIVA>08</CodigoTarifaIVA>
+				<Tarifa>13.0</Tarifa>
+				<Monto>1.4027</Monto>
+			</Impuesto>
+			<ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+			<ImpuestoNeto>1.4027</ImpuestoNeto>
+			<MontoTotalLinea>12.1927</MontoTotalLinea>
+		</LineaDetalle>
+		<LineaDetalle>
+			<NumeroLinea>2</NumeroLinea>
+			<CodigoCABYS>4994100009900</CodigoCABYS>
+			<CodigoComercial>
+				<Tipo>04</Tipo>
+				<Codigo>JY541055</Codigo>
+			</CodigoComercial>
+			<Cantidad>1.0</Cantidad>
+			<UnidadMedida>Unid</UnidadMedida>
+			<Detalle>[JY541055] EMPAQUE TAPA DEL FILTRO DE ACEITE KTM 390 DUKE</Detalle>
+			<PrecioUnitario>4.83</PrecioUnitario>
+			<MontoTotal>4.83</MontoTotal>
+			<SubTotal>4.83</SubTotal>
+			<BaseImponible>4.83</BaseImponible>
+			<Impuesto>
+				<Codigo>01</Codigo>
+				<CodigoTarifaIVA>08</CodigoTarifaIVA>
+				<Tarifa>13.0</Tarifa>
+				<Monto>0.6279</Monto>
+			</Impuesto>
+			<ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+			<ImpuestoNeto>0.6279</ImpuestoNeto>
+			<MontoTotalLinea>5.4579</MontoTotalLinea>
+		</LineaDetalle>
+		<LineaDetalle>
+			<NumeroLinea>3</NumeroLinea>
+			<CodigoCABYS>4994100009900</CodigoCABYS>
+			<CodigoComercial>
+				<Tipo>04</Tipo>
+				<Codigo>304980-G</Codigo>
+			</CodigoComercial>
+			<Cantidad>2.0</Cantidad>
+			<UnidadMedida>Unid</UnidadMedida>
+			<Detalle>[304980-G] ACEITE  TOP SPEED 4T 15W/50 JASO MA 2 (Granel)</Detalle>
+			<PrecioUnitario>19.07</PrecioUnitario>
+			<MontoTotal>38.14</MontoTotal>
+			<SubTotal>38.14</SubTotal>
+			<BaseImponible>38.14</BaseImponible>
+			<Impuesto>
+				<Codigo>01</Codigo>
+				<CodigoTarifaIVA>08</CodigoTarifaIVA>
+				<Tarifa>13.0</Tarifa>
+				<Monto>4.9582</Monto>
+			</Impuesto>
+			<ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+			<ImpuestoNeto>4.9582</ImpuestoNeto>
+			<MontoTotalLinea>43.0982</MontoTotalLinea>
+		</LineaDetalle>
+		<LineaDetalle>
+			<NumeroLinea>4</NumeroLinea>
+			<CodigoCABYS>8714200000000</CodigoCABYS>
+			<CodigoComercial>
+				<Tipo>04</Tipo>
+				<Codigo>MO-MP-BAJA CC</Codigo>
+			</CodigoComercial>
+			<Cantidad>1.05</Cantidad>
+			<UnidadMedida>Os</UnidadMedida>
+			<Detalle>[MO-MP-BAJA CC] MO MP BAJA CC</Detalle>
+			<PrecioUnitario>42.0</PrecioUnitario>
+			<MontoTotal>44.1</MontoTotal>
+			<SubTotal>44.1</SubTotal>
+			<BaseImponible>44.1</BaseImponible>
+			<Impuesto>
+				<Codigo>01</Codigo>
+				<CodigoTarifaIVA>08</CodigoTarifaIVA>
+				<Tarifa>13.0</Tarifa>
+				<Monto>5.733</Monto>
+			</Impuesto>
+			<ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+			<ImpuestoNeto>5.733</ImpuestoNeto>
+			<MontoTotalLinea>49.833</MontoTotalLinea>
+		</LineaDetalle>
+		<LineaDetalle>
+			<NumeroLinea>5</NumeroLinea>
+			<CodigoCABYS>8714200000000</CodigoCABYS>
+			<CodigoComercial>
+				<Tipo>04</Tipo>
+				<Codigo>Lubrisol</Codigo>
+			</CodigoComercial>
+			<Cantidad>1.0</Cantidad>
+			<UnidadMedida>Os</UnidadMedida>
+			<Detalle>[Lubrisol] Lubricantes y solventes varios</Detalle>
+			<PrecioUnitario>11.67</PrecioUnitario>
+			<MontoTotal>11.67</MontoTotal>
+			<SubTotal>11.67</SubTotal>
+			<BaseImponible>11.67</BaseImponible>
+			<Impuesto>
+				<Codigo>01</Codigo>
+				<CodigoTarifaIVA>08</CodigoTarifaIVA>
+				<Tarifa>13.0</Tarifa>
+				<Monto>1.5171</Monto>
+			</Impuesto>
+			<ImpuestoAsumidoEmisorFabrica>0</ImpuestoAsumidoEmisorFabrica>
+			<ImpuestoNeto>1.5171</ImpuestoNeto>
+			<MontoTotalLinea>13.1871</MontoTotalLinea>
+		</LineaDetalle>
+	</DetalleServicio>
+	<ResumenFactura>
+		<CodigoTipoMoneda>
+			<CodigoMoneda>USD</CodigoMoneda>
+			<TipoCambio>503.92</TipoCambio>
+		</CodigoTipoMoneda>
+		<TotalServGravados>55.77</TotalServGravados>
+		<TotalServExentos>0.0</TotalServExentos>
+		<TotalServExonerado>0.0</TotalServExonerado>
+		<TotalServNoSujeto>0.0</TotalServNoSujeto>
+		<TotalMercanciasGravadas>53.76</TotalMercanciasGravadas>
+		<TotalMercanciasExentas>0.0</TotalMercanciasExentas>
+		<TotalMercExonerada>0.0</TotalMercExonerada>
+		<TotalMercNoSujeta>0.0</TotalMercNoSujeta>
+		<TotalGravado>109.53</TotalGravado>
+		<TotalExento>0.0</TotalExento>
+		<TotalExonerado>0.0</TotalExonerado>
+		<TotalNoSujeto>0.0</TotalNoSujeto>
+		<TotalVenta>109.53</TotalVenta>
+		<TotalVentaNeta>109.53</TotalVentaNeta>
+		<TotalDesgloseImpuesto>
+			<Codigo>01</Codigo>
+			<CodigoTarifaIVA>08</CodigoTarifaIVA>
+			<TotalMontoImpuesto>14.2389</TotalMontoImpuesto>
+		</TotalDesgloseImpuesto>
+		<TotalImpuesto>14.2389</TotalImpuesto>
+		<TotalIVADevuelto>0.0</TotalIVADevuelto>
+		<MedioPago>
+			<TipoMedioPago>02</TipoMedioPago>
+			<TotalMedioPago>123.7689</TotalMedioPago>
+		</MedioPago>
+		<TotalComprobante>123.7689</TotalComprobante>
+	</ResumenFactura>
+	<Otros>
+		<OtroTexto codigo="ContactoDesarrollador">Generado por www.delfixcr.com con el sistema Odoo. Delfix soporte@delfixcr.com +506 4001-3192 Ext 1001</OtroTexto>
+	</Otros>
+<ds:Signature Id="Signature-3765">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="Reference-6944" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>dKS5gm4pvOfxBvqH52dCkW/8HyxOorjJXNmBSbm122Q=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-3765">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>CVnPVi7qbpS1/hWhQsHUfKvZ2o0zDmH+yzxlSIP4f30=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#SignedProperties-Signature-3765" Type="http://uri.etsi.org/01903#SignedProperties">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>/b15VSWr1nFlUSi9BRtO8JCQycv9ftFve26r1ujXD2o=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>HERAbyJosxIQFPzB11C2HIkRo4OqmPT8IisLPkuJbeEnhcaoGBGq/e1qNRQBvmQ4N8gS7pccxZEdIMbyviYAbLv8p1TdQwjSsgSgU/6BJuJeL9H9gch5ZEee2PTGGBmAGlQsX2xgA2CVjNw6EdwBAj+y/q9onhEEo5ug6FdRW/IBBISB0BkOFKqm+tJ0y02AHABCRQMPLbDPwf2lMLrHqAK57kyIXPs94uO3RKb5iBfni8y9tlADXUG4jSqRDkmgkMP9zIKAfUy3wX7zIuCDZj4qq1IoAU84jXomhedkTbeCYxgX2QJlwaunBLZmDDSkPsuiUqOuKX+fmIVQWe/X1Q==</ds:SignatureValue>
+<ds:KeyInfo Id="KeyInfoId-Signature-3765">
+<ds:X509Data>
+<ds:X509Certificate>MIIFGzCCAwOgAwIBAgIGAZmNEMPRMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjUwOTI3MjEyNTEwWhcNMjkwOTI2MjEyNTEwWjB2MRkwFwYDVQQFExBDUEotMy0xMDEtNzgyNzUwMQswCQYDVQQGEwJDUjEZMBcGA1UECgwQUEVSU09OQSBKVVJJRElDQTEMMAoGA1UECwwDQ1BKMSMwIQYDVQQDDBpBUEVYIE1PVE8gU09DSUVEQUQgQU5PTklNQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJix8SIWynCJYOCNbFruzHsbfaGkyIqdgcFJtb9MjoNzwFhRxAR0EEv+Fby+1ft8C6KKVpB+l1eSkAPBs0ytyfcpqtGPGfiDtdQHmAE1FgimuPVgZa2du+F5nLbw0FFnTaHoSYnRljlejJ/UU8nsAg7N3XjnfsAdEELk3l1ueMJvhWKzERfB0qdvoRbBCBgdH3NbWh8bgGaccTpWWhKenupxZDnFSjssUGYqxriYzk/L4dtX5fJj+Aj6ZlgDJSLcMKA2D9kFtFy7hxKJWbOymmDDp1kXfxl8omI++52v4xA77DVirLX0qulzFy+S+dlFRqwB7WTqY8bjiI66noS+dqMCAwEAAaOByjCBxzAfBgNVHSMEGDAWgBQ7bVf11nzpnhACIEHjvRrMz7NOlTAdBgNVHQ4EFgQURmkCzjdJ9dOxguPaK93Kb9573MowCwYDVR0PBAQDAgbAMBMGA1UdJQQMMAoGCCsGAQUFBwMEMGMGCCsGAQUFBwEBBFcwVTBTBggrBgEFBQcwAoZHaHR0cHM6Ly9wa2kuY29tcHJvYmFudGVzZWxlY3Ryb25pY29zLmdvLmNyL3Byb2QvaW50ZXJtZWRpYXRlLXBqLXBlbS5jcnQwDQYJKoZIhvcNAQELBQADggIBAKkw5lBtPSSx3VtURlK1TgS6W53dTXtSE+a1w77ojfSrNzskBpNWGfbA3KPRDW2YttRGB+Gxf0G9XWQ8E2WvZOqJopb3MG/igFrN+4Tu2OEeefPJFYyBeSFjUraBKGQcmJRsdSMmWAodC2bW556nASdcTvw43n6tTINLqXLShFJoLsd7NlY9XI1pMPGKy6GxBgNCEE/8wexwf5upSwCOVuI6KCCVieDNVs934x6DrmYNtg4nec6fXJwNqo3Rhpt3y5LkHVGEqbNqaZR/OdISpE5szb08qhaOVjrUAgMHzYukjfYZQaJEHjS4TIvTCDvKc9Uwa8klmiXeGafgivOQU/7XZOEhcOXR2YqH/Qc7UlD415s/avnQX9/0ti0HEAX7E3c+Ew22/TjIC+gTnUGO0Gfwd6+ftyESUjdMkdHoWalIAT1458PPwBx7bf7FdAOAcpwZbhL6KRcj5eF/mP7CNT7GiubmftzRBeRDCaIQSXqHidXj3F777+bkcBndYoXObW5Uxu+1pEuAoeP3usR7fq6uC0ql7GtfSELoUrKry0iRXBDNrBao5XQoRTkFCbYZvWdm1EbMGtd1eiVoO4cutQFFfbTHklvR3Pn89mum8qNajjNX2f85r5Xkkcch1zE74cNwdpDyKtOYen+gmzNOh/R+MfR8nA3U333FheAhVIUO</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>mLHxIhbKcIlg4I1sWu7Mext9oaTIip2BwUm1v0yOg3PAWFHEBHQQS/4VvL7V+3wLoopWkH6XV5KQA8GzTK3J9ymq0Y8Z+IO11AeYATUWCKa49WBlrZ274XmctvDQUWdNoehJidGWOV6Mn9RTyewCDs3deOd+wB0QQuTeXW54wm+FYrMRF8HSp2+hFsEIGB0fc1taHxuAZpxxOlZaEp6e6nFkOcVKOyxQZirGuJjOT8vh21fl8mP4CPpmWAMlItwwoDYP2QW0XLuHEolZs7KaYMOnWRd/GXyiYj77na/jEDvsNWKstfSq6XMXL5L52UVGrAHtZOpjxuOIjrqehL52ow==</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-3765" Id="XadesObjects"><xades:SignedProperties Id="SignedProperties-Signature-3765"><xades:SignedSignatureProperties><xades:SigningTime>2025-11-13T17:38:31.793469+00:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>QQwX/h2zjRvVIrOa83H7HHlq6kSlGjn/2LqtIpzJi/8=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>commonName=CA PERSONA JURIDICA,organizationalUnitName=DGT,organizationName=MINISTERIO DE HACIENDA,countryName=CR</ds:X509IssuerName><ds:X509SerialNumber>1759008310225</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf</xades:Identifier><xades:Description/></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>DWxin1xWOeI8OuWQXazh4VjLWAaCLAA954em7DMh0h8=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:ClaimedRoles><xades:ClaimedRole>Emisor</xades:ClaimedRole></xades:ClaimedRoles><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-6944"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

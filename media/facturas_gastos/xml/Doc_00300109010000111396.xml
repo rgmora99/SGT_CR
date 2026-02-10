@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica">
+  <Clave>50605032500310100156800300109010000111396199999999</Clave>
+  <CodigoActividad>521901</CodigoActividad>
+  <NumeroConsecutivo>00300109010000111396</NumeroConsecutivo>
+  <FechaEmision>2025-03-05T17:50:02</FechaEmision>
+  <Emisor>
+    <Nombre>Federspiel &amp; CO Sociedad Anónima</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101001568</Numero>
+    </Identificacion>
+    <NombreComercial>Federspiel &amp; CO Sociedad Anónima</NombreComercial>
+    <Ubicacion>
+      <Provincia>1</Provincia>
+      <Canton>01</Canton>
+      <Distrito>08</Distrito>
+      <Barrio>04</Barrio>
+      <OtrasSenas>Torre Universal, Sabana</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>22222222</NumTelefono>
+    </Telefono>
+    <Fax xsi:nil="true" />
+    <CorreoElectronico>servicioalcliente@tiendauniversal.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>RULEY MORA CALVO</Nombre>
+    <Identificacion>
+      <Tipo>01</Tipo>
+      <Numero>117580572</Numero>
+    </Identificacion>
+    <NombreComercial>RULEY MORA CALVO</NombreComercial>
+    <Ubicacion>
+      <Provincia>1</Provincia>
+      <Canton>03</Canton>
+      <Distrito>01</Distrito>
+      <Barrio>03</Barrio>
+      <OtrasSenas />
+    </Ubicacion>
+    <OtrasSenasExtranjero />
+    <CorreoElectronico>ruleymorac@gmail.com</CorreoElectronico>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <PlazoCredito>0</PlazoCredito>
+  <MedioPago>99</MedioPago>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <Codigo>3214999990100</Codigo>
+      <CodigoComercial>
+        <Tipo>02</Tipo>
+        <Codigo>52307</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>ROLLO PAPEL TODA OCASI MH05</Detalle>
+      <PrecioUnitario>1318.58410</PrecioUnitario>
+      <MontoTotal>1318.58410</MontoTotal>
+      <SubTotal>1318.58410</SubTotal>
+      <BaseImponible>1318.58410</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13.00</Tarifa>
+        <Monto>171.41593</Monto>
+      </Impuesto>
+      <ImpuestoNeto>171.41593</ImpuestoNeto>
+      <MontoTotalLinea>1490.00003</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <Codigo>3854005000000</Codigo>
+      <CodigoComercial>
+        <Tipo>02</Tipo>
+        <Codigo>83909</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>PISTA VEH BONE CRUSH 6701</Detalle>
+      <PrecioUnitario>7070.79650</PrecioUnitario>
+      <MontoTotal>7070.79650</MontoTotal>
+      <SubTotal>7070.79650</SubTotal>
+      <BaseImponible>7070.79650</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13.00</Tarifa>
+        <Monto>919.20355</Monto>
+      </Impuesto>
+      <ImpuestoNeto>919.20355</ImpuestoNeto>
+      <MontoTotalLinea>7990.00005</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <Codigo>3854001000000</Codigo>
+      <CodigoComercial>
+        <Tipo>02</Tipo>
+        <Codigo>83076</Codigo>
+      </CodigoComercial>
+      <Cantidad>1.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>VEH MONSTER JAM X1 SURTIDO 6044941</Detalle>
+      <PrecioUnitario>5300.88500</PrecioUnitario>
+      <MontoTotal>5300.88500</MontoTotal>
+      <SubTotal>5300.88500</SubTotal>
+      <BaseImponible>5300.88500</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13.00</Tarifa>
+        <Monto>689.11505</Monto>
+      </Impuesto>
+      <ImpuestoNeto>689.11505</ImpuestoNeto>
+      <MontoTotalLinea>5990.00005</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>4</NumeroLinea>
+      <Codigo>3854001000000</Codigo>
+      <CodigoComercial>
+        <Tipo>02</Tipo>
+        <Codigo>82731</Codigo>
+      </CodigoComercial>
+      <Cantidad>2.000</Cantidad>
+      <UnidadMedida>Unid</UnidadMedida>
+      <UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+      <Detalle>CARRO BASICO SURT C4982 HOT WHEELS</Detalle>
+      <PrecioUnitario>1230.08850</PrecioUnitario>
+      <MontoTotal>2460.17700</MontoTotal>
+      <Descuento>
+        <MontoDescuento>690.26550</MontoDescuento>
+        <NaturalezaDescuento>Descuento</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>1769.91150</SubTotal>
+      <BaseImponible>1769.91150</BaseImponible>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13.00</Tarifa>
+        <Monto>230.08850</Monto>
+      </Impuesto>
+      <ImpuestoNeto>230.08850</ImpuestoNeto>
+      <MontoTotalLinea>2000.00000</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>0</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>0</TotalServGravados>
+    <TotalServExentos>0</TotalServExentos>
+    <TotalServExonerado>0</TotalServExonerado>
+    <TotalMercanciasGravadas>16150.4426</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0</TotalMercanciasExentas>
+    <TotalMercExonerada>0</TotalMercExonerada>
+    <TotalGravado>16150.4426</TotalGravado>
+    <TotalExento>0</TotalExento>
+    <TotalExonerado>0</TotalExonerado>
+    <TotalVenta>16150.4426</TotalVenta>
+    <TotalDescuentos>690.2655</TotalDescuentos>
+    <TotalVentaNeta>15460.1771</TotalVentaNeta>
+    <TotalImpuesto>2009.82303</TotalImpuesto>
+    <TotalIVADevuelto>0</TotalIVADevuelto>
+    <TotalOtrosCargos>0</TotalOtrosCargos>
+    <TotalComprobante>17470.00013</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto codigo="Comentario" />
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-60fecbb8-5a59-4d19-9fcd-6e460430542c"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-da77e905-4f56-43b0-b88c-8c0bca975e05" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>8HIFS7wJcY7BUXJuBmpzcPBoutttFCOmAFP+3UkpRhs=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-60fecbb8-5a59-4d19-9fcd-6e460430542c"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>XRvJ3mQRAWSE/sq2O/NgcqawHAF3nvKK6nb+LrVnC3Q=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-60fecbb8-5a59-4d19-9fcd-6e460430542c"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>VtWvWral3I8tyHIqJpQdyTXV3+r48BWHjpb7fKcn9b4=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-60fecbb8-5a59-4d19-9fcd-6e460430542c">E+jTO2waI9W1eAhZspOC+E44pfIc7a9qSh7h5mOEyeK1TDUduOtEsmXEHiTv5tgZvJgMpF8ChKVMtHuoo+Orw7Sy4/jEeGk+Unass9PsK25B/PAYXUvyPKlNERjZhZGa8m7XUBYRdfhjqxRl+8+645VLnzZIoKHQxk6EKeNqntvsnerUnz6bV0E3Uzc1Qha9oVFGIXcAofMG0Cp3J2LhH8jUyZYXf9H/IyyfD0pW922X35z1O7Q8fyDnGAJO31S+rE+UhISJnarQ78zbnEV+LHmCx+NPuMYBrg+h+y1ZBQNrziE9uWNEs0iQDBwfQpUXS08iansooIlOPwU6Dge6tQ==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-60fecbb8-5a59-4d19-9fcd-6e460430542c"><ds:X509Data><ds:X509Certificate>MIIFLzCCAxegAwIBAgIGAYQwJ+YWMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjIxMDMxMjIyNzEyWhcNMjYxMDMwMjIyNzEyWjCBiTEZMBcGA1UEBRMQQ1BKLTMtMTAxLTAwMTU2ODELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjE2MDQGA1UEAwwtQ0FSTE9TIEZFREVSU1BJRUwgJiBDT01QQW5JQSBTT0NJRURBRCBBTk9OSU1BMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgfeMKq8ZajX+kDAZGyQKfELcqBgyKRPtXiVS4FOSGrOHIwnXqC8eAD6/jZLkTSQJ1Om5oufEEG65c06ayfQ9hfTccFOdP9FZLkdueobiNHPYsMtIPs0FiBopRVSzczbgzOwma76oeTLHUsGeEbvUyOYHJKsWyRrwQAZH2Yf2koAwsQQa96xhdQdMG4g6pqDLL/RGqpMKaNlhu0X7LnjQstwfN39kYT7ebEfy+qU3w+3406QOVnGe4QyU5L/6U5afIpWPwKdnvUXXw3NVHSwW9zGHnWXO4d3uAIZ8/9+dFjDSd6Zp90kqVaM6jrvJqbbOygWTsqDHP/TdBhbSEHLJ2wIDAQABo4HKMIHHMB8GA1UdIwQYMBaAFDttV/XWfOmeEAIgQeO9GszPs06VMB0GA1UdDgQWBBQKKDKD1KiBIr4pyEUBtpsiJWFF0DALBgNVHQ8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwYwYIKwYBBQUHAQEEVzBVMFMGCCsGAQUFBzAChkdodHRwczovL3BraS5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IvcHJvZC9pbnRlcm1lZGlhdGUtcGotcGVtLmNydDANBgkqhkiG9w0BAQsFAAOCAgEAVxQ/tg+2S15P24snhMToP3aXl6yhryPH/1G7+DkpkeS7CJrrlAVmuHRW2BkuLKXia5zMLipc6mC4i/6d2Be0+UscB36Iq3sBZKSPrUcge92yFPHQ/KpSrOdt0zWjxdghVia2hkmTmAIZAJ+hsRNLy1sbnUb7HVW+poeb+dSThzbdnb2ykZCmWplBzza3T43daKYZrD/vs8xN7bWC+2heKGAkXMxkzKbYNI08jX6s55ptsU7S6KgHWt13jLkO1NwXgIoVDcyEHmn4x/TEvpJqyh9XLNYTnDDCaCOca3337PC7AGC5zUVTCq3lS/otnZjolkbEeZ0sNeMVMCaZ8Zg75NRj7nVmH4ySWwqZUkJL0kEySF8d6CBFQ/7eHd7bft6MC3kuu095pUVUUKJWy846113mbSJX9R437lqsDMhPf4UeboDYyuh8LwlzbXScbo/0oZ4eG/EMsOfHksjiqbQP8J6Yv5hIPjCuQamMz/eILLTLi1KbtI8k4rjnf3fyv8wu4RnenoDr2HNriYAIb0JEUOnmYILRLr8es1QgNnXoQfD6wdIq4HMKDv976Y6nyniD3PxP/wb7q6XM9cuXfk7VTzKSFr2vp1nYSijBxupGbBhIZz1ya13IodJDOfmVMQANk4DU2rYJUfSAYNi4k/9L+ZZrrNS08dssslOJLEFIC9Y=</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>gfeMKq8ZajX+kDAZGyQKfELcqBgyKRPtXiVS4FOSGrOHIwnXqC8eAD6/jZLkTSQJ1Om5oufEEG65c06ayfQ9hfTccFOdP9FZLkdueobiNHPYsMtIPs0FiBopRVSzczbgzOwma76oeTLHUsGeEbvUyOYHJKsWyRrwQAZH2Yf2koAwsQQa96xhdQdMG4g6pqDLL/RGqpMKaNlhu0X7LnjQstwfN39kYT7ebEfy+qU3w+3406QOVnGe4QyU5L/6U5afIpWPwKdnvUXXw3NVHSwW9zGHnWXO4d3uAIZ8/9+dFjDSd6Zp90kqVaM6jrvJqbbOygWTsqDHP/TdBhbSEHLJ2w==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-cc362f08-4433-4c51-baaa-87e150660cb0"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-e1d57824-6dfa-49ea-8711-cb9ecb2a00fe" Target="#Signature-60fecbb8-5a59-4d19-9fcd-6e460430542c"><xades:SignedProperties Id="SignedProperties-Signature-60fecbb8-5a59-4d19-9fcd-6e460430542c"><xades:SignedSignatureProperties><xades:SigningTime>2025-03-05T18:04:07-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>9/hI0qGbTPDnZ3aXjrcieAVQTILk+/hTwIjvaTtYSWw=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1667255232022</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.1/Resolucion_Comprobantes_Electronicos_DGT-R-48-2016.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>eUGBLxo7SaqxaR+CGU5DCjUc514GOiOU9S0Smy5W7HE=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-da77e905-4f56-43b0-b88c-8c0bca975e05"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

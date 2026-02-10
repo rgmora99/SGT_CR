@@ -1,0 +1,155 @@
+{% extends "base/menu.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/contratos/contrato_nuevo.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="contrato-wrapper">
+
+  <!-- ================= ENCABEZADO ================= -->
+  <header class="contrato-header">
+    <div>
+      <h2>Registrar Nuevo Contrato</h2>
+      <p>Completa los datos principales, documentos asociados y condiciones del contrato.</p>
+    </div>
+
+    <a href="{% url 'contratos:listar' %}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i> Volver
+    </a>
+  </header>
+
+  <!-- ================= WIZARD ================= -->
+  <nav class="wizard">
+    <div class="wizard-step active" data-step="1">
+      <span>1</span>
+      <label>Datos Generales</label>
+    </div>
+    <div class="wizard-line"></div>
+    <div class="wizard-step" data-step="2">
+      <span>2</span>
+      <label>Documentos</label>
+    </div>
+    <div class="wizard-line"></div>
+    <div class="wizard-step" data-step="3">
+      <span>3</span>
+      <label>Condiciones</label>
+    </div>
+  </nav>
+
+  <!-- ================= FORMULARIO ================= -->
+  <form id="wizardForm" method="post" novalidate>
+    {% csrf_token %}
+
+    <!-- ===== PASO 1 ===== -->
+    <section class="wizard-panel active" data-step="1">
+      <h5>Datos Generales</h5>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label>Número de contrato</label>
+          <input class="form-control" name="numero" required>
+        </div>
+
+        <div class="col-md-4">
+          <label>Contratista</label>
+          <input class="form-control" name="contratista" required>
+        </div>
+
+        <div class="col-md-4">
+          <label>Gerencia</label>
+          <select class="form-select" name="gerencia" required>
+            <option disabled selected>Seleccione...</option>
+            <option>Logística</option>
+            <option>Tecnologías</option>
+            <option>Proveeduría</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label>Objeto del contrato</label>
+          <input class="form-control" name="objeto" required>
+        </div>
+
+        <div class="col-md-3">
+          <label>Fecha inicio</label>
+          <input type="date" class="form-control" name="fecha_inicio" required>
+        </div>
+
+        <div class="col-md-3">
+          <label>Fecha fin</label>
+          <input type="date" class="form-control" name="fecha_fin" required>
+        </div>
+
+        <div class="col-md-4">
+          <label>Monto (₡)</label>
+          <input type="number" class="form-control" name="monto" required>
+        </div>
+
+        <div class="col-md-4">
+          <label>Tipo de contrato</label>
+          <select class="form-select" name="tipo">
+            <option>Bienes</option>
+            <option>Servicios</option>
+            <option>Consultoría</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label>Estado</label>
+          <select class="form-select" name="estado">
+            <option>Activo</option>
+            <option>En prórroga</option>
+            <option>Vencido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel-actions">
+        <button type="button" class="btn btn-primary next">
+          Siguiente <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== PASO 2 ===== -->
+    <section class="wizard-panel" data-step="2">
+      <h5>Documentos Asociados</h5>
+
+      <input type="file" class="form-control mb-4">
+
+      <div class="panel-actions between">
+        <button type="button" class="btn btn-outline-secondary prev">
+          <i class="bi bi-arrow-left"></i> Anterior
+        </button>
+        <button type="button" class="btn btn-primary next">
+          Siguiente <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== PASO 3 ===== -->
+    <section class="wizard-panel" data-step="3">
+      <h5>Condiciones / Observaciones</h5>
+
+      <textarea class="form-control mb-4" rows="4"
+        placeholder="Observaciones, condiciones de pago, prórrogas, etc."></textarea>
+
+      <div class="panel-actions between">
+        <button type="button" class="btn btn-outline-secondary prev">
+          <i class="bi bi-arrow-left"></i> Anterior
+        </button>
+        <button type="submit" class="btn btn-success">
+          <i class="bi bi-check-circle"></i> Finalizar Registro
+        </button>
+      </div>
+    </section>
+
+  </form>
+</div>
+
+<script src="{% static 'js/contratos/contrato_nuevo.js' %}"></script>
+
+{% endblock %}

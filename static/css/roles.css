@@ -1,0 +1,54 @@
+/* ===== roles.css ===== */
+ 
+/* Encabezados de tarjetas */
+.card-header {
+  padding-top: .6rem;
+  padding-bottom: .6rem;
+  min-height: 48px; /* altura uniforme */
+}
+ 
+/* Contenedor flexible: título a la izquierda, acciones/buscadores a la derecha */
+.hdr-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+ 
+/* Estilo de los títulos */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: .4rem;              /* espacio entre ícono y texto */
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  margin: 0;
+  padding: .25rem 0;
+  text-align: left !important;
+  margin-right: auto;      /* asegura que las acciones se empujen a la derecha */
+}
+ 
+/* Inputs de búsqueda en los headers: tamaño consistente */
+.header-search {
+  width: 260px;
+  max-width: 40vw;
+}
+ 
+.card-header {
+  background-color: #e8f5e9;   /* verde claro */
+  border-bottom: 1px solid #c8e6c9;
+}
+ 
+/* Texto negro */
+.card-header .section-title {
+  color: #212121;  /* negro/gris oscuro */
+}
+ 
+/* Íconos verdes dentro de los títulos */
+.card-header .section-title i {
+  color: #2e7d32;
+}
+ 
+ 
+ 

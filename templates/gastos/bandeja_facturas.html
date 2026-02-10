@@ -1,0 +1,116 @@
+{% extends "base/menu.html" %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static '/css/gastos/bandeja_facturas.css' %}">
+
+<div class="container-fluid">
+  <div class="bandeja-header">
+    <div>
+      <h2>Bandeja de facturas</h2>
+      <p>Facturas detectadas por correo (XML/PDF) y facturas cargadas manualmente.</p>
+    </div>
+    <div class="actions">
+      <a href="{% url 'gastos:config_correo_facturas' %}" class="btn btn-outline-primary">
+        Configurar correo
+      </a>
+    </div>
+  </div>
+
+  <div class="card bandeja-card">
+    <form method="get" class="row g-2 mb-3">
+      <div class="col-md-3">
+        {{ form.q }}
+      </div>
+      <div class="col-md-3">
+        {{ form.estado }}
+      </div>
+      <div class="col-md-3 d-grid">
+        <button class="btn btn-primary">Filtrar</button>
+      </div>
+       <div class="col-md-3 d-grid">
+        <button id="btnSync"
+        class="btn btn-outline-success"> Sincronizar ahora</button>
+      </div>
+      
+    </form>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Proveedor</th>
+            <th># Factura</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for f in facturas %}
+          <tr>
+            <td>
+              <div class="fw-semibold">{{ f.proveedor }}</div>
+              <div class="text-muted small">{{ f.email_from|default:"" }}</div>
+            </td>
+            <td>{{ f.numero_factura }}</td>
+            <td>{{ f.fecha_emision|date:"d/m/Y" }}</td>
+            <td>₡ {{ f.total }}</td>
+            <td>
+              <span class="badge badge-estado {{ f.estado }}">
+                {{ f.get_estado_display }}
+              </span>
+            </td>
+            <td class="text-end">
+              {% if f.xml_file %}
+                <a class="btn btn-sm btn-light" href="{{ f.xml_file.url }}" target="_blank">XML</a>
+              {% endif %}
+              {% if f.pdf_file %}
+                <a class="btn btn-sm btn-light" href="{{ f.pdf_file.url }}" target="_blank">PDF</a>
+              {% endif %}
+
+              {% if f.estado == "pendiente" %}
+                <a class="btn btn-sm btn-success" href="{% url 'gastos:aprobar_factura' f.id %}">Aprobar</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'gastos:rechazar_factura' f.id %}">Rechazar</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center text-muted py-4">
+              No hay facturas en la bandeja.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <nav class="mt-3">
+  <ul class="pagination justify-content-center">
+
+    {% if facturas.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ facturas.previous_page_number }}">Anterior</a>
+      </li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">
+        {{ facturas.number }} / {{ facturas.paginator.num_pages }}
+      </span>
+    </li>
+
+    {% if facturas.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ facturas.next_page_number }}">Siguiente</a>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/gastos/bandeja_facturas.js' %}"></script>
+
+{% endblock %}

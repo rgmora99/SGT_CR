@@ -1,0 +1,353 @@
+/* ===================== PALETA / TOKENS ===================== */
+:root{
+  --brand-navy:#003057;   --brand-navy-rgb:0,48,87;     /* PANTONE 540 */
+  --brand-green:#78BE21;  --brand-green-rgb:120,190,33; /* PANTONE 368 */
+  --brand-teal:#115E67;   --brand-teal-rgb:17,94,103;   /* PANTONE 5473 */
+  --brand-cyan:#00AFD7;   --brand-cyan-rgb:0,175,215;   /* PANTONE 638 */
+  --brand-gray9:#A7A8A9;  --brand-gray9-rgb:167,168,169;/* Cool Gray 9C */
+  --brand-lime:#C4D600;   --brand-lime-rgb:196,214,0;   /* PANTONE 382 */
+
+  --card-px:1.25rem; --card-py:1rem; --card-bw:1px;
+  --accent-width:6px;  /* acento vertical en cards */
+  --accent-gap:0px;
+
+  --btn-radius:999px; --btn-pad-y:.55rem; --btn-pad-x:1.1rem; --btn-font:600; --btn-gap:.55rem;
+  --btn-shadow:0 2px 6px rgba(0,0,0,.06); --btn-shadow-hover:0 6px 14px rgba(0,0,0,.12);
+
+  --text-color:#111;  /* texto base negro */
+}
+
+/* ===================== BASE ===================== */
+/* Fondo existente (mantiene tu imagen) */
+body{
+  background: url("../img/fnd.svg") no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text-color);
+}
+
+.d-flex h3 { letter-spacing: .2px; }
+
+/* Utilidades */
+.text-mono{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; }
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+.text-truncate { max-width:100%; }
+
+/* ===================== ACORDEÓN CONSISTENTE ===================== */
+.accordion-custom .accordion-item{
+  background:transparent; border:0; margin-bottom:.5rem;
+}
+.accordion-custom .accordion-button{
+  background-color: var(--brand-navy);
+  color:#fff; font-weight:600; border-radius:.75rem !important;
+  padding:.9rem 1.1rem; box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+.accordion-custom .accordion-button:focus{
+  box-shadow:0 0 0 .2rem rgba(var(--brand-navy-rgb), .25);
+}
+.accordion-custom .accordion-button::after{
+  filter: invert(1) brightness(2); transition: transform .2s ease;
+}
+.accordion-custom .accordion-button:not(.collapsed)::after{
+  transform: rotate(-180deg);
+}
+/* Pequeño relleno dentro del panel abierto */
+#accordionReportes .accordion-collapse {
+  padding-top: .20rem;            /* ~12px de aire arriba */
+}
+
+/* Micro separación extra por si la fila viene sin margen */
+#accordionReportes .reportes-container {
+  margin-top: .12rem;
+}
+
+/* Título del acordeón (nombre de gerencia) */
+#accordionReportes .accordion-button .grupo-nombre {
+  font-weight: 800;   /* 700 también sirve; 800 se nota un poco más */
+}
+
+/* Título de cada card (nombre del reporte) */
+.card-reporte .card-title {
+  font-weight: 800 !important;
+}
+/* Un “respiro” bajo la banda del header (sin cambiar estructura) */
+#accordionReportes .accordion-header .accordion-button {
+  margin-bottom: .25rem;
+}
+/* Estilo base (si quieres un solo color para todos, cambia --accent aquí) */
+.card-reporte{
+  --accent: var(--brand-navy);
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;                      /* para que la raya respete el radio */
+}
+
+/* Raya izquierda con leve degradado y sombra sutil */
+.card-reporte::before{
+  content:"";
+  position:absolute;
+  inset: 0 auto 0 0;
+  width: 8px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent) 92%, #ffffff 8%),
+    var(--accent)
+  );
+  box-shadow: 0 0 0 1px rgba(0,0,0,.02), 0 2px 8px rgba(0,0,0,.08);
+  pointer-events: none;
+}
+
+/* ===== Paleta alternada AUTOMÁTICA por tarjeta ===== */
+.reportes-container .reporte-item:nth-child(5n+1) .card-reporte{ --accent: var(--brand-navy);  }
+.reportes-container .reporte-item:nth-child(5n+2) .card-reporte{ --accent: var(--brand-teal);  }
+.reportes-container .reporte-item:nth-child(5n+3) .card-reporte{ --accent: var(--brand-cyan);  }
+.reportes-container .reporte-item:nth-child(5n+4) .card-reporte{ --accent: var(--brand-green); }
+.reportes-container .reporte-item:nth-child(5n+5) .card-reporte{ --accent: var(--brand-lime);  }
+
+/* (Opcional) Iconos de acción usan el acento visual */
+.reporte-card .acciones .btn i{
+  color: var(--accent);
+}
+
+/* ===================== PAGINACIÓN MINIMAL ===================== */
+.pagination-controls{ gap:.5rem; }
+
+.pager{
+  display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+  padding:.75rem; border:1px solid #eef1f5; border-radius:12px; background:#fff;
+}
+.pager-left,.pager-right{ display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+
+.pager label{ margin:0; font-size:.9rem; color:#667085; }
+.pager select{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  padding:.35rem 2rem .35rem .6rem; font-size:.9rem; border:1px solid #e5e7eb; border-radius:10px; background:#f9fafb;
+  background-image: linear-gradient(45deg, transparent 50%, #6b7280 50%), linear-gradient(135deg, #6b7280 50%, transparent 50%), linear-gradient(to right, transparent, transparent);
+  background-position: calc(100% - 16px) calc(50% - 3px), calc(100% - 11px) calc(50% - 3px), 100% 0;
+  background-size: 5px 5px, 5px 5px, 2.5rem 2.5rem; background-repeat:no-repeat;
+}
+
+.pager .btn-page{
+  display:inline-flex; align-items:center; gap:.4rem; border:1px solid #e5e7eb; background:#fff; color:#0f172a;
+  padding:.4rem .7rem; border-radius:999px; font-size:.9rem; line-height:1; transition:all .15s ease;
+}
+.pager .btn-page:hover{ background:#f1f5f9; border-color:#dbe2ea; }
+.pager .btn-page:active{ transform: translateY(1px); }
+.pager .btn-page[disabled]{ opacity:.45; cursor:not-allowed; background:#fafafa; }
+
+.pager .btn-icon{
+  width:28px; height:28px; border-radius:50%; display:inline-grid; place-items:center;
+  border:1px solid #e5e7eb; background:#fff;
+}
+.pager .btn-icon:hover{ background:#f1f5f9; }
+
+.pager .page-info{
+  font-size:.9rem; color:#334155; padding:.25rem .6rem; border:1px dashed #e5e7eb; border-radius:999px; background:#fcfdff;
+}
+
+/* Responsive */
+@media (max-width:576px){
+  .pager{ flex-direction:column; align-items:stretch; }
+  .pager-right{ justify-content:space-between; }
+}
+
+/* ===================== BOTONES (BTN-ACTION) ===================== */
+.btn-action{
+  display:inline-flex; align-items:center; gap:var(--btn-gap);
+  padding:var(--btn-pad-y) var(--btn-pad-x); border-radius:var(--btn-radius);
+  border:1px solid transparent; font-weight:var(--btn-font); line-height:1; letter-spacing:.2px;
+  user-select:none; text-decoration:none; box-shadow:var(--btn-shadow);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  color: var(--text-color);
+}
+.btn-action i{ font-size:.95rem; }
+.btn-action:hover{ transform:translateY(-1px); box-shadow:var(--btn-shadow-hover); }
+.btn-action:active{ transform:translateY(0); box-shadow:0 2px 6px rgba(0,0,0,.06) inset; }
+.btn-action:focus-visible{ outline:3px solid rgba(var(--brand-navy-rgb), .35); outline-offset:2px; }
+.btn-action:disabled, .btn-action[disabled]{ opacity:.6; pointer-events:none; }
+
+.btn-action--sm{ padding:.45rem .85rem; font-size:.85rem; }
+.btn-action--lg{ padding:.7rem 1.25rem; font-size:.95rem; }
+
+.btn-action.is-loading{ pointer-events:none; opacity:.85; }
+.btn-action.is-loading i{ animation:spin .9s linear infinite; }
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+/* Variantes con paleta corporativa */
+.btn-primary{
+  background: linear-gradient(180deg, var(--brand-navy), var(--brand-navy));
+  color:#fff !important; border-color:rgba(var(--brand-navy-rgb), .8);
+  text-shadow:0 1px 0 rgba(0,0,0,.25);
+}
+.btn-success{
+  background: linear-gradient(180deg, var(--brand-green), var(--brand-green));
+  color:#fff !important; border-color:rgba(var(--brand-green-rgb), .8);
+}
+.btn-warning{
+  background: linear-gradient(180deg, var(--brand-lime), var(--brand-lime));
+  color:#212529 !important; border-color:rgba(var(--brand-lime-rgb), .85);
+}
+.btn-danger{
+  background: linear-gradient(180deg, var(--brand-teal), var(--brand-teal));
+  color:#fff !important; border-color:rgba(var(--brand-teal-rgb), .85);
+}
+.btn-clean { background:#ECEFF3; color:#343A40 !important; border-color:#E1E6EA; }
+.btn-back  { background:#E5E7EB; color:#343A40 !important; border-color:#CFD4DA; }
+.btn-back:hover{ background:#DDE1E6; } 
+.btn-back:active{ background:#D3D8DE; }
+.btn-dark  { background:#343a40; color:#fff !important; border-color:#2c2f33; }
+
+/* ===================== TABLA DE RESULTADOS (alineada) ===================== */
+#tablaContenedor{ border:1px solid rgba(0,0,0,.08); background:#fff; }
+
+#tablaResultados{
+  width:100% !important; table-layout:auto;
+  border-collapse:separate; border-spacing:0;
+}
+#tablaResultados thead th,
+#tablaResultados tbody td{
+  box-sizing:border-box; padding:.55rem .75rem; border-bottom:1px solid rgba(0,0,0,.08); vertical-align:middle;
+}
+#tablaResultados thead th:first-child, #tablaResultados tbody td:first-child{ border-left:1px solid rgba(0,0,0,.08); }
+#tablaResultados thead th:last-child,  #tablaResultados tbody td:last-child { border-right:1px solid rgba(0,0,0,.08); }
+#tablaResultados thead th{ background:#fff; position:sticky; top:0; z-index:1; }
+
+.dt-col-num  { text-align:right; font-variant-numeric:tabular-nums; }
+.dt-col-date { white-space:nowrap; }
+
+/* ====== Acciones en tarjetas — UX/UI mejorado ====== */
+/* Capas correctas frente al .stretched-link */
+.reporte-card { position: relative; }
+.reporte-card .stretched-link { z-index: 1; }
+.reporte-card .acciones { position: relative; z-index: 2; align-items: center; }
+
+/* Botón redondo con icono (base) */
+.btn-circle{
+  --bg:#f6f7f9;
+  --bg-hover:#eef1f6;
+  --bd:#e1e6ee;
+  --fg:#0f172a;
+
+  /* tamaño fijo + centrado real */
+  width: 38px; height: 38px;
+  display: inline-grid; place-items: center;
+  border-radius: 999px;
+
+  /* anula padding/line-height de Bootstrap */
+  padding: 0 !important;
+  line-height: 1 !important;
+
+  border: 1px solid var(--bd);
+  background: var(--bg);
+  color: var(--fg) !important;
+
+  /* halo base más sutil/simétrico */
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease, filter .15s ease;
+}
+.btn-circle i{
+  display: block;
+  font-size: 1rem;
+  line-height: 1;
+  margin: 0;
+}
+.btn-circle:hover{
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+  /* halo simétrico (sin desplazamiento) */
+  box-shadow: 0 0 18px rgba(0,0,0,.12);
+  text-decoration: none;
+}
+.btn-circle:focus-visible{
+  outline: 0;
+  box-shadow:
+    0 0 0 3px rgba(255,255,255,.85),
+    0 0 0 6px rgba(0,48,87,.28),
+    0 0 18px rgba(0,0,0,.12);
+}
+
+/* Variantes circulares */
+.btn-view { --bg:#eef4ff; --bg-hover:#dfeaff; --bd:#c8d9ff; --fg:#0d6efd; filter: saturate(1.05); }
+.btn-del  { --bg:#fff1f1; --bg-hover:#ffe4e4; --bd:#ffc2c2; --fg:#d7263d; }
+
+/* ====== Acciones en tarjetas — capas y contenedor ====== */
+.reporte-card { position: relative; }
+.reporte-card .stretched-link { z-index: 1; }
+.reporte-card .acciones { position: relative; z-index: 2; }
+
+/* ====== Botón “chip” (píldora) común ====== */
+.btn-chip{
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 0 .95rem;
+  border-radius: 999px;
+  border: 1px solid;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
+  text-decoration: none !important;
+}
+.btn-chip i{ font-size: 1rem; }
+
+/* ====== Ver (azul) — mismo look que Editar ====== */
+.btn-view-chip{
+  background: #eaf2ff;           /* fondo */
+  border-color: #b7cffd;         /* borde */
+  color: #0b3d91 !important;     /* texto/ícono */
+}
+.btn-view-chip:hover{
+  background: #d9e8ff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(13,110,253,.18);
+}
+.btn-view-chip:focus-visible{
+  outline: 0;
+  box-shadow:
+    0 0 0 3px rgba(255,255,255,.85),
+    0 0 0 6px rgba(13,110,253,.35),
+    0 10px 22px rgba(13,110,253,.18);
+}
+
+/* ====== Editar (ámbar) ====== */
+.btn-edit{
+  background: #fff7e6;
+  border-color: #ffd58a;
+  color: #8a5b00 !important;
+}
+.btn-edit:hover{
+  background: #ffe6b8;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(240,160,0,.18);
+}
+.btn-edit:focus-visible{
+  outline: 0;
+  box-shadow:
+    0 0 0 3px rgba(255,255,255,.85),
+    0 0 0 6px rgba(255,193,7,.35),
+    0 10px 22px rgba(240,160,0,.18);
+}
+
+/* ====== Eliminar (píldora/redondo compacto) ====== */
+.btn-del{
+  display: inline-grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 999px;
+  border: 1px solid #ffc2c2;
+  background: #fff1f1;
+  color: #c21d3d !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
+}
+.btn-del:hover{
+  background: #ffe4e4;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(224,49,49,.18);
+}
+
+/* Móvil: mantener legibilidad */
+@media (max-width:576px){
+  .btn-chip{ padding: 0 .8rem; font-weight: 600; }
+}

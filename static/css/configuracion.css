@@ -1,0 +1,118 @@
+/* ==========================
+   CONFIGURACIÓN – UX/UI PRO
+========================== */
+
+:root {
+  --primary: #2563eb;
+  --primary-soft: rgba(37, 99, 235, 0.12);
+  --border: #e5e7eb;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --bg-card: #ffffff;
+}
+
+/* Card principal */
+.config-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 28px 30px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+/* Header */
+.config-header h5 {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.config-header small {
+  color: var(--text-muted);
+}
+
+/* Tabs */
+.config-tabs {
+  border-bottom: 1px solid var(--border);
+  margin-top: 18px;
+}
+
+.config-tabs .nav-link {
+  border: none;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 10px 16px;
+  position: relative;
+}
+
+.config-tabs .nav-link.active {
+  color: var(--primary);
+  background: transparent;
+}
+
+.config-tabs .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -1px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+/* Form sections */
+.form-section {
+  margin-top: 10px;
+}
+
+.form-section label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+/* Inputs */
+.form-control,
+.form-select {
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* Botones */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 26px;
+}
+
+.form-actions .btn {
+  border-radius: 12px;
+  padding: 10px 22px;
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(37,99,235,0.18);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .config-card {
+    padding: 22px;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+}

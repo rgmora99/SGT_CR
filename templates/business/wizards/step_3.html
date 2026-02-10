@@ -1,0 +1,43 @@
+{% extends "base/menu.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+  <div class="hero-header">
+    <h2>Confirmación</h2>
+    <p>Revisa la información antes de finalizar.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="card card-analytics p-4">
+
+        <ul class="list-group list-group-flush mb-3">
+          <li class="list-group-item">
+            <strong>Negocio:</strong> Tienda La Esquina
+          </li>
+          <li class="list-group-item">
+            <strong>Identificación:</strong> 1-2345-6789
+          </li>
+          <li class="list-group-item">
+            <strong>Régimen:</strong> Simplificado
+          </li>
+          <li class="list-group-item">
+            <strong>IVA:</strong> 13%
+          </li>
+        </ul>
+
+        <div class="d-flex justify-content-end gap-2">
+          <a href="#" class="btn-view btn-secondary">Editar</a>
+          <a href="#" class="btn-view btn-success">Finalizar</a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

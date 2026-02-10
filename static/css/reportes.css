@@ -1,0 +1,120 @@
+
+:root {
+  --brand-navy: #003057;
+  --brand-green: #78BE21;
+  --brand-bg: #f8f9fc;
+  --brand-gray: #6b7280;
+}
+body {
+  background: var(--brand-bg); /* ✅ usa el mismo fondo neutro */
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+/* ===== Página ===== */
+.page-content {
+  background: var(--brand-bg);
+  min-height: 100vh;
+  padding: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  animation: fadeIn .4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-title {
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.page-content p.text-muted {
+  color: var(--brand-gray);
+  font-size: 0.95rem;
+}
+
+/* ===== KPIs ===== */
+.kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: all .2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.kpi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.kpi-label {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.kpi-value {
+  font-weight: 700;
+  color: var(--brand-navy);
+  font-size: 1.2rem;
+}
+/* ===== Tamaño uniforme de gráficos ===== */
+.chart-card {
+  height: 320px;              /* Alto igual para ambas tarjetas */
+}
+
+.chart-wrapper {
+  position: relative;
+  height: calc(100% - 32px);  /* deja espacio para el título */
+}
+
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ===== Tarjetas analíticas ===== */
+.card-analytics {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  transition: all .2s ease;
+}
+
+.card-analytics:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+/* ===== Alertas informativas ===== */
+.alert-info {
+  background-color: rgba(0,48,87,0.05);
+  border: 1px solid rgba(0,48,87,0.15);
+  color: var(--brand-navy);
+  border-radius: 12px;
+}
+
+/* ===== Footer ===== */
+.footer-info {
+  color: #6b7280;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .kpi-card { padding: 0.7rem; }
+  .page-title { font-size: 1.4rem; }
+}

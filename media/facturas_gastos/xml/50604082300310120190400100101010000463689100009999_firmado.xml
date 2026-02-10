@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><Clave>50604082300310120190400100101010000463689100009999</Clave>
+<CodigoActividad>523601</CodigoActividad>
+<NumeroConsecutivo>00100101010000463689</NumeroConsecutivo>
+<FechaEmision>2023-08-04T11:57:02</FechaEmision>
+<Emisor>
+<Nombre>COMPUBETEL S.A.</Nombre>
+<Identificacion>
+<Tipo>02</Tipo>
+<Numero>3101201904</Numero>
+</Identificacion>
+<NombreComercial>Tienda Punto de Venta</NombreComercial>
+<Ubicacion>
+<Provincia>3</Provincia>
+<Canton>01</Canton>
+<Distrito>01</Distrito><Barrio>01</Barrio><OtrasSenas>100m oeste del costado norte del parque los Angeles Cartago</OtrasSenas>
+</Ubicacion><Telefono>
+<CodigoPais>506</CodigoPais>
+<NumTelefono>25517272</NumTelefono>
+</Telefono><Fax>
+<CodigoPais>506</CodigoPais>
+<NumTelefono>25517272</NumTelefono>
+</Fax><CorreoElectronico>facturaelectronica@compubetel.com</CorreoElectronico>
+</Emisor><Receptor>
+<Nombre>Ruley Gustavo Mora Calvo</Nombre>
+<Identificacion>
+<Tipo>01</Tipo>
+<Numero>117580572</Numero>
+</Identificacion><NombreComercial>Ruley Gustavo Mora Calvo</NombreComercial>
+<Ubicacion>
+<Provincia>3</Provincia>
+<Canton>01</Canton>
+<Distrito>01</Distrito>
+<Barrio>01</Barrio>
+<OtrasSenas></OtrasSenas>
+</Ubicacion>
+<CorreoElectronico>ruleymorac@gmail.com</CorreoElectronico>
+</Receptor>
+<CondicionVenta>01</CondicionVenta>
+<PlazoCredito>0</PlazoCredito>
+<MedioPago>01</MedioPago>
+<DetalleServicio>
+<LineaDetalle>
+<NumeroLinea>1</NumeroLinea>
+
+<Codigo>4529000000000</Codigo>
+<CodigoComercial>
+<Tipo>04</Tipo>
+<Codigo>MCL10</Codigo>
+</CodigoComercial>
+<Cantidad>1.000</Cantidad>
+<UnidadMedida>Unid</UnidadMedida>
+<UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+<Detalle>CARGADOR LENOVO 20V 3.25A 5.52.5 ZOECAN GENERICO</Detalle>
+<PrecioUnitario>11362.8300</PrecioUnitario>
+<MontoTotal>11362.83</MontoTotal>
+
+<SubTotal>11362.83</SubTotal>
+
+<Impuesto>
+<Codigo>01</Codigo><CodigoTarifa>08</CodigoTarifa>
+<Tarifa>13.00</Tarifa>
+<Monto>1477.17</Monto>
+</Impuesto>
+
+<MontoTotalLinea>12840.00</MontoTotalLinea>
+</LineaDetalle>
+<LineaDetalle>
+<NumeroLinea>2</NumeroLinea>
+
+<Codigo>4912999009900</Codigo>
+<CodigoComercial>
+<Tipo>04</Tipo>
+<Codigo>TRANSPORTE</Codigo>
+</CodigoComercial>
+<Cantidad>1.000</Cantidad>
+<UnidadMedida>Unid</UnidadMedida>
+<UnidadMedidaComercial>Unid</UnidadMedidaComercial>
+<Detalle>ENVIO O TRANSPORTE</Detalle>
+<PrecioUnitario>2212.3900</PrecioUnitario>
+<MontoTotal>2212.39</MontoTotal>
+
+<SubTotal>2212.39</SubTotal>
+
+<Impuesto>
+<Codigo>01</Codigo><CodigoTarifa>08</CodigoTarifa>
+<Tarifa>13.00</Tarifa>
+<Monto>287.61</Monto>
+</Impuesto>
+
+<MontoTotalLinea>2500.00</MontoTotalLinea>
+</LineaDetalle>
+</DetalleServicio>
+<ResumenFactura>
+
+<CodigoTipoMoneda>
+<CodigoMoneda>CRC</CodigoMoneda>
+<TipoCambio>1.00</TipoCambio>
+</CodigoTipoMoneda>
+<TotalServGravados>0</TotalServGravados>
+<TotalServExentos>0</TotalServExentos>
+<TotalServExonerado>0.00</TotalServExonerado>
+<TotalMercanciasGravadas>13575.22</TotalMercanciasGravadas>
+<TotalMercanciasExentas>0.00</TotalMercanciasExentas>
+<TotalMercExonerada>0.00</TotalMercExonerada>
+<TotalGravado>13575.22</TotalGravado>
+<TotalExento>0.00</TotalExento>
+<TotalExonerado>0.00</TotalExonerado>
+<TotalVenta>13575.22</TotalVenta>
+<TotalDescuentos>0.00</TotalDescuentos>
+<TotalVentaNeta>13575.22</TotalVentaNeta>
+<TotalImpuesto>1764.78</TotalImpuesto>
+<TotalComprobante>15340.00</TotalComprobante>
+</ResumenFactura>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-d947e37a-8d7e-4a1c-a525-fcc8b57e3b0b"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-f28ad966-d89d-4453-9ce4-14a6ec6621f6" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>JQSAnTwRSbFoeQyWKo2zyRkNC9YwMY4v4IHyVqZJil8=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-d947e37a-8d7e-4a1c-a525-fcc8b57e3b0b"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>WSa3YFOn0gGgd7aWMhM98DWFEb82BO2s9qjkgpNkSnI=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-d947e37a-8d7e-4a1c-a525-fcc8b57e3b0b"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>/JxSdykRmlyzVRzH7BHDm1/kuFFudmeSWCiqyRkw4vg=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-d947e37a-8d7e-4a1c-a525-fcc8b57e3b0b">ausumDMukDfTcZ06DViHzg1KNv6qGckvdF5Xcy4T8slQnobefv3o929aIetfY+4c6EGNHiLEdVY9TC7tfawAF0JSfQNOG+GHVMp9/6kQhtdtA1NNIcBCokjo65RG1EaOJkXqszNLKAl0HAhYedyTI1fXxPAH3YiPTEEjxsDp75Xu2JtEcl01l6quTMQ5d+wF3MniWaM04Ua5Xjb8CSO8I2hJxODeAg+OrLIBhSlIEOkskeZRUNBuluSe4ShxJy5HIvDDEM1Xb+KPz+5dJvQ5zIlj0ISFlOyyLNZ0Qpil9MSUXIxY/41EAMUykV3VFB+24DTrv1PcsmEmstmZ209IqA==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-d947e37a-8d7e-4a1c-a525-fcc8b57e3b0b"><ds:X509Data><ds:X509Certificate>MIIFhTCCBG2gAwIBAgITSAAABDtPgXKDwm49GwABAAAEOzANBgkqhkiG9w0BAQsFADCBmzEZMBcGA1UEBRMQQ1BKLTQtMDAwLTAwNDAxNzELMAkGA1UEBhMCQ1IxJDAiBgNVBAoTG0JBTkNPIENFTlRSQUwgREUgQ09TVEEgUklDQTEiMCAGA1UECxMZRElWSVNJT04gU0lTVEVNQVMgREUgUEFHTzEnMCUGA1UEAxMeQ0EgU0lOUEUgLSBQRVJTT05BIEpVUklESUNBIHYyMB4XDTIyMDUwMzE3MDkyMloXDTI2MDUwMjE3MDkyMlowfTEZMBcGA1UEBRMQQ1BKLTMtMTAxLTIwMTkwNDELMAkGA1UEBhMCQ1IxGTAXBgNVBAoTEFBFUlNPTkEgSlVSSURJQ0ExODA2BgNVBAMTL0NPTVBVQkVURUwgU09DSUVEQUQgQU5PTklNQSAoU0VMTE8gRUxFQ1RST05JQ08pMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqSCRDUIUVwzn20V6x+aWuQUAJV6dnBamxUT4tbo+07ovUDWQd7+aUrvyXtTNhMeEKh4xDVfTP4i00WSXJ3RrszuRMtBNCwF1MDffQyKErJNm3b81s0HvIxsgUQGZnVuWBZ/byYWysAOB5XxS8D9c5VTa0wrbXFLYAxasxHtLvEQSxNMTDMOy5gOcyRYjyH5pl+akvkvGKa/VsHZoin6XYm7QOTfBTtMYRCy53TviVDh0hrkxj831+gDbXecKY3N3hiV4veXRt0JnbvF9MdfpH1KimtTXvNT38kXtYG2O+6QGcn3G6EHr72HZS+oRYqWgILvMOB9RhFbI8hIYeJa0VwIDAQABo4IB3TCCAdkwDgYDVR0PAQH/BAQDAgbAMB0GA1UdDgQWBBQSbqQyVp6w5d8jr57m7MKYeJ8KyTAfBgNVHSMEGDAWgBS4Wf2gIywnRNWP3G+dL7hy7OZJCzBjBgNVHR8EXDBaMFigVqBUhlJodHRwOi8vZmRpLnNpbnBlLmZpLmNyL3JlcG9zaXRvcmlvL0NBJTIwU0lOUEUlMjAtJTIwUEVSU09OQSUyMEpVUklESUNBJTIwdjIoMSkuY3JsMIGaBggrBgEFBQcBAQSBjTCBijAoBggrBgEFBQcwAYYcaHR0cDovL29jc3Auc2lucGUuZmkuY3Ivb2NzcDBeBggrBgEFBQcwAoZSaHR0cDovL2ZkaS5zaW5wZS5maS5jci9yZXBvc2l0b3Jpby9DQSUyMFNJTlBFJTIwLSUyMFBFUlNPTkElMjBKVVJJRElDQSUyMHYyKDEpLmNydDA8BgkrBgEEAYI3FQcELzAtBiUrBgEEAYI3FQiFxOpbgtHjNZWRG4L5lxiGpctrgX+BkIZ13rJcAgFkAgEJMBMGA1UdJQQMMAoGCCsGAQUFBwMEMBsGCSsGAQQBgjcVCgQOMAwwCgYIKwYBBQUHAwQwFQYDVR0gBA4wDDAKBghggTwBAQEBBjANBgkqhkiG9w0BAQsFAAOCAQEAqM0jsYaaz08IHPwTuIXVEXLF3WQRScuTWHaeK5lMlku0ohMrKPdUTRTPPgJXL/iwBWoqs//4mIok9YSvOId6okLy++yPsOdJrISAxHwxFePELLolbdLWyEBmbkZXuu1H7Wf71MBu59gaYGKaI2hjvKBUOtNiXtGyGTGnWrJxOXgam43tPtdim+m053a9/0Gv9FiluPb7Fz9QEkS+4svcSlMgI1vE6HwF11nPOfazRsEiRa73MKs7a0vA9twa3DDUV6P6eggDgBsMb4sNQ14VdzWkTf4gMzvjSJH8AlvOX4U0+1kWUQXJCDo1PCSXALsc0dFf2aKX0jXfBEFca1Avdw==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>qSCRDUIUVwzn20V6x+aWuQUAJV6dnBamxUT4tbo+07ovUDWQd7+aUrvyXtTNhMeEKh4xDVfTP4i00WSXJ3RrszuRMtBNCwF1MDffQyKErJNm3b81s0HvIxsgUQGZnVuWBZ/byYWysAOB5XxS8D9c5VTa0wrbXFLYAxasxHtLvEQSxNMTDMOy5gOcyRYjyH5pl+akvkvGKa/VsHZoin6XYm7QOTfBTtMYRCy53TviVDh0hrkxj831+gDbXecKY3N3hiV4veXRt0JnbvF9MdfpH1KimtTXvNT38kXtYG2O+6QGcn3G6EHr72HZS+oRYqWgILvMOB9RhFbI8hIYeJa0Vw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-7f31bbe8-71c6-4550-bc65-a561ba1eb771"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-66b5d586-dd10-4c6d-989a-89afc436311c" Target="#Signature-d947e37a-8d7e-4a1c-a525-fcc8b57e3b0b"><xades:SignedProperties Id="SignedProperties-Signature-d947e37a-8d7e-4a1c-a525-fcc8b57e3b0b"><xades:SignedSignatureProperties><xades:SigningTime>2023-08-04T11:57:02-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>T6xHqZpEdr/lNIxyY3ggxDHIYb7i/gBinaoAA6iJGvs=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA SINPE - PERSONA JURIDICA v2, OU=DIVISION SISTEMAS DE PAGO, O=BANCO CENTRAL DE COSTA RICA, C=CR, SERIALNUMBER=CPJ-4-000-004017</ds:X509IssuerName><ds:X509SerialNumber>1605653659919074930216021434037743093710586939</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4/Resolucion%20Comprobantes%20Electronicos%20%20DGT-R-48-2016.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>V8lVVNGDCPen6VELRD1Ja8HARFk=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-f28ad966-d89d-4453-9ce4-14a6ec6621f6"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

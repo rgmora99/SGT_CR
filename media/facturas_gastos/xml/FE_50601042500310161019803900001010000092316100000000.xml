@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaElectronica xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica">
+  <Clave>50601042500310161019803900001010000092316100000000</Clave>
+  <CodigoActividad>642002</CodigoActividad>
+  <NumeroConsecutivo>03900001010000092316</NumeroConsecutivo>
+  <FechaEmision>2025-04-01T17:27:06-06:00</FechaEmision>
+  <Emisor>
+    <Nombre>LIBERTY TELECOMUNICACIONES DE COSTA RICA LY S.A.</Nombre>
+    <Identificacion>
+      <Tipo>02</Tipo>
+      <Numero>3101610198</Numero>
+    </Identificacion>
+    <Ubicacion>
+      <Provincia>1</Provincia>
+      <Canton>02</Canton>
+      <Distrito>03</Distrito>
+      <Barrio>26</Barrio>
+      <OtrasSenas>Centro Corp. El Cedral, SJ, CR 10203</OtrasSenas>
+    </Ubicacion>
+    <Telefono>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>41009000</NumTelefono>
+    </Telefono>
+    <Fax>
+      <CodigoPais>506</CodigoPais>
+      <NumTelefono>41009000</NumTelefono>
+    </Fax>
+    <CorreoElectronico>factura.electronicacr@libertycr.com</CorreoElectronico>
+  </Emisor>
+  <Receptor>
+    <Nombre>RULEY GUSTAVO MORA CALVO</Nombre>
+    <Identificacion>
+      <Tipo>01</Tipo>
+      <Numero>117580572</Numero>
+    </Identificacion>
+  </Receptor>
+  <CondicionVenta>01</CondicionVenta>
+  <PlazoCredito />
+  <MedioPago>01</MedioPago>
+  <DetalleServicio>
+    <LineaDetalle>
+      <NumeroLinea>1</NumeroLinea>
+      <Codigo>8462200000000</Codigo>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>01022236</Codigo>
+      </CodigoComercial>
+      <Cantidad>1</Cantidad>
+      <UnidadMedida>Os</UnidadMedida>
+      <Detalle>NEXTGEN TV</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>27869.00000</PrecioUnitario>
+      <MontoTotal>27869.00000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>15478.44000</MontoDescuento>
+        <NaturalezaDescuento>DESCUENTO APLICADO</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>12390.56000</SubTotal>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13.00</Tarifa>
+        <Monto>1610.77000</Monto>
+      </Impuesto>
+      <MontoTotalLinea>14001.33000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>2</NumeroLinea>
+      <Codigo>8462200000000</Codigo>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>01022669</Codigo>
+      </CodigoComercial>
+      <Cantidad>2</Cantidad>
+      <UnidadMedida>Os</UnidadMedida>
+      <Detalle>TELEVISOR ANALÓGICO ADICIONAL IPTV</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>353.99000</PrecioUnitario>
+      <MontoTotal>707.98000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>707.98000</MontoDescuento>
+        <NaturalezaDescuento>DESCUENTO APLICADO</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>0.00000</SubTotal>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13.00</Tarifa>
+        <Monto>0.00000</Monto>
+      </Impuesto>
+      <MontoTotalLinea>0.00000</MontoTotalLinea>
+    </LineaDetalle>
+    <LineaDetalle>
+      <NumeroLinea>3</NumeroLinea>
+      <Codigo>8422200000000</Codigo>
+      <CodigoComercial>
+        <Tipo>01</Tipo>
+        <Codigo>02022893</Codigo>
+      </CodigoComercial>
+      <Cantidad>1</Cantidad>
+      <UnidadMedida>Os</UnidadMedida>
+      <Detalle>2022E_INTERNET CT 450MBPS/15MBPS</Detalle>
+      <RegistroMedicamento />
+      <FormaFarmaceutica />
+      <PrecioUnitario>52778.42000</PrecioUnitario>
+      <MontoTotal>52778.42000</MontoTotal>
+      <Descuento>
+        <MontoDescuento>41155.22000</MontoDescuento>
+        <NaturalezaDescuento>DESCUENTO APLICADO</NaturalezaDescuento>
+      </Descuento>
+      <SubTotal>11623.20000</SubTotal>
+      <Impuesto>
+        <Codigo>01</Codigo>
+        <CodigoTarifa>08</CodigoTarifa>
+        <Tarifa>13.00</Tarifa>
+        <Monto>1511.02000</Monto>
+      </Impuesto>
+      <MontoTotalLinea>13134.22000</MontoTotalLinea>
+    </LineaDetalle>
+  </DetalleServicio>
+  <OtrosCargos>
+    <TipoDocumento>99</TipoDocumento>
+    <NumeroIdentidadTercero />
+    <NombreTercero />
+    <Detalle>CARGO 911 0.75%</Detalle>
+    <MontoCargo>87.17000</MontoCargo>
+  </OtrosCargos>
+  <OtrosCargos>
+    <TipoDocumento>99</TipoDocumento>
+    <NumeroIdentidadTercero />
+    <NombreTercero />
+    <Detalle>CARGO CRUZ ROJA 1%</Detalle>
+    <MontoCargo>116.23000</MontoCargo>
+  </OtrosCargos>
+  <ResumenFactura>
+    <CodigoTipoMoneda>
+      <CodigoMoneda>CRC</CodigoMoneda>
+      <TipoCambio>504.21</TipoCambio>
+    </CodigoTipoMoneda>
+    <TotalServGravados>81355.40000</TotalServGravados>
+    <TotalServExentos>0.00000</TotalServExentos>
+    <TotalServExonerado>0.00000</TotalServExonerado>
+    <TotalMercanciasGravadas>0.00000</TotalMercanciasGravadas>
+    <TotalMercanciasExentas>0.00000</TotalMercanciasExentas>
+    <TotalMercExonerada>0.00000</TotalMercExonerada>
+    <TotalGravado>81355.40000</TotalGravado>
+    <TotalExento>0.00000</TotalExento>
+    <TotalExonerado>0.00000</TotalExonerado>
+    <TotalVenta>81355.40000</TotalVenta>
+    <TotalDescuentos>57341.64000</TotalDescuentos>
+    <TotalVentaNeta>24013.76000</TotalVentaNeta>
+    <TotalImpuesto>3121.79000</TotalImpuesto>
+    <TotalIVADevuelto>0</TotalIVADevuelto>
+    <TotalOtrosCargos>203.40000</TotalOtrosCargos>
+    <TotalComprobante>27338.95000</TotalComprobante>
+  </ResumenFactura>
+  <Otros>
+    <OtroTexto codigo="NumeroContrato">0001487464</OtroTexto>
+    <OtroTexto codigo="NumerosTelefono">83396964 83396964</OtroTexto>
+    <OtroTexto codigo="Observaciones">Esta factura incluye un descuento equivalente al doble de las horas sin servicio debido a la incidencia del 22 de marzo.</OtroTexto>
+    <OtroTexto codigo="RecargoMora">Si cancela posterior al día 20 del mes, en su próxima factura se cobrará un recargo por mora de: 1400.00</OtroTexto>
+    <OtroTexto codigo="FechaPeriodo">ABRIL 2025</OtroTexto>
+    <OtroTexto codigo="NumeroIdentificacionImpresion">0117580572</OtroTexto>
+    <OtroTexto codigo="DireccionImpresion">**CONCEPCIÓN DE LA ESCUELA DE CALLE NARANJO 100 MTRS SUR 100 MTRS OESTE CALLE SIN SALIDA ÚLTIMA CASA VERDE MANO IZQUIERDA **</OtroTexto>
+    <OtroTexto codigo="RESUMEN_INTERNET">11623.20000</OtroTexto>
+    <OtroTexto codigo="RESUMEN_TELEVISION">12390.56000</OtroTexto>
+    <OtroTexto codigo="SUB TOTAL">24013.76000</OtroTexto>
+    <OtroTexto codigo="Cuota_Equipo">8800.00000</OtroTexto>
+    <OtroTexto codigo="Email_Receptor">ruleym12@gmail.com</OtroTexto>
+  </Otros>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-e73364ab-0918-481a-8df6-b88fc64140c3"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><ds:Reference Id="Reference-e0e3b8e4-e795-4c13-bb91-26c1b0ad325b" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>wyRBNf+l4nhqbIDIhiOifOUqqCjwQertUGI7OLOSYhA=</ds:DigestValue></ds:Reference><ds:Reference Id="ReferenceKeyInfo" URI="#KeyInfoId-Signature-e73364ab-0918-481a-8df6-b88fc64140c3"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>as5pK8MKnBELRRAINxZr2fFQaE+mFKa7Rubl+LabFqw=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-Signature-e73364ab-0918-481a-8df6-b88fc64140c3"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>ImItiAXQmK4zg0d2bHn+NMQtcwruWpdD9ciCI+/FnPk=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-e73364ab-0918-481a-8df6-b88fc64140c3">0oelp4eCNJh18I2ZCPPNJr7mC/IEFkIlu8ytM0zB4exnaBw3S+ResJlvaEGYf2PZ3Ev/n7eP1DRwEAuBiki6bCuSmUiSbKFW/b2vuYO3HbRYfYPAPDJdDF6jTbqkWBM9b0Sq43gPk+OtezOYiqDqmoF0l5QsmxrCUeBcM2sMiFUS7A1uYxXAsnKY6LHduxhMGOJ2aVxB+OBQFe0otDAmfGqh/b7PjEaCi0TGi9Im04NAcriDKTJfOuO6GlrEGekstLIjzPz7/3iFv2SCY/T8qi1lbKP/3mZuMVy/JZav+5WTcFKXeOuytLbilMVmXkhJ7EP+StZdWe+6ZsrJ+P7TLg==</ds:SignatureValue><ds:KeyInfo Id="KeyInfoId-Signature-e73364ab-0918-481a-8df6-b88fc64140c3"><ds:X509Data><ds:X509Certificate>MIIFLjCCAxagAwIBAgIGAXvNsQInMA0GCSqGSIb3DQEBCwUAMFoxCzAJBgNVBAYTAkNSMR8wHQYDVQQKDBZNSU5JU1RFUklPIERFIEhBQ0lFTkRBMQwwCgYDVQQLDANER1QxHDAaBgNVBAMME0NBIFBFUlNPTkEgSlVSSURJQ0EwHhcNMjEwOTEwMDMxMjE0WhcNMjUwOTA5MDMxMjE0WjCBiDEZMBcGA1UEBRMQQ1BKLTMtMTAxLTYxMDE5ODELMAkGA1UEBhMCQ1IxGTAXBgNVBAoMEFBFUlNPTkEgSlVSSURJQ0ExDDAKBgNVBAsMA0NQSjE1MDMGA1UEAwwsVEVMRUZPTklDQSBERSBDT1NUQSBSSUNBIFRDIFNPQ0lFREFEIEFOT05JTUEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDayBiHv1qtaWZy88VjJ3hTWK4rhaoYrIwIPy2QyvcHQvs9Kv8EBAJf8qKnHmKPZEhAO/u8S0rkGkYy3RmtDcTQcFmyTtEDAu786ERrex7kX41xzYzybZQgt34+1tho4YKUpXDRp3Qx/a0pH3u/a4p7nmbkVpyavFKbd4riaB6x4tws7hv6RiADbxlHThILbtvUZ/d8unH5o7y8UEJvpeyckSUePmwM9baNMmLAsgIlp8LUkV0EwJjeS21uWAs6sRnlHGVNE3YrkqpP2B2+L7Q4RK3Uy6ViXfqiL5moSFZVVLSk1sDn7xbuRZGE1foMtDVDdiNFlE7frp1rgN1MrPt3AgMBAAGjgcowgccwHwYDVR0jBBgwFoAUO21X9dZ86Z4QAiBB470azM+zTpUwHQYDVR0OBBYEFJPTQ8BsLIVwjUHlJvSckY70LWWbMAsGA1UdDwQEAwIGwDATBgNVHSUEDDAKBggrBgEFBQcDBDBjBggrBgEFBQcBAQRXMFUwUwYIKwYBBQUHMAKGR2h0dHBzOi8vcGtpLmNvbXByb2JhbnRlc2VsZWN0cm9uaWNvcy5nby5jci9wcm9kL2ludGVybWVkaWF0ZS1wai1wZW0uY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQB0Lpt7+lf5WGvvubgPlTpOdEhNxAzUTwHdHF1k+mCZigihdN2680C0ojdB9qfu06RMfwJm86Lr/Qt/l7STkF0tkQWDopDksP53B8fvNOGChOilHU2uMJBEGwXT0KY8t5kLUtM0VzlRJSamXXzh4F1MZemxLNcgj+l3Dm7APGnvARAU4/mLG6ij7PcdFRZAOYZQm90HmI6cjvoTDjOc1K/vk7Nl+JdOA1tGxIHk5kA1AWSQmJD4M6n1QE9jB2G+B6sOTFDBUY2ul7BM9/5V2O577ngrGOiepOG9v6K+VlV+TBcgFmQQeS5KZZDBZlhtUjf4RFYEyFU7CdnkVcWkIC/1nmtYbTeykfmdkuxxsmxQwWRuYvQSos8XaF0cLaCcMPO52nmxWvxSUIRNHui0jmmaY6kCIc9D8yJOGEuN73pX4uRquo0h+Qtlb/G1zio2UhvoeRQ9PB6nEueqM+8XvxOhhWUqPYsYL3lifZlvfpwNPwTEPICaA6WDIl3YyjoywCAkwb+sCvsA9wlGQQvQ/pxYQVlezgjkZb5xrFrzE9/vND8BVIsqSbrn4462lyHMKUaUiBAScYHcMeA24zM/h1CxbpKd3MhZf7PfOijAFQjw1w2FZ/4Sq2TZAILqLdQAVTebfLhfSB8hdzD/eYY1r30vTSI/zrE7bvqlgwmVLI6S+w==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>2sgYh79arWlmcvPFYyd4U1iuK4WqGKyMCD8tkMr3B0L7PSr/BAQCX/Kipx5ij2RIQDv7vEtK5BpGMt0ZrQ3E0HBZsk7RAwLu/OhEa3se5F+Ncc2M8m2UILd+PtbYaOGClKVw0ad0Mf2tKR97v2uKe55m5FacmrxSm3eK4mgeseLcLO4b+kYgA28ZR04SC27b1Gf3fLpx+aO8vFBCb6XsnJElHj5sDPW2jTJiwLICJafC1JFdBMCY3kttblgLOrEZ5RxlTRN2K5KqT9gdvi+0OESt1MulYl36oi+ZqEhWVVS0pNbA5+8W7kWRhNX6DLQ1Q3YjRZRO366da4DdTKz7dw==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="XadesObjectId-11cd6126-9b15-47b7-bf99-ad81d4171b7f"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="QualifyingProperties-da126ef4-0436-4273-9026-0a9519727bc5" Target="#Signature-e73364ab-0918-481a-8df6-b88fc64140c3"><xades:SignedProperties Id="SignedProperties-Signature-e73364ab-0918-481a-8df6-b88fc64140c3"><xades:SignedSignatureProperties><xades:SigningTime>2025-04-01T17:27:07-06:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>sNfAcQe6gq80kJEhwHqPQZy8l4d/i8oU2wPkkkvDbUs=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA PERSONA JURIDICA, OU=DGT, O=MINISTERIO DE HACIENDA, C=CR</ds:X509IssuerName><ds:X509SerialNumber>1631243534887</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://tribunet.hacienda.go.cr/docs/esquemas/2016/v4.2/Resolucion_Comprobantes_Electronicos_DGT-R-48-2016.pdf</xades:Identifier><xades:Description /></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><ds:DigestValue>NmI5Njk1ZThkNzI0MmIzMGJmZDAyNDc4YjUwNzkzODM2NTBiOWUxNTBkMmI2YjgzYzZjM2I5NTZlNDQ4OWQzMQ==</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#Reference-e0e3b8e4-e795-4c13-bb91-26c1b0ad325b"><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FacturaElectronica>

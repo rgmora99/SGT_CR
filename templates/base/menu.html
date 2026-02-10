@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{% block title %}Sistema de Gestión de Compras - Correos de Costa Rica{% endblock %}</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Tipografía institucional -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+  <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+  <link rel="stylesheet" href="{% static 'css/configuracion.css' %}">
+
+  <!-- Estilos por vista -->
+  {% block styles %}{% endblock %}
+</head>
+<body>
+
+<!-- ===================== SIDEBAR ===================== -->
+<aside class="sidebar" id="sidebar">
+
+  <!-- HEADER / BRAND -->
+  <div class="sidebar-header">
+    <a class="brand brand--stack text-center w-100" href="{% url 'core:home' %}">
+      <img class="brand-logo mb-2" src="{% static 'img/logo.png' %}" alt="Sistema para Emprendedores">
+    </a>
+  </div>
+
+  <ul class="nav flex-column sidebar-menu mt-3">
+
+  <!-- PANEL FISCAL -->
+  <li class="nav-item">
+    <a class="nav-link active" href="{% url 'core:home' %}">
+      <i class="bi bi-speedometer2"></i>
+      <span class="text">Inicio</span>
+    </a>
+  </li>
+
+  <!-- INGRESOS -->
+  <li class="nav-item has-submenu">
+    <a class="nav-link toggle-submenu" href="#">
+      <i class="bi bi-arrow-down-left-circle"></i>
+      <span class="text">Ingresos</span>
+      <i class="bi bi-chevron-right arrow"></i>
+    </a>
+    <ul class="submenu">
+      <li><a href="#">Registrar ingreso</a></li>
+      <li><a href="#">Historial de ingresos</a></li>
+      <li><a href="#">Cuentas por cobrar</a></li>
+    </ul>
+  </li>
+
+  <!-- GASTOS -->
+  <li class="nav-item has-submenu">
+    <a class="nav-link toggle-submenu" href="#">
+      <i class="bi bi-arrow-up-right-circle"></i>
+      <span class="text">Gastos</span>
+      <i class="bi bi-chevron-right arrow"></i>
+    </a>
+    <ul class="submenu">
+      <li><a href="#">Registrar gasto</a></li>
+      <li><a href="{% url 'gastos:bandeja_facturas' %}">Bandeja de facturas</a></li>
+      <li><a href="#">Gastos fijos</a></li>
+      <li><a href="#">Categorías de gasto</a></li>
+    </ul>
+  </li>
+
+  <!-- IVA Y OBLIGACIONES -->
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="bi bi-receipt-cutoff"></i>
+      <span class="text">IVA y obligaciones</span>
+    </a>
+  </li>
+
+  <!-- DOCUMENTOS -->
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="bi bi-folder2-open"></i>
+      <span class="text">Documentos</span>
+    </a>
+  </li>
+
+  <!-- REPORTES CONTABLES -->
+  <li class="nav-item has-submenu">
+    <a class="nav-link toggle-submenu" href="#">
+      <i class="bi bi-bar-chart-line"></i>
+      <span class="text">Reportes contables</span>
+      <i class="bi bi-chevron-right arrow"></i>
+    </a>
+    <ul class="submenu">
+      <li><a href="#">Estado de resultados</a></li>
+      <li><a href="#">Balance general</a></li>
+      <li><a href="#">Libro mayor</a></li>
+      <li><a href="#">Exportaciones</a></li>
+    </ul>
+  </li>
+
+  <!-- ALERTAS -->
+  <li class="nav-item">
+    <a class="nav-link" href="#">
+      <i class="bi bi-bell"></i>
+      <span class="text">Alertas fiscales</span>
+    </a>
+  </li>
+
+  <!-- CONFIGURACIÓN FISCAL -->
+  <li class="nav-item has-submenu">
+    <a class="nav-link toggle-submenu" href="#">
+      <i class="bi bi-gear"></i>
+      <span class="text">Configuración fiscal</span>
+      <i class="bi bi-chevron-right arrow"></i>
+    </a>
+    <ul class="submenu">
+      <li><a href="#">Mi negocio</a></li>
+      <li><a href="#">Usuarios y roles</a></li>
+      <li><a href="#">Plan de cuentas</a></li>
+      <li><a href="#">Parámetros fiscales</a></li>
+    </ul>
+  </li>
+
+</ul>
+
+  <!-- FOOTER -->
+  <div class="sidebar-footer mt-auto">
+    <form method="post" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <button type="submit"
+              class="nav-link text-danger border-0 bg-transparent w-100 text-start"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Cerrar sesión">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Salir</span>
+      </button>
+    </form>
+  </div>
+
+</aside>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<!-- ===================== MAIN ===================== -->
+<div class="main-content" id="mainContent">
+
+  <!-- TOPBAR -->
+  <header class="topbar px-4">
+    <div class="d-flex align-items-center justify-content-between w-100">
+
+      <div class="d-flex align-items-center gap-3">
+        <button id="btnToggleTop"
+                class="toggle-btn"
+                type="button"
+                aria-label="Menú">
+          <i class="bi bi-list"></i>
+        </button>
+        <span class="topbar-title">Conecta Tech CR</span>
+      </div>
+
+      <div class="topbar-user dropdown">
+  <button class="btn btn-user dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+
+    <!-- Avatar -->
+    <div class="user-avatar">
+      {{ request.user.get_username|slice:":1"|upper }}
+    </div>
+
+    <!-- Texto -->
+    <div class="user-info d-none d-md-flex">
+      <span class="user-name">{{ request.user.get_username }}</span>
+    </div>
+
+  </button>
+
+  <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+    <li class="dropdown-header">
+      {{ request.user.get_full_name|default:request.user.get_username }}
+    </li>
+      <li>
+    <a class="dropdown-item" href="{% url 'accounts:perfil' %}">
+        <i class="bi bi-person me-2"></i> Mi perfil
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item" href="{% url 'accounts:configuracion' %}">
+        <i class="bi bi-gear me-2"></i>Configuración
+      </a>
+    </li>
+    <li><hr class="dropdown-divider"></li>
+    <li>
+      <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="dropdown-item text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+        </button>
+      </form>
+    </li>
+  </ul>
+</div>
+
+
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="container-fluid py-4">
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/menu.js' %}"></script>
+
+<script>
+  // Activar tooltips Bootstrap
+  document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach(el => new bootstrap.Tooltip(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+/* =========================================================
+   IDENTIDAD – SISTEMA CONTABLE / TRIBUTARIO (NAVY + MINT)
+   Listo para copiar y pegar (sin romper nada)
+========================================================= */
+:root {
+  /* Paleta */
+  --brand-primary: #0b1f3a;     /* navy */
+  --brand-secondary: #34d399;   /* mint */
+  --brand-accent: #60a5fa;      /* soft blue */
+  --brand-bg: #f8fafc;
+  --brand-gray: #64748b;
+  --brand-border: rgba(0,0,0,.08);
+
+  /* Alias para compatibilidad con tu CSS anterior */
+  --brand-navy: var(--brand-primary);
+  --brand-green: var(--brand-secondary);
+
+  /* UI */
+  --btn-radius: 12px;
+  --card-radius: 16px;
+  --transition-base: 0.25s ease;
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+* { box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(135deg, var(--brand-bg) 0%, #edf2f7 100%);
+  overflow-x: hidden;
+}
+
+/* Texto destacado */
+.marca {
+  color: var(--brand-secondary);
+  font-weight: 600;
+}
+
+/* =========================================================
+   HERO / ENCABEZADO
+========================================================= */
+.hero-header {
+  text-align: center;
+  margin: 2rem auto 3rem;
+  padding: 0 1rem;
+}
+
+.hero-header h2 {
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: .5rem;
+}
+
+.hero-header p {
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--brand-gray);
+  line-height: 1.6;
+}
+
+/* =========================================================
+   GRID DASHBOARD
+========================================================= */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.8rem;
+  padding: 0 1.5rem;
+}
+
+/* =========================================================
+   TARJETAS PRINCIPALES
+========================================================= */
+.card-module {
+  background: #fff;
+  border-radius: var(--card-radius);
+  padding: 2rem 1.5rem;
+  min-height: 320px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  position: relative;
+}
+
+/* Barra superior suave (más look SaaS) */
+.card-module::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand-secondary), var(--brand-accent));
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
+}
+
+/* Hover */
+.card-module:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.10);
+}
+
+/* Ícono */
+.card-module i {
+  font-size: 3rem;
+  color: var(--brand-primary);
+  margin-bottom: 1rem;
+}
+
+/* Título */
+.card-module h4 {
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: .75rem;
+}
+
+/* Descripción */
+.card-module p {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--brand-gray);
+  font-size: .95rem;
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+}
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+========================================================= */
+.btn-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+
+  min-width: 150px;
+  padding: .65rem 1.4rem;
+  margin-top: auto;
+
+  border: none;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+  text-decoration: none;
+
+  background-color: var(--brand-primary);
+  color: #fff;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  transition: all var(--transition-base);
+}
+
+.btn-view:hover {
+  background-color: var(--brand-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(52, 211, 153, 0.35);
+}
+
+/* Accesibilidad */
+.btn-view:focus-visible {
+  outline: 3px solid rgba(96,165,250,.55);
+  outline-offset: 3px;
+}
+
+/* Variante success (si la usas) */
+.btn-view.btn-success {
+  background-color: var(--brand-secondary);
+}
+.btn-view.btn-success:hover {
+  background-color: #22c55e;
+}
+
+/* Deshabilitado */
+.btn-view[aria-disabled="true"],
+.btn-view.disabled {
+  opacity: .6;
+  pointer-events: none;
+}
+
+/* =========================================================
+   TARJETAS ANALÍTICAS INFERIORES
+========================================================= */
+.card-analytics {
+  background: #fff;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--brand-border);
+
+  min-height: 320px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  box-shadow: 0 6px 12px rgba(0,0,0,.05);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.card-analytics:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.1);
+}
+
+.card-analytics h6 {
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+
+.card-analytics .text-muted {
+  color: var(--brand-gray) !important;
+}
+
+/* Chart (tu canvas actual es actividadChart, no ventasChart) */
+#actividadChart,
+#ventasChart {
+  max-height: 220px;
+}
+
+/* =========================================================
+   ACTIVIDAD RECIENTE
+========================================================= */
+.activity-list { flex-grow: 1; }
+
+.activity-list .mb-2,
+.activity-list .border-top {
+  padding: 6px 0;
+}
+
+.activity-list .float-end {
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+
+.activity-list .border-top {
+  border-color: rgba(0,0,0,.05) !important;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.footer-info {
+  margin-top: 3rem;
+  padding-bottom: 2rem;
+  text-align: center;
+  font-size: .9rem;
+  color: var(--brand-gray);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 992px) {
+  .card-analytics { min-height: 280px; }
+}

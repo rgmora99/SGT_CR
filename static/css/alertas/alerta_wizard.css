@@ -1,0 +1,96 @@
+/* ================= WIZARD ================= */
+
+.step-content {
+  display: none;
+}
+
+.step-content.active {
+  display: block;
+}
+
+/* Contenedor general */
+.wizard-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Cada paso */
+.wizard-step {
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+/* Círculo numerado */
+.wizard-step span {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background: #dee2e6;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Texto debajo */
+.wizard-step small {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.15;
+  min-height: 2.2em;        /* reserva espacio uniforme */
+  max-width: 120px;
+}
+
+/* Paso activo */
+.wizard-step.active {
+  opacity: 1;
+}
+
+.wizard-step.active span {
+  background: var(--ccr-verde);
+  color: #003057;
+}
+
+/* Paso completado */
+.wizard-step.completed {
+  opacity: 1;
+}
+
+.wizard-step.completed span {
+  background: #198754;
+  color: #fff;
+}
+
+/* Línea entre pasos */
+.wizard-line {
+  width: 48px;
+  height: 2px;
+  background: #dee2e6;
+  margin-top: 16px;   /* alinea con el centro del círculo */
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .wizard-step {
+    width: 100px;
+  }
+
+  .wizard-step small {
+    font-size: 0.72rem;
+    max-width: 90px;
+  }
+
+  .wizard-line {
+    width: 28px;
+  }
+}

@@ -1,0 +1,88 @@
+{% extends "base/menu.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+  <div class="hero-header text-center mb-4">
+    <h2>Perfil fiscal</h2>
+    <p>Configuración tributaria del negocio.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="card card-analytics p-4 shadow-sm">
+
+        <form method="POST" novalidate>
+          {% csrf_token %}
+
+          <!-- Tipo identificación -->
+          <div class="mb-3">
+            <label class="form-label">Tipo de identificación</label>
+            {{ form.tipo_identificacion }}
+            {% if form.tipo_identificacion.errors %}
+              <div class="text-danger small">
+                {{ form.tipo_identificacion.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Identificación -->
+          <div class="mb-3">
+            <label class="form-label">Identificación</label>
+            {{ form.identificacion }}
+          </div>
+
+          <!-- Régimen IVA -->
+          <div class="mb-3">
+            <label class="form-label">Régimen tributario</label>
+            {{ form.regimen_iva }}
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">¿Aplica IVA?</label>
+              {{ form.aplica_iva }}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tarifa IVA (%)</label>
+              {{ form.porc_iva }}
+            </div>
+          </div>
+
+          <!-- Periodicidad IVA -->
+          <div class="mb-3">
+            <label class="form-label">Periodicidad del IVA</label>
+            {{ form.periodo_iva }}
+          </div>
+
+          <!-- Renta -->
+          <div class="mb-3">
+            <label class="form-label">¿Declara renta?</label>
+            {{ form.declara_renta }}
+          </div>
+
+          <div class="alert alert-info small mt-2">
+            Esta información se usará para cálculos automáticos y reportes.
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'onboarding_negocio' %}" class="btn-view btn-secondary">
+              Atrás
+            </a>
+            <button type="submit" class="btn-view btn-success">
+              Finalizar
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

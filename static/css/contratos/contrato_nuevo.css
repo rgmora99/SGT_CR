@@ -1,0 +1,109 @@
+:root {
+  --azul: #003057;
+  --verde: #78BE21;
+  --gris: #6b7280;
+  --borde: #e5e7eb;
+}
+
+/* CONTENEDOR */
+.contrato-wrapper {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 14px;
+}
+
+/* HEADER */
+.contrato-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.contrato-header h2 {
+  color: var(--azul);
+  font-weight: 700;
+}
+
+.contrato-header p {
+  color: var(--gris);
+  font-size: 0.9rem;
+}
+
+/* WIZARD */
+.wizard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.wizard-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 110px;
+}
+
+.wizard-step span {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #d1d5db;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wizard-step.active span {
+  background: var(--verde);
+}
+
+.wizard-step label {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--gris);
+}
+
+.wizard-step.active label {
+  color: var(--azul);
+  font-weight: 600;
+}
+
+.wizard-line {
+  width: 70px;
+  height: 3px;
+  background: #d1d5db;
+}
+
+/* PANEL */
+.wizard-panel {
+  display: none;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.wizard-panel.active {
+  display: block;
+}
+
+.wizard-panel h5 {
+  color: var(--azul);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* ACCIONES */
+.panel-actions {
+  margin-top: 1.5rem;
+  text-align: right;
+}
+
+.panel-actions.between {
+  display: flex;
+  justify-content: space-between;
+}

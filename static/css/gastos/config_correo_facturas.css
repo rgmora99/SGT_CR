@@ -1,0 +1,13 @@
+.correo-card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 10px 24px rgba(0,0,0,.04);
+}
+
+.correo-card label{
+  font-weight:600;
+  color:#111827;
+  margin-bottom:6px;
+}

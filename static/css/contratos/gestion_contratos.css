@@ -1,0 +1,223 @@
+/* =========================================================
+   CIAN CCR — Módulo Contratos
+   Alineado al libro de marca Correos de Costa Rica
+========================================================= */
+:root {
+  --ccr-azul: #003057;
+  --ccr-verde: #78BE21;
+  --ccr-fondo: #f8f9fc;
+  --ccr-gris: #6b7280;
+  --ccr-gris-claro: #eef1f4;
+}
+
+/* ===== Página general ===== */
+body {
+  background: var(--ccr-fondo);
+  font-family: "Inter", sans-serif;
+}
+
+.page-title {
+  font-weight: 700;
+  color: var(--ccr-azul);
+}
+
+.text-muted {
+  color: var(--ccr-gris) !important;
+}
+
+/* ===== KPIs ===== */
+.kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--ccr-gris-claro);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 48, 87, 0.08);
+}
+
+.kpi-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  background: rgba(0, 48, 87, 0.08);
+  color: var(--ccr-azul);
+}
+
+.kpi-label {
+  color: var(--ccr-gris);
+  font-size: 0.85rem;
+}
+
+.kpi-value {
+  font-weight: 700;
+  color: var(--ccr-azul);
+  font-size: 1.15rem;
+}
+
+/* ===== Filtros ===== */
+.filter-bar .form-label {
+  font-weight: 600;
+  color: var(--ccr-azul);
+  font-size: 0.8rem;
+}
+
+.filter-bar .form-select,
+.filter-bar .form-control {
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.filter-bar .btn {
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+/* ===== Cards ===== */
+.card {
+  border: 1px solid var(--ccr-gris-claro);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.card-footer {
+  background-color: #fff;
+  border-top: 1px solid var(--ccr-gris-claro);
+  font-size: 0.8rem;
+  color: var(--ccr-gris);
+}
+
+/* ===== Tabla ===== */
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table thead {
+  background-color: #f1f4f8;
+  color: var(--ccr-azul);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.table td,
+.table th {
+  padding: 0.35rem 0.45rem;
+  font-size: 0.82rem;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 48, 87, 0.04);
+}
+
+/* ===== Estados ===== */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+}
+
+/* ===== Botones ===== */
+.btn-primary {
+  background-color: var(--ccr-azul);
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.btn-primary:hover {
+  background-color: #002743;
+}
+
+.btn-outline-secondary,
+.btn-outline-primary,
+.btn-outline-danger {
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+/* ===== Botones de acción ===== */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.action-btn {
+  border: 1px solid var(--ccr-gris-claro);
+  background: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--ccr-azul);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+/* Colores */
+.action-btn.view { color: #0d6efd; }
+.action-btn.edit { color: #856404; }
+.action-btn.danger { color: #dc3545; }
+
+/* Tooltip institucional */
+.action-btn::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--ccr-azul);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.action-btn:hover::after {
+  opacity: 1;
+}
+
+/* ===== Layout ===== */
+.page-content {
+  padding: 1.25rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.35rem;
+  }
+
+  .kpi-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .action-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.8rem;
+  }
+}

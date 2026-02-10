@@ -1,0 +1,227 @@
+{% extends "menu.html" %}
+{% block content %}
+{% block styles %}
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/contrato_nuevo.css') }}">
+</head>
+{% endblock %}
+
+<div class="contrato-nuevo-page">
+
+  <!-- ===== Encabezado ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-4 header-section">
+    <div>
+      <h2 class="page-title mb-0">Registrar Nuevo Contrato</h2>
+      <p class="text-muted mb-0">Completa los datos principales, documentos asociados y condiciones del contrato.</p>
+    </div>
+    <a href="{{ url_for('routes.contratos') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i> Volver
+    </a>
+  </div>
+
+  <!-- ===== Wizard visual ===== -->
+  <div class="wizard-progress mb-4 text-center">
+    <div class="wizard-steps d-flex justify-content-center align-items-center">
+      <div class="wizard-step active" data-step="1">
+        <span>1</span>
+        <small>Datos Generales</small>
+      </div>
+      <div class="wizard-line"></div>
+      <div class="wizard-step" data-step="2">
+        <span>2</span>
+        <small>Documentos Asociados</small>
+      </div>
+      <div class="wizard-line"></div>
+      <div class="wizard-step" data-step="3">
+        <span>3</span>
+        <small>Condiciones / Prórrogas</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Formulario global ===== -->
+  <form id="formContrato" novalidate>
+
+    <!-- ===== STEP 1: DATOS GENERALES ===== -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content active" id="step-1">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold title mb-0">
+          <i class="bi bi-file-earmark-text me-2 text-success"></i> Datos Generales del Contrato
+        </h5>
+        <small class="text-muted">Información principal y administrativa del contrato.</small>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="numContrato" class="form-label">Número de contrato</label>
+            <input id="numContrato" type="text" class="form-control" placeholder="Ej. CTR-2025-001" required>
+          </div>
+
+          <div class="col-md-4">
+            <label for="contratista" class="form-label">Contratista / Proveedor</label>
+            <input id="contratista" type="text" class="form-control" placeholder="Ej. LogiTrans S.A." required>
+          </div>
+
+          <div class="col-md-4">
+            <label for="gerencia" class="form-label">Gerencia responsable</label>
+            <select id="gerencia" class="form-select" required>
+              <option selected disabled>Seleccione...</option>
+              <option>Logística</option>
+              <option>Tecnologías</option>
+              <option>Proveeduría</option>
+              <option>Administración</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="objeto" class="form-label">Objeto del contrato</label>
+            <input id="objeto" type="text" class="form-control" placeholder="Ej. Servicio de transporte interno" required>
+          </div>
+
+          <div class="col-md-3">
+            <label for="fechaInicio" class="form-label">Fecha inicio</label>
+            <input id="fechaInicio" type="date" class="form-control" required>
+          </div>
+
+          <div class="col-md-3">
+            <label for="fechaFin" class="form-label">Fecha finalización</label>
+            <input id="fechaFin" type="date" class="form-control" required>
+          </div>
+
+          <div class="col-md-4">
+            <label for="monto" class="form-label">Monto total (₡)</label>
+            <input id="monto" type="number" class="form-control" placeholder="Ej. 25000000" required>
+          </div>
+
+          <div class="col-md-4">
+            <label for="tipoContrato" class="form-label">Tipo de contrato</label>
+            <select id="tipoContrato" class="form-select">
+              <option selected disabled>Seleccione...</option>
+              <option>Bienes</option>
+              <option>Servicios</option>
+              <option>Consultoría</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="estado" class="form-label">Estado</label>
+            <select id="estado" class="form-select">
+              <option>Activo</option>
+              <option>En prórroga</option>
+              <option>Vencido</option>
+              <option>Finalizado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+          <button type="button" class="btn btn-primary px-4 next-step">
+            Siguiente <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 2: DOCUMENTOS ASOCIADOS ===== -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content" id="step-2">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold title mb-0">
+          <i class="bi bi-folder-symlink me-2 text-success"></i> Documentos Asociados
+        </h5>
+        <small class="text-muted">Adjunta los documentos previos o vinculados al contrato.</small>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Sondeo de mercado</label>
+            <input type="file" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Cartel</label>
+            <input type="file" class="form-control">
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Cláusulas penales</label>
+            <input type="file" class="form-control">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Orden de pedido (SICOP)</label>
+            <input type="file" class="form-control">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Gestión de recepción</label>
+            <input type="file" class="form-control">
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-outline-secondary prev-step">
+            <i class="bi bi-arrow-left me-1"></i> Anterior
+          </button>
+          <button type="button" class="btn btn-primary px-4 next-step">
+            Siguiente <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 3: CONDICIONES Y PRÓRROGAS ===== -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content" id="step-3">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold title mb-0">
+          <i class="bi bi-calendar-check me-2 text-success"></i> Condiciones y Prórrogas
+        </h5>
+        <small class="text-muted">Define condiciones de pago, vigencia y alertas de vencimiento.</small>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="formaPago" class="form-label">Forma de pago</label>
+            <select id="formaPago" class="form-select">
+              <option selected disabled>Seleccione...</option>
+              <option>Transferencia bancaria</option>
+              <option>Depósito</option>
+              <option>Cheque</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="diasAviso" class="form-label">Días previos de aviso de vencimiento</label>
+            <input id="diasAviso" type="number" class="form-control" placeholder="Ej. 15">
+          </div>
+
+          <div class="col-md-4">
+            <label for="cantProrrogas" class="form-label">Cantidad de prórrogas</label>
+            <input id="cantProrrogas" type="number" class="form-control" placeholder="Ej. 2">
+          </div>
+
+          <div class="col-md-12">
+            <label for="notas" class="form-label">Notas u observaciones</label>
+            <textarea id="notas" class="form-control" rows="3" placeholder="Detalle condiciones, observaciones o garantías..."></textarea>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-outline-secondary prev-step">
+            <i class="bi bi-arrow-left me-1"></i> Anterior
+          </button>
+          <button type="submit" class="btn btn-success px-4" id="btnFinalizar">
+            <i class="bi bi-check-circle me-1"></i> Finalizar Registro
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/contrato_nuevo.js') }}"></script>
+{% endblock %}

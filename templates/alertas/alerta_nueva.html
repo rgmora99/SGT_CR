@@ -1,0 +1,197 @@
+{% extends "menu.html" %}
+{% block content %}
+{% block styles %}
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/alerta_nueva.css') }}">
+</head>
+{% endblock %}
+
+<div class="alerta-nueva-page">
+
+  <!-- ===== Encabezado ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-4 header-section">
+    <div>
+      <h2 class="page-title mb-0">Registrar Nueva Alerta</h2>
+      <p class="text-muted mb-0">Crea una alerta personalizada vinculada a un contrato, con fecha de aviso y prioridad.</p>
+    </div>
+    <a href="{{ url_for('routes.alertas') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i> Volver
+    </a>
+  </div>
+
+  <!-- ===== Wizard visual ===== -->
+  <div class="wizard-progress mb-4 text-center">
+    <div class="wizard-steps d-flex justify-content-center align-items-center">
+      <div class="wizard-step active" data-step="1">
+        <span>1</span>
+        <small>Datos Generales</small>
+      </div>
+      <div class="wizard-line"></div>
+      <div class="wizard-step" data-step="2">
+        <span>2</span>
+        <small>Asociación</small>
+      </div>
+      <div class="wizard-line"></div>
+      <div class="wizard-step" data-step="3">
+        <span>3</span>
+        <small>Configuración</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Formulario global ===== -->
+  <form id="formAlerta" novalidate>
+
+    <!-- STEP 1️⃣ DATOS GENERALES -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content active" id="step-1">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold title mb-0">
+          <i class="bi bi-bell me-2 text-warning"></i> Datos Generales de la Alerta
+        </h5>
+        <small class="text-muted">Completa la información básica de la alerta a registrar.</small>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="tipoAlerta" class="form-label">Tipo de alerta</label>
+            <select id="tipoAlerta" class="form-select" required>
+              <option selected disabled>Seleccione...</option>
+              <option>Vencimiento de contrato</option>
+              <option>Prórroga próxima</option>
+              <option>Factura pendiente</option>
+              <option>Recepción pendiente</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label for="prioridad" class="form-label">Prioridad</label>
+            <select id="prioridad" class="form-select" required>
+              <option selected disabled>Seleccione...</option>
+              <option value="Alta">Alta</option>
+              <option value="Media">Media</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label for="fechaAviso" class="form-label">Fecha de aviso</label>
+            <input id="fechaAviso" type="date" class="form-control" required>
+          </div>
+
+          <div class="col-md-12">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea id="descripcion" class="form-control" rows="3" placeholder="Ej. Contrato #CTR-2025-014 vence en 10 días."></textarea>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+          <button type="button" class="btn btn-primary px-4 next-step">
+            Siguiente <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2️⃣ ASOCIACIÓN -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content" id="step-2">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold title mb-0">
+          <i class="bi bi-link-45deg me-2 text-success"></i> Asociación con Contrato / Proveedor
+        </h5>
+        <small class="text-muted">Asocia esta alerta a un contrato o proveedor registrado.</small>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="numContrato" class="form-label">Contrato asociado</label>
+            <input id="numContrato" type="text" class="form-control" placeholder="Ej. CTR-2025-014">
+          </div>
+
+          <div class="col-md-6">
+            <label for="proveedor" class="form-label">Proveedor</label>
+            <input id="proveedor" type="text" class="form-control" placeholder="Ej. LogiTrans S.A.">
+          </div>
+
+          <div class="col-md-6">
+            <label for="gerencia" class="form-label">Gerencia responsable</label>
+            <select id="gerencia" class="form-select">
+              <option selected disabled>Seleccione...</option>
+              <option>Logística</option>
+              <option>Tecnologías</option>
+              <option>Proveeduría</option>
+              <option>Administración</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="responsable" class="form-label">Responsable interno</label>
+            <input id="responsable" type="text" class="form-control" placeholder="Ej. Juan Pérez">
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-outline-secondary prev-step">
+            <i class="bi bi-arrow-left me-1"></i> Anterior
+          </button>
+          <button type="button" class="btn btn-primary px-4 next-step">
+            Siguiente <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3️⃣ CONFIGURACIÓN -->
+    <div class="card shadow-sm border-0 rounded-4 form-card step-content" id="step-3">
+      <div class="card-header bg-white border-0 pt-4 pb-2">
+        <h5 class="fw-semibold title mb-0">
+          <i class="bi bi-gear me-2 text-info"></i> Configuración de Notificación
+        </h5>
+        <small class="text-muted">Define cuándo y cómo se notificará esta alerta.</small>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="medio" class="form-label">Medio de notificación</label>
+            <select id="medio" class="form-select">
+              <option>Correo electrónico</option>
+              <option>Teams</option>
+              <option>Sistema interno</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="diasAntelacion" class="form-label">Días de antelación</label>
+            <input id="diasAntelacion" type="number" class="form-control" placeholder="Ej. 5">
+          </div>
+
+          <div class="col-md-4">
+            <label for="estado" class="form-label">Estado inicial</label>
+            <select id="estado" class="form-select">
+              <option>Pendiente</option>
+              <option>Atendida</option>
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea id="observaciones" class="form-control" rows="3" placeholder="Notas adicionales o instrucciones..."></textarea>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-outline-secondary prev-step">
+            <i class="bi bi-arrow-left me-1"></i> Anterior
+          </button>
+          <button type="submit" class="btn btn-success px-4" id="btnFinalizar">
+            <i class="bi bi-check-circle me-1"></i> Guardar Alerta
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/alerta_nueva.js') }}"></script>
+{% endblock %}

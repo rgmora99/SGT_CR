@@ -1,0 +1,168 @@
+{% extends "menu.html" %}
+{% block content %}
+{% block styles %}
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/alertas.css') }}">
+</head>
+{% endblock %}
+
+<div class="alertas-page">
+
+  <!-- ===== Encabezado ===== -->
+   <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+      <h2 class="page-title mb-0">Alertas y Seguimiento</h2>
+      <p class="text-muted mb-0">Monitorea los vencimientos de contratos, prórrogas, facturas y órdenes de pedido.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-secondary"><i class="bi bi-download me-1"></i> Exportar</button>
+      <a href="{{ url_for('alertas.alerta_nueva') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i>  Nueva alerta</a>
+    </div>
+  </div>
+
+  <!-- ===== KPIs ===== -->
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-md-3">
+      <div class="kpi-card">
+        <div class="kpi-icon bg-warning-subtle text-warning"><i class="bi bi-hourglass-split"></i></div>
+        <div>
+          <div class="kpi-label">Vencimientos próximos</div>
+          <div class="kpi-value">8</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="kpi-card">
+        <div class="kpi-icon bg-danger-subtle text-danger"><i class="bi bi-exclamation-triangle"></i></div>
+        <div>
+          <div class="kpi-label">Vencidos</div>
+          <div class="kpi-value">4</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="kpi-card">
+        <div class="kpi-icon bg-info-subtle text-info"><i class="bi bi-file-earmark-text"></i></div>
+        <div>
+          <div class="kpi-label">Facturas pendientes</div>
+          <div class="kpi-value">6</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="kpi-card">
+        <div class="kpi-icon bg-success-subtle text-success"><i class="bi bi-check2-circle"></i></div>
+        <div>
+          <div class="kpi-label">Atendidas</div>
+          <div class="kpi-value">12</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Filtros ===== -->
+  <div class="card filter-bar mb-3">
+    <div class="card-body d-flex flex-wrap align-items-end gap-3">
+      <div class="flex-grow-1">
+        <label class="form-label small text-muted">Buscar alerta</label>
+        <div class="position-relative">
+          <i class="bi bi-search position-absolute ms-3 mt-2 text-muted"></i>
+          <input id="txtBuscar" type="text" class="form-control ps-5" placeholder="Contrato, proveedor o tipo de alerta...">
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label small text-muted">Tipo de alerta</label>
+        <select id="selTipo" class="form-select">
+          <option value="">Todas</option>
+          <option>Vencimiento</option>
+          <option>Factura</option>
+          <option>Recepción</option>
+          <option>Orden de pedido</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="form-label small text-muted">Estado</label>
+        <select id="selEstado" class="form-select">
+          <option value="">Todos</option>
+          <option>Pendiente</option>
+          <option>Atendida</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="form-label small text-muted">Rango de fechas</label>
+        <div class="d-flex gap-2">
+          <input id="fDesde" type="date" class="form-control">
+          <input id="fHasta" type="date" class="form-control">
+        </div>
+      </div>
+
+      <div class="ms-auto d-flex gap-2">
+        <button id="btnLimpiar" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar</button>
+        <button id="btnFiltrar" class="btn btn-primary"><i class="bi bi-funnel me-1"></i> Aplicar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Tabla de Alertas ===== -->
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th><input class="form-check-input" type="checkbox" id="chkAll"></th>
+            <th>Tipo</th>
+            <th>Contrato</th>
+            <th>Proveedor</th>
+            <th>Fecha aviso</th>
+            <th>Días restantes</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tblAlertas">
+          <tr>
+            <td><input class="form-check-input chkRow" type="checkbox"></td>
+            <td><i class="bi bi-clock text-warning me-1"></i> Vencimiento</td>
+            <td>CTR-2025-014</td>
+            <td>LogiTrans S.A.</td>
+            <td>2025-11-20</td>
+            <td><span class="text-danger fw-semibold">9</span></td>
+            <td><span class="badge rounded-pill text-bg-warning">Pendiente</span></td>
+            <td class="text-end">
+              <div class="action-buttons">
+                <button class="action-btn view" title="Ver detalle"><i class="bi bi-eye"></i></button>
+                <button class="action-btn success" title="Marcar como atendida"><i class="bi bi-check2"></i></button>
+                <button class="action-btn danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input class="form-check-input chkRow" type="checkbox"></td>
+            <td><i class="bi bi-receipt text-info me-1"></i> Factura</td>
+            <td>CTR-2025-007</td>
+            <td>Proveedora del Sur</td>
+            <td>2025-11-10</td>
+            <td><span class="text-success fw-semibold">1</span></td>
+            <td><span class="badge rounded-pill text-bg-success">Atendida</span></td>
+            <td class="text-end">
+              <div class="action-buttons">
+                <button class="action-btn view" title="Ver detalle"><i class="bi bi-eye"></i></button>
+                <button class="action-btn danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer text-muted small text-end">
+      Mostrando 1–2 de 2 alertas
+    </div>
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+{% endblock %}

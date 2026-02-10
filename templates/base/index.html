@@ -1,0 +1,172 @@
+{% extends "base/menu.html" %}
+{% load static %}
+
+{% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<main class="flex-grow-1" data-aos="fade-up">
+
+  <!-- ===== HEADER ===== -->
+  <section class="hero-header text-center">
+    <h2>
+      Panel <span class="marca">Fiscal & Contable</span>
+    </h2>
+    <p>
+      Controla tus <strong>ingresos, gastos, IVA y obligaciones fiscales</strong>
+      y prepárate mejor para tu contador.
+    </p>
+  </section>
+
+  <!-- ===== ALERTAS CLAVE ===== -->
+  <div class="row g-3 px-3 mb-4">
+
+    <div class="col-md-4">
+      <div class="card border-start border-warning border-4 shadow-sm p-3">
+        <h6 class="mb-1 fw-semibold">
+          <i class='bx bx-calendar-exclamation'></i> Próxima obligación
+        </h6>
+        <p class="mb-0 small">Declaración IVA – 15 del mes</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-start border-success border-4 shadow-sm p-3">
+        <h6 class="mb-1 fw-semibold">
+          <i class='bx bx-wallet'></i> IVA estimado
+        </h6>
+        <p class="mb-0 small">₡ 128.500 por pagar</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-start border-info border-4 shadow-sm p-3">
+        <h6 class="mb-1 fw-semibold">
+          <i class='bx bx-folder'></i> Documentos del mes
+        </h6>
+        <p class="mb-0 small">12 facturas registradas</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== MÓDULOS PRINCIPALES ===== -->
+<!-- ===== MÓDULOS PRINCIPALES ===== -->
+<div class="dashboard-grid mb-4">
+
+  <!-- MOVIMIENTOS -->
+  <div class="card-module" data-aos="zoom-in">
+    <i class='bx bx-transfer-alt'></i>
+    <h4>Movimientos</h4>
+    <p>
+      Registra ingresos y gastos del negocio de forma ordenada y clasificada.
+    </p>
+    <a href="#" class="btn-view btn-primary">Registrar</a>
+  </div>
+
+  <!-- DOCUMENTOS -->
+  <div class="card-module" data-aos="zoom-in" data-aos-delay="100">
+    <i class='bx bx-folder-open'></i>
+    <h4>Documentos</h4>
+    <p>
+      Administra facturas, comprobantes y documentos de respaldo.
+    </p>
+    <a href="#" class="btn-view btn-primary">Bandeja</a>
+  </div>
+
+  <!-- IVA -->
+  <div class="card-module" data-aos="zoom-in" data-aos-delay="200">
+    <i class='bx bx-receipt'></i>
+    <h4>IVA & Calendario</h4>
+    <p>
+      Consulta el IVA, vencimientos y obligaciones fiscales del período.
+    </p>
+    <a href="#" class="btn-view btn-primary">Ver IVA</a>
+  </div>
+
+  <!-- REPORTES -->
+  <div class="card-module" data-aos="zoom-in" data-aos-delay="300">
+    <i class='bx bx-bar-chart-alt-2'></i>
+    <h4>Reportes</h4>
+    <p>
+      Analiza resultados financieros y exporta reportes contables.
+    </p>
+    <a href="#" class="btn-view btn-primary">Ver reportes</a>
+  </div>
+</div>
+
+  <!-- ===== RESUMEN FINANCIERO ===== 
+  <div class="row g-4 px-3">
+
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-semibold mb-2">
+          Resultado financiero (últimos 6 meses)
+        </h6>
+        <canvas id="actividadChart" height="140"></canvas>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="fw-semibold mb-3">Actividad reciente</h6>
+
+        <div class="activity-list small">
+          <div class="mb-2">
+            <strong>Gasto confirmado</strong><br>
+            <span class="text-muted">Factura de electricidad registrada.</span>
+            <span class="float-end text-muted">Hoy</span>
+          </div>
+
+          <div class="border-top pt-2 mb-2">
+            <strong>IVA actualizado</strong><br>
+            <span class="text-muted">Resumen mensual recalculado.</span>
+            <span class="float-end text-muted">Ayer</span>
+          </div>
+
+          <div class="border-top pt-2">
+            <strong>Documento recibido</strong><br>
+            <span class="text-muted">Factura detectada por correo.</span>
+            <span class="float-end text-muted">Hace 2 días</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>-->
+
+  <div class="footer-info text-center mt-4">
+    © {% now "Y" %} Sistema de Apoyo Contable y Tributario
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 700, once: true });
+</script>
+
+<script>
+const ctx = document.getElementById('actividadChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Ene','Feb','Mar','Abr','May','Jun'],
+    datasets: [
+      { label: 'Ingresos', data: [450,520,610,580,700,760], backgroundColor: 'rgba(25,135,84,0.6)' },
+      { label: 'Gastos', data: [280,300,320,310,350,370], backgroundColor: 'rgba(220,53,69,0.6)' }
+    ]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom' } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "base/menu.html" %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/gastos/ver_factura.css' %}">
+
+<div class="container-fluid gasto-view">
+
+  <!-- Header -->
+  <div class="gasto-header">
+    <div>
+      <h2>Detalle del gasto</h2>
+      <p>Gasto registrado a partir de una factura.</p>
+    </div>
+    <a href="{% url 'gastos:listado_gastos' %}" class="btn btn-outline">
+      Volver a bandeja
+    </a>
+  </div>
+
+  <div class="card gasto-card">
+
+    <!-- FACTURA -->
+    <section class="gasto-section">
+      <h5>Factura asociada</h5>
+      <div class="grid-3">
+        <div class="field">
+          <label>Proveedor</label>
+          <input value="{{ gasto.factura.proveedor }}" readonly>
+        </div>
+        <div class="field">
+          <label>Número de factura</label>
+          <input value="{{ gasto.factura.numero_factura }}" readonly>
+        </div>
+        <div class="field">
+          <label>Fecha de emisión</label>
+          <input value="{{ gasto.factura.fecha_emision|date:'d/m/Y' }}" readonly>
+        </div>
+      </div>
+    </section>
+
+    <!-- GASTO -->
+    <section class="gasto-section">
+      <h5>Datos del gasto</h5>
+      <div class="grid-3">
+        <div class="field">
+          <label>Categoría</label>
+          <input value="{{ gasto.categoria.nombre }}" readonly>
+        </div>
+        <div class="field">
+          <label>Fecha del gasto</label>
+          <input value="{{ gasto.fecha_gasto|date:'d/m/Y' }}" readonly>
+        </div>
+        <div class="field">
+          <label>Método de pago</label>
+          <input value="{{ gasto.metodo_pago }}" readonly>
+        </div>
+      </div>
+    </section>
+
+    <!-- MONTOS -->
+    <section class="gasto-section">
+      <h5>Montos</h5>
+      <div class="grid-3">
+        <div class="field">
+          <label>Subtotal</label>
+          <input value="₡ {{ gasto.subtotal }}" readonly>
+        </div>
+        <div class="field">
+          <label>IVA</label>
+          <input value="₡ {{ gasto.iva }}" readonly>
+        </div>
+        <div class="field highlight">
+          <label>Total</label>
+          <input value="₡ {{ gasto.total }}" readonly>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADJUNTOS -->
+    <section class="gasto-section">
+      <h5>Adjuntos</h5>
+      <div class="actions">
+        {% if gasto.factura.xml_file %}
+          <a class="btn btn-outline-primary" target="_blank"
+             href="{{ gasto.factura.xml_file.url }}">Ver XML</a>
+        {% endif %}
+        {% if gasto.factura.pdf_file %}
+          <a class="btn btn-outline-danger" target="_blank"
+             href="{{ gasto.factura.pdf_file.url }}">Ver PDF</a>
+        {% endif %}
+      </div>
+    </section>
+
+  </div>
+</div>
+
+{% endblock %}

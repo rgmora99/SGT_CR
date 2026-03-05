@@ -1,0 +1,99 @@
+:root{
+  --brand-primary:#0b1f3a;
+  --brand-secondary:#34d399;
+  --brand-accent:#60a5fa;
+  --brand-bg:#f8fafc;
+  --brand-gray:#64748b;
+  --brand-border:rgba(0,0,0,.08);
+  --btn-radius:12px;
+  --card-radius:16px;
+  --transition-base:.25s ease;
+}
+
+.bandeja-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-bottom:16px;
+}
+
+.bandeja-header h2{
+  color:var(--brand-primary);
+  font-weight:800;
+  letter-spacing:-.3px;
+}
+
+.bandeja-header p{
+  color:var(--brand-gray);
+  margin:0;
+}
+
+.bandeja-card{
+  background:#fff;
+  border:1px solid var(--brand-border);
+  border-radius:var(--card-radius);
+  box-shadow:0 10px 24px rgba(0,0,0,.04);
+}
+
+.table th{
+  color:var(--brand-gray);
+  font-weight:700;
+}
+
+.badge-estado{
+  padding:6px 12px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:.82rem;
+  display:inline-block;
+}
+
+.badge-estado.registrada{
+  background:var(--brand-primary);
+  color:#fff;
+}
+
+.badge-estado.en_registro{
+  background:rgba(96,165,250,.18);
+  color:var(--brand-primary);
+}
+
+.badge-estado.rechazada{
+  background:rgba(239,68,68,.15);
+  color:#991b1b;
+}
+
+.btn{
+  border-radius:var(--btn-radius);
+  transition:all var(--transition-base);
+}
+
+.btn-success{
+  background:var(--brand-secondary);
+  border-color:var(--brand-secondary);
+  color:#052012;
+  font-weight:800;
+}
+
+.btn-success:hover{
+  filter:brightness(.95);
+}
+
+.btn-outline-secondary{
+  border-color:var(--brand-border);
+  color:var(--brand-primary);
+}
+
+.btn-outline-secondary:hover{
+  background:rgba(11,31,58,.06);
+}
+
+.form-control, .form-select{
+  border-radius:12px;
+  border:1px solid var(--brand-border);
+}
+
+.form-control:focus, .form-select:focus{
+  border-color:rgba(96,165,250,.55);
+  box-shadow:0 0 0 .2rem rgba(96,165,250,.18);
+}

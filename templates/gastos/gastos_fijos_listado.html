@@ -1,0 +1,71 @@
+{% extends "base/menu.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/gastos/gastos_fijos.css' %}">
+
+<div class="container-fluid">
+  <div class="bandeja-header">
+    <div>
+      <h2>Gastos fijos</h2>
+      <p>Reglas para clasificar o registrar automáticamente facturas.</p>
+    </div>
+    <div class="actions">
+      <a href="{% url 'gastos:crear_gasto_fijo' %}" class="btn btn-success">Nuevo gasto fijo</a>
+    </div>
+  </div>
+
+  <div class="card bandeja-card">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Match proveedor</th>
+            <th>Categoría</th>
+            <th>Método pago</th>
+            <th>Auto</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in reglas %}
+          <tr>
+            <td class="fw-semibold">{{ r.nombre }}</td>
+            <td class="text-muted">{{ r.proveedor_match }}</td>
+            <td>{{ r.categoria.nombre }}</td>
+            <td>{{ r.metodo_pago|default:"-" }}</td>
+            <td>
+              {% if r.auto_registrar %}
+                <span class="badge-estado registrada">Sí</span>
+              {% else %}
+                <span class="badge-estado en_registro">No</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if r.activo %}
+                <span class="badge-estado registrada">Activo</span>
+              {% else %}
+                <span class="badge-estado rechazada">Inactivo</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <a href="{% url 'gastos:editar_gasto_fijo' r.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+              <a href="{% url 'gastos:toggle_gasto_fijo' r.id %}" class="btn btn-sm btn-outline-danger">
+                {% if r.activo %}Desactivar{% else %}Activar{% endif %}
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">
+              No hay gastos fijos creados.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

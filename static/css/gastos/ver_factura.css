@@ -1,0 +1,136 @@
+:root {
+  --brand-primary: #0b1f3a;
+  --brand-secondary: #34d399;
+  --brand-accent: #60a5fa;
+  --brand-bg: #f8fafc;
+  --brand-gray: #64748b;
+  --brand-border: rgba(0,0,0,.08);
+
+  --btn-radius: 12px;
+  --card-radius: 16px;
+  --transition-base: 0.25s ease;
+}
+
+/* Layout */
+.gasto-view {
+  background: var(--brand-bg);
+  padding-bottom: 40px;
+}
+
+.gasto-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.gasto-header h2 {
+  margin: 0;
+  color: var(--brand-primary);
+}
+
+.gasto-header p {
+  margin: 4px 0 0;
+  color: var(--brand-gray);
+}
+
+/* Card */
+.gasto-card {
+  background: #fff;
+  border-radius: var(--card-radius);
+  padding: 24px;
+  border: 1px solid var(--brand-border);
+  box-shadow: 0 10px 30px rgba(0,0,0,.04);
+}
+
+/* Sections */
+.gasto-section {
+  margin-bottom: 28px;
+}
+
+.gasto-section h5 {
+  margin-bottom: 14px;
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
+/* Grid */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Fields */
+.field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--brand-gray);
+  margin-bottom: 4px;
+}
+
+.field input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--btn-radius);
+  border: 1px solid var(--brand-border);
+  background: #f9fafb;
+  color: #111827;
+  font-weight: 500;
+}
+
+/* Highlight total */
+.field.highlight input {
+  background: rgba(96,165,250,0.08);
+  border-color: var(--brand-accent);
+  font-weight: 700;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  border-radius: var(--btn-radius);
+  padding: 8px 16px;
+  font-weight: 600;
+  transition: var(--transition-base);
+  text-decoration: none;
+}
+
+.btn-outline {
+  border: 1px solid var(--brand-border);
+  color: var(--brand-primary);
+  background: #fff;
+}
+
+.btn-outline:hover {
+  background: #f1f5f9;
+}
+
+.btn-outline-primary {
+  border: 1px solid var(--brand-accent);
+  color: var(--brand-accent);
+}
+
+.btn-outline-primary:hover {
+  background: rgba(96,165,250,0.12);
+}
+
+.btn-outline-danger {
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+  background: rgba(239,68,68,0.1);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}

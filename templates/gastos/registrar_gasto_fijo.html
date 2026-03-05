@@ -1,0 +1,98 @@
+{% extends "base/menu.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/gastos/registrar_gasto.css' %}">
+
+<div class="container-fluid">
+
+  <div class="bandeja-header mb-3">
+    <div>
+      <h2>{% if modo == "crear" %}Nuevo gasto fijo{% else %}Editar gasto fijo{% endif %}</h2>
+      <p>Definí una regla para detectar facturas y asignarles categoría automáticamente.</p>
+    </div>
+    <div class="actions">
+      <a href="{% url 'gastos:gastos_fijos' %}" class="btn btn-outline-secondary">Volver</a>
+    </div>
+  </div>
+
+ <div class="card bandeja-card p-4 gasto-fijo-card">
+  <form method="post">
+    {% csrf_token %}
+
+    <!-- 🔹 Identificación -->
+    <div class="form-section">
+      <h5 class="section-title">Identificación</h5>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre de la regla</label>
+          {{ form.nombre }}
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔹 Regla -->
+    <div class="form-section">
+      <h5 class="section-title">Regla de detección</h5>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Texto proveedor</label>
+          {{ form.proveedor_match }}
+          <div class="form-text">Ej: KOLBI, ICE, LIBERTY</div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Prefijo factura</label>
+          {{ form.numero_factura_prefijo }}
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Categoría</label>
+          {{ form.categoria }}
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Método de pago</label>
+          {{ form.metodo_pago }}
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔹 Comportamiento -->
+    <div class="form-section">
+      <h5 class="section-title">Comportamiento</h5>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-check switch-check">
+            {{ form.auto_registrar }}
+            <label class="form-check-label">
+              Registrar automáticamente al detectar factura
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-check switch-check">
+            {{ form.activo }}
+            <label class="form-check-label">Regla activa</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔹 Acciones -->
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <a href="{% url 'gastos:gastos_fijos' %}" class="btn btn-outline-secondary">
+        Cancelar
+      </a>
+      <button class="btn btn-success px-4" type="submit">
+        Guardar regla
+      </button>
+    </div>
+
+  </form>
+</div>
+</div>
+{% endblock %}

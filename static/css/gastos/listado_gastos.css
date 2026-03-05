@@ -1,0 +1,148 @@
+:root {
+  /* Paleta */
+  --brand-primary: #0b1f3a;
+  --brand-secondary: #34d399;
+  --brand-accent: #60a5fa;
+  --brand-bg: #f8fafc;
+  --brand-gray: #64748b;
+  --brand-border: rgba(0,0,0,.08);
+
+  /* UI */
+  --btn-radius: 12px;
+  --card-radius: 16px;
+  --transition-base: 0.25s ease;
+}
+
+/* =========================
+   HEADER
+========================= */
+.bandeja-header h2 {
+    margin: 0;
+  color: var(--brand-primary);
+}
+
+.bandeja-header p {
+  color: var(--brand-gray);
+  margin-bottom: 0;
+}
+
+/* =========================
+   FILTROS
+========================= */
+form .form-control,
+form .form-select {
+  border-radius: var(--btn-radius);
+  border-color: var(--brand-border);
+}
+
+form .form-control:focus,
+form .form-select:focus {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 2px rgba(96,165,250,.15);
+}
+
+/* =========================
+   CARD / CONTENEDOR
+========================= */
+.bandeja-card {
+  background: #fff;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--brand-border);
+  box-shadow: 0 10px 24px rgba(0,0,0,.04);
+}
+
+/* =========================
+   TABLA
+========================= */
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  color: var(--brand-gray);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--brand-border);
+}
+
+.table tbody tr {
+  transition: background var(--transition-base);
+}
+
+.table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+/* =========================
+   BADGES DE ESTADO
+========================= */
+.badge-estado {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+/* Estados */
+.badge-estado.registrada {
+  background: rgba(11,31,58,.1);
+  color: var(--brand-primary);
+}
+
+.badge-estado.rechazada,
+.badge-estado.anulado {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* =========================
+   BOTONES
+========================= */
+.btn {
+  border-radius: var(--btn-radius);
+  transition: all var(--transition-base);
+}
+
+.btn-outline-primary {
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
+}
+
+.btn-outline-primary:hover {
+  background: var(--brand-accent);
+  color: #fff;
+}
+
+.btn-outline-secondary {
+  border-color: var(--brand-gray);
+  color: var(--brand-gray);
+}
+
+.btn-outline-secondary:hover {
+  background: var(--brand-gray);
+  color: #fff;
+}
+
+.btn-outline-danger {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* =========================
+   ESTADO ANULADO (FILA)
+========================= */
+tr.gasto-anulado {
+  opacity: 0.55;
+}

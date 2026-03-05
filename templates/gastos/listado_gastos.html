@@ -9,48 +9,70 @@
   <div class="bandeja-header">
     <div>
       <h2>Gastos registrados</h2>
-      <p>Listado de gastos confirmados en el sistema.</p>
+      <p>Consulta tus gastos, aplica filtros y toma decisiones rápidas con información clara.</p>
     </div>
   </div>
 
-  <!-- FILTROS -->
-  <form method="get" class="row g-2 mb-3">
+  <section class="kpi-grid" aria-label="Resumen de gastos">
+    <article class="kpi-card">
+      <p class="kpi-label">Total filtrado</p>
+      <h3>{{ kpi.total }}</h3>
+    </article>
+    <article class="kpi-card success">
+      <p class="kpi-label">Registrados</p>
+      <h3>{{ kpi.registrados }}</h3>
+    </article>
+    <article class="kpi-card danger">
+      <p class="kpi-label">Anulados</p>
+      <h3>{{ kpi.anulados }}</h3>
+    </article>
+  </section>
+
+  <form method="get" class="row g-2 mb-3 align-items-end" aria-label="Filtros de gastos">
     <div class="col-md-3">
-      <input name="q" class="form-control" placeholder="Proveedor o # factura">
+      <label for="q" class="form-label">Proveedor / factura</label>
+      <input id="q" name="q" class="form-control" placeholder="Ej. ICE o 0010000101000" value="{{ filtros.q }}">
     </div>
 
     <div class="col-md-2">
-      <select name="categoria" class="form-select">
-        <option value="">Todas las categorías</option>
+      <label for="categoria" class="form-label">Categoría</label>
+      <select id="categoria" name="categoria" class="form-select">
+        <option value="">Todas</option>
         {% for c in categorias %}
-          <option value="{{ c.id }}">{{ c.nombre }}</option>
+          <option value="{{ c.id }}" {% if filtros.categoria == c.id|stringformat:'s' %}selected{% endif %}>{{ c.nombre }}</option>
         {% endfor %}
       </select>
     </div>
 
     <div class="col-md-2">
-      <select name="metodo_pago" class="form-select">
-        <option value="">Método de pago</option>
-        <option value="EFECTIVO">Efectivo</option>
-        <option value="TRANSFERENCIA">Transferencia</option>
-        <option value="TARJETA">Tarjeta</option>
+      <label for="metodo_pago" class="form-label">Método de pago</label>
+      <select id="metodo_pago" name="metodo_pago" class="form-select">
+        <option value="">Todos</option>
+        <option value="EFECTIVO" {% if filtros.metodo_pago == 'EFECTIVO' %}selected{% endif %}>Efectivo</option>
+        <option value="TRANSFERENCIA" {% if filtros.metodo_pago == 'TRANSFERENCIA' %}selected{% endif %}>Transferencia</option>
+        <option value="TARJETA" {% if filtros.metodo_pago == 'TARJETA' %}selected{% endif %}>Tarjeta</option>
       </select>
     </div>
 
     <div class="col-md-2">
-      <input type="date" name="fecha_desde" class="form-control">
+      <label for="fecha_desde" class="form-label">Desde</label>
+      <input type="date" id="fecha_desde" name="fecha_desde" class="form-control" value="{{ filtros.fecha_desde }}">
     </div>
 
     <div class="col-md-2">
-      <input type="date" name="fecha_hasta" class="form-control">
+      <label for="fecha_hasta" class="form-label">Hasta</label>
+      <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-control" value="{{ filtros.fecha_hasta }}">
     </div>
 
     <div class="col-md-1 d-grid">
-      <button class="btn btn-primary">Filtrar</button>
+      <button class="btn btn-primary" type="submit">Filtrar</button>
+    </div>
+
+    <div class="col-12">
+      <a href="{% url 'gastos:listado_gastos' %}" class="btn btn-link btn-sm p-0">Limpiar filtros</a>
     </div>
   </form>
 
-  <!-- TABLA -->
   <div class="card bandeja-card">
     <table class="table table-hover align-middle">
       <thead>
@@ -65,41 +87,33 @@
       </thead>
       <tbody>
         {% for g in gastos %}
-        <tr>
-          <td>{{ g.factura.proveedor }}</td>
+        <tr class="{% if g.estado == 'anulado' %}gasto-anulado{% endif %}">
+          <td>
+            <div class="fw-semibold">{{ g.factura.proveedor }}</div>
+            <div class="text-muted small">Factura: {{ g.factura.numero_factura }}</div>
+          </td>
           <td>{{ g.categoria.nombre }}</td>
           <td>{{ g.fecha_gasto|date:"d/m/Y" }}</td>
           <td>₡ {{ g.total }}</td>
           <td>
             {% if g.estado == "registrado" %}
-                <span class="badge-estado registrada">Registrado</span>
+              <span class="badge-estado registrada">Registrado</span>
             {% else %}
-                <span class="badge-estado rechazada">Anulado</span>
+              <span class="badge-estado rechazada">Anulado</span>
             {% endif %}
           </td>
-          <td class="text-end">
-            <a href="{% url 'gastos:ver_gasto' g.id %}"
-               class="btn btn-sm btn-outline-primary">Ver</a>
-               
-             {% if g.estado == "registrado" %}
-            <a href="{% url 'gastos:editar_gasto' g.id %}"
-                class="btn btn-sm btn-outline-secondary">
-                Editar
-            </a>
-            
-            <a href="{% url 'gastos:anular_gasto' g.id %}"
-               class="btn btn-sm btn-outline-danger"
-               onclick="return confirm('¿Anular este gasto?')">
-               Anular
-            </a>
-             {% endif %}
+          <td class="text-end d-flex flex-wrap justify-content-end gap-1">
+            <a href="{% url 'gastos:ver_gasto' g.id %}" class="btn btn-sm btn-outline-primary">Ver</a>
+
+            {% if g.estado == "registrado" %}
+              <a href="{% url 'gastos:editar_gasto' g.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+              <a href="{% url 'gastos:anular_gasto' g.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Anular este gasto?')">Anular</a>
+            {% endif %}
           </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="5" class="text-center text-muted py-4">
-            No hay gastos registrados.
-          </td>
+          <td colspan="6" class="text-center text-muted py-4">No hay gastos registrados.</td>
         </tr>
         {% endfor %}
       </tbody>

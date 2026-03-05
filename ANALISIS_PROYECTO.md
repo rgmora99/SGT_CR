@@ -88,3 +88,90 @@ Módulo más robusto actualmente:
 
 ## 7) Conclusión
 El proyecto tiene una base sólida de Django modular y un módulo de **gastos** bastante avanzado que ya resuelve un problema real (captura y registro de facturas desde correo). La oportunidad principal está en **limpieza arquitectónica**, **alineación de módulos activos** y **fortalecimiento de calidad (tests + hardening)** para escalar de forma más segura.
+
+
+## 8) ¿Con qué cambios empezar para lograr un MVP?
+
+### Objetivo MVP (4-6 semanas)
+Tener un sistema usable por 1 negocio piloto que permita:
+1. Login + onboarding básico.
+2. Sincronizar facturas por correo.
+3. Registrar y listar gastos.
+4. Ver métricas básicas (pendientes/registradas/anuladas).
+
+---
+
+### Fase 1 (Semana 1): estabilizar base técnica
+**Meta:** eliminar bloqueadores estructurales para poder construir encima.
+
+- Definir alcance oficial de apps activas para MVP:
+  - Activas: `accounts`, `core`, `gastos`.
+  - En pausa: `alertas`, `mantenimientos`, `auditoria`, `ventas` (si no aportan al MVP inmediato).
+- Corregir inconsistencias de código que pueden romper ejecución:
+  - Quitar decoradores de request/auth en funciones de servicio (`sync_facturas` debe ser función de dominio pura).
+  - Eliminar duplicidad de métodos (`mark_seen`) en cliente IMAP.
+- Estandarizar configuración local:
+  - Asegurar entorno Python/Django reproducible (`requirements/dev.txt`, guía de arranque mínima).
+
+**Criterio de salida:** `manage.py check` y arranque local funcionando en ambiente del equipo.
+
+---
+
+### Fase 2 (Semana 2): onboarding y multi-negocio mínimo
+**Meta:** asegurar que un usuario nuevo entra y queda operativo.
+
+- Revisar flujo de onboarding end-to-end:
+  - Registro → crear negocio → perfil fiscal → home.
+- Robustecer middleware de onboarding:
+  - Rutas permitidas explícitas y fallback seguro para sesiones sin negocio.
+- Añadir validaciones y mensajes de error consistentes en formularios clave.
+
+**Criterio de salida:** flujo completo sin errores manuales para usuario nuevo (happy path + 2 casos inválidos).
+
+---
+
+### Fase 3 (Semana 3-4): gastos punta a punta (núcleo de valor)
+**Meta:** cerrar el flujo funcional principal del producto.
+
+- Configuración de correo IMAP por negocio (guardar/probar conexión).
+- Sincronización de facturas:
+  - deduplicación por `Message-ID`,
+  - parseo XML robusto,
+  - creación de `FacturaGasto` en estado pendiente.
+- Registro de gasto desde factura:
+  - pasar de `pendiente` → `en_registro` → `registrada`.
+- Listado de gastos con filtros básicos (fecha, categoría, texto).
+
+**Criterio de salida:** demo funcional con 10-20 facturas de prueba y registro exitoso de gastos.
+
+---
+
+### Fase 4 (Semana 5): calidad mínima de producción
+**Meta:** reducir riesgo operativo antes de piloto real.
+
+- Seguridad y configuración:
+  - mover `SECRET_KEY` y credenciales sensibles a variables de entorno.
+- Observabilidad mínima:
+  - logging de sincronización (facturas creadas, omitidas, errores).
+- Pruebas prioritarias:
+  - parseo XML,
+  - deduplicación,
+  - onboarding middleware,
+  - transición de estados de factura/gasto.
+
+**Criterio de salida:** pruebas críticas pasando y checklist de despliegue básico.
+
+---
+
+### Backlog post-MVP (no bloquear salida inicial)
+- Reactivar `alertas` con modelo consistente.
+- Consolidar `ventas` con modelo de dominio real.
+- Evaluar activación de `mantenimientos` según roadmap negocio.
+
+## 9) Priorización sugerida (impacto vs esfuerzo)
+1. **Alta / Bajo-Medio:** estabilidad técnica (fase 1).
+2. **Alta / Medio:** onboarding sin fricción (fase 2).
+3. **Muy alta / Medio-Alto:** flujo de gastos completo (fase 3).
+4. **Alta / Medio:** hardening y pruebas críticas (fase 4).
+
+En resumen: si quieres resultados rápidos, empieza por **cerrar el flujo `accounts + gastos`** y congelar temporalmente lo demás.

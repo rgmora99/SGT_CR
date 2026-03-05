@@ -85,10 +85,10 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "sgtdb",
-        "USER": "admin",
-        "PASSWORD": "rHyCIIhQkI5du6GNKWOS5iQLtZszToki",
-        "HOST": "dpg-d65tr1jh46gs73dlgv00-a",   # IP del servidor PostgreSQL
+        "NAME": "DE_CONT",
+        "USER": "usr_cnt",
+        "PASSWORD": "usr_cnt",
+        "HOST": "localhost",   # IP del servidor PostgreSQL
         "PORT": "5432",
         "OPTIONS": {
             "options": "-c search_path=cnt"

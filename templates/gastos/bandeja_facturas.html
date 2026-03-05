@@ -32,6 +32,10 @@
         <button id="btnSync"
         class="btn btn-outline-success"> Sincronizar ahora</button>
       </div>
+      <a href="#"
+        class="btn btn-outline-primary">
+        Aplicar gastos fijos
+      </a>
       
     </form>
 
@@ -63,6 +67,7 @@
               </span>
             </td>
             <td class="text-end">
+
               {% if f.xml_file %}
                 <a class="btn btn-sm btn-light" href="{{ f.xml_file.url }}" target="_blank">XML</a>
               {% endif %}
@@ -71,8 +76,27 @@
               {% endif %}
 
               {% if f.estado == "pendiente" %}
-                <a class="btn btn-sm btn-success" href="{% url 'gastos:aprobar_factura' f.id %}">Aprobar</a>
-                <a class="btn btn-sm btn-danger" href="{% url 'gastos:rechazar_factura' f.id %}">Rechazar</a>
+                <a class="btn btn-sm btn-success"
+                  href="{% url 'gastos:registrar' f.id %}">
+                  Registrar gasto
+                </a>
+                <a class="btn btn-sm btn-danger"
+                  href="{% url 'gastos:rechazar_factura' f.id %}">
+                  Rechazar
+                </a>
+
+              {% elif f.estado == "en_registro" %}
+              <a class="btn btn-sm btn-success"
+                href="{% url 'gastos:registrar' f.id %}">
+                Continuar
+              </a>
+
+              {% elif f.estado == "registrada" and f.gasto %}
+                <a class="btn btn-sm btn-outline-primary"
+                  href="{% url 'gastos:ver_gasto' f.gasto.id %}">
+                  Ver gasto
+                </a>
+
               {% endif %}
             </td>
           </tr>

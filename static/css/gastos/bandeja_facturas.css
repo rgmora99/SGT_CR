@@ -1,24 +1,94 @@
-.bandeja-header{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  margin-bottom:16px;
+:root {
+  --brand-primary: #0b1f3a;
+  --brand-secondary: #34d399;
+  --brand-accent: #60a5fa;
+  --brand-bg: #f8fafc;
+  --brand-gray: #64748b;
+  --brand-border: rgba(0,0,0,.08);
+
+  --btn-radius: 12px;
+  --card-radius: 16px;
+  --transition-base: 0.25s ease;
 }
 
-.bandeja-card{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 10px 24px rgba(0,0,0,.04);
+/* =========================
+   Header / Card
+========================= */
+.bandeja-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18px;
 }
 
-.badge-estado{
-  padding:6px 12px;
-  border-radius:999px;
-  font-weight:600;
+.bandeja-card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: var(--card-radius);
+  padding: 20px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+  transition: var(--transition-base);
 }
 
-.badge-estado.pendiente{ background:rgba(245,158,11,.15); color:#b45309; }
-.badge-estado.validada{ background:rgba(34,197,94,.15); color:#15803d; }
-.badge-estado.rechazada{ background:rgba(239,68,68,.15); color:#b91c1c; }
+/* =========================
+   Badge base
+========================= */
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 14px;
+  border-radius: 999px;
+
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.2px;
+
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* =========================
+   Estados (usando paleta)
+========================= */
+
+/* Pendiente */
+.badge-estado.pendiente {
+  background: rgba(251, 191, 36, 0.25); /* amarillo suave */
+  color: #92400e;
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+/* En registro */
+.badge-estado.en_registro {
+  background: rgba(96, 165, 250, 0.18); /* brand-accent */
+  color: var(--brand-primary);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+/* Registrada */
+.badge-estado.registrada {
+  background: var(--brand-primary);
+  color: #ffffff;
+  border-color: var(--brand-primary);
+}
+
+/* Rechazada */
+.badge-estado.rechazada {
+  background: rgba(239, 68, 68, 0.15);
+  color: #991b1b;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+/* =========================
+   Extra: hover elegante
+========================= */
+.badge-estado {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.badge-estado:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}

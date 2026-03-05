@@ -8,6 +8,7 @@ class FiltroBandejaFacturasForm(forms.Form):
     estado = forms.ChoiceField(required=False, choices=[
         ("", "Todos"),
         ("pendiente", "Pendiente"),
-        ("validada", "Validada"),
+        ("en_registro", "En registro"),
+        ("registrada", "Registrada"),
         ("rechazada", "Rechazada"),
     ], widget=forms.Select(attrs={"class": "form-control"}))

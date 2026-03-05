@@ -50,6 +50,9 @@ class TB_NEGOCIOS(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, db_column="CREATED_AT")
 
+    def __str__(self):
+        return self.nombre_comercial
+    
     class Meta:
         db_table = 'cnt"."TB_NEGOCIOS'
         managed = True

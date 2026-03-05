@@ -9,9 +9,15 @@ from django.core.paginator import Paginator
 def bandeja_facturas(request):
     negocio_id = request.session.get("negocio_activo_id")
 
+    if not negocio_id:
+        return redirect("seleccionar_negocio")  # o donde manejes esto
+
     form = FiltroBandejaFacturasForm(request.GET or None)
 
-    qs = FacturaGasto.objects.filter(negocio_id=negocio_id).order_by("-fecha_emision")
+    qs = FacturaGasto.objects.filter(
+        negocio_id=negocio_id,
+        estado__in=["pendiente", "en_registro"]
+    ).order_by("-fecha_emision")
 
     if form.is_valid():
         q = form.cleaned_data.get("q")
@@ -25,7 +31,7 @@ def bandeja_facturas(request):
                 proveedor__icontains=q
             ) | qs.filter(numero_factura__icontains=q)
 
-    paginator = Paginator(qs, 10)  # 🔹 10 por página
+    paginator = Paginator(qs, 10)
     page_number = request.GET.get("page")
     facturas = paginator.get_page(page_number)
 

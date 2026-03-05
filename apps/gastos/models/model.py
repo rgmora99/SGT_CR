@@ -42,7 +42,8 @@ class FacturaGasto(models.Model):
 
     ESTADOS = (
         ("pendiente", "Pendiente"),
-        ("validada", "Validada"),
+        ("en_registro", "En registro"),
+        ("registrada", "Registrada"),
         ("rechazada", "Rechazada"),
     )
 
@@ -54,7 +55,7 @@ class FacturaGasto(models.Model):
     numero_factura = models.CharField(max_length=50)
     fecha_emision = models.DateField()
     fecha_registro = models.DateTimeField(auto_now_add=True)
-
+    fecha_cierre = models.DateTimeField(null=True, blank=True)
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     iva = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     total = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
@@ -95,3 +96,54 @@ class FacturaGasto(models.Model):
 
     def __str__(self):
         return f"{self.proveedor} - {self.numero_factura}"
+    
+    
+class Gasto(models.Model):
+    negocio = models.ForeignKey(
+        TB_NEGOCIOS, on_delete=models.CASCADE, related_name="gastos"
+    )
+
+    ESTADOS = (
+        ("registrado", "Registrado"),
+        ("anulado", "Anulado"),
+    )
+
+    estado = models.CharField(
+        max_length=20,
+        choices=ESTADOS,
+        default="registrado"
+    )
+
+    factura = models.OneToOneField(
+        FacturaGasto,
+        on_delete=models.PROTECT,
+        related_name="gasto"
+    )
+
+    categoria = models.ForeignKey(
+        CategoriaGasto, on_delete=models.PROTECT
+    )
+
+    fecha_gasto = models.DateField()
+    metodo_pago = models.CharField(max_length=30, blank=True, null=True)
+
+    subtotal = models.DecimalField(max_digits=12, decimal_places=2)
+    iva = models.DecimalField(max_digits=12, decimal_places=2)
+    total = models.DecimalField(max_digits=12, decimal_places=2)
+
+    notas = models.TextField(blank=True, null=True)
+
+    creado_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
+    creado_en = models.DateTimeField(auto_now_add=True)
+    actualizado_en = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["negocio", "fecha_gasto"]),
+            models.Index(fields=["negocio", "estado"]),
+        ]
+
+    def __str__(self):
+        return f"Gasto #{self.id} - {self.total}"

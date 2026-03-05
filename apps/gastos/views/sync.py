@@ -20,7 +20,7 @@ def sync_facturas_ajax(request):
     try:
         resultados = sync_facturas(
             year=year_actual,
-            solo_unread=False
+            solo_unread=True
         )
 
         total_creadas = sum(r["creadas"] for r in resultados)

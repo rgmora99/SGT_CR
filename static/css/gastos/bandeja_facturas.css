@@ -4,22 +4,49 @@
   --brand-accent: #60a5fa;
   --brand-bg: #f8fafc;
   --brand-gray: #64748b;
-  --brand-border: rgba(0,0,0,.08);
+  --brand-border: rgba(0, 0, 0, 0.08);
 
   --btn-radius: 12px;
   --card-radius: 16px;
   --transition-base: 0.25s ease;
 }
 
-/* =========================
-   Header / Card
-========================= */
 .bandeja-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   margin-bottom: 18px;
+  gap: 12px;
 }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.kpi-card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.kpi-card h3 {
+  margin: 0;
+  color: var(--brand-primary);
+}
+
+.kpi-label {
+  margin-bottom: 4px;
+  color: var(--brand-gray);
+  font-size: 0.84rem;
+}
+
+.kpi-card.warning { border-left: 4px solid #f59e0b; }
+.kpi-card.info { border-left: 4px solid #3b82f6; }
+.kpi-card.success { border-left: 4px solid #10b981; }
 
 .bandeja-card {
   background: #fff;
@@ -27,68 +54,54 @@
   border-radius: var(--card-radius);
   padding: 20px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
-  transition: var(--transition-base);
 }
 
-/* =========================
-   Badge base
-========================= */
+.form-label {
+  font-size: 0.85rem;
+  color: var(--brand-gray);
+  margin-bottom: 4px;
+}
+
 .badge-estado {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
   padding: 6px 14px;
   border-radius: 999px;
-
   font-weight: 600;
   font-size: 0.82rem;
   letter-spacing: 0.2px;
-
   border: 1px solid transparent;
   white-space: nowrap;
 }
 
-/* =========================
-   Estados (usando paleta)
-========================= */
-
-/* Pendiente */
 .badge-estado.pendiente {
-  background: rgba(251, 191, 36, 0.25); /* amarillo suave */
+  background: rgba(251, 191, 36, 0.25);
   color: #92400e;
   border-color: rgba(251, 191, 36, 0.45);
 }
 
-/* En registro */
 .badge-estado.en_registro {
-  background: rgba(96, 165, 250, 0.18); /* brand-accent */
+  background: rgba(96, 165, 250, 0.18);
   color: var(--brand-primary);
   border-color: rgba(96, 165, 250, 0.35);
 }
 
-/* Registrada */
 .badge-estado.registrada {
   background: var(--brand-primary);
   color: #ffffff;
   border-color: var(--brand-primary);
 }
 
-/* Rechazada */
 .badge-estado.rechazada {
   background: rgba(239, 68, 68, 0.15);
   color: #991b1b;
   border-color: rgba(239, 68, 68, 0.35);
 }
 
-/* =========================
-   Extra: hover elegante
-========================= */
-.badge-estado {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.badge-estado:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+@media (max-width: 768px) {
+  .bandeja-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

@@ -1,24 +1,22 @@
 from django.db import transaction
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from apps.gastos.models import FacturaGasto, CategoriaGasto,Gasto
 from django.contrib.auth.decorators import login_required
+
+from apps.gastos.models import FacturaGasto, CategoriaGasto, Gasto
+
 
 @login_required
 @transaction.atomic
 def registrar_gasto(request, factura_id):
 
     factura = (
-        FacturaGasto.objects
-        .select_for_update()
-        .select_related("negocio")
-        .get(id=factura_id)
+        FacturaGasto.objects.select_for_update().select_related("negocio").get(id=factura_id)
     )
 
-    # Si ya existe gasto → redirigir
     if hasattr(factura, "gasto"):
-        return redirect("gastos:ver", factura.gasto.id)
+        return redirect("gastos:ver_gasto", factura.gasto.id)
 
-    # Cambiar estado al abrir
     if factura.estado == "pendiente":
         factura.estado = "en_registro"
         factura.save(update_fields=["estado"])
@@ -29,7 +27,7 @@ def registrar_gasto(request, factura_id):
         metodo_pago = request.POST.get("metodo_pago")
         notas = request.POST.get("notas")
 
-        gasto = Gasto.objects.create(
+        Gasto.objects.create(
             negocio=factura.negocio,
             factura=factura,
             categoria_id=categoria_id,
@@ -39,7 +37,7 @@ def registrar_gasto(request, factura_id):
             iva=factura.iva,
             total=factura.total,
             notas=notas,
-            creado_por=request.user
+            creado_por=request.user,
         )
 
         factura.estado = "registrada"
@@ -47,47 +45,46 @@ def registrar_gasto(request, factura_id):
 
         return redirect("gastos:bandeja_facturas")
 
-    return render(request, "gastos/registrar_gasto.html", {
-        "factura": factura,
-        "categorias": CategoriaGasto.objects.filter(
-            negocio=factura.negocio, activo=True
-        )
-    })
+    return render(
+        request,
+        "gastos/registrar_gasto.html",
+        {
+            "factura": factura,
+            "categorias": CategoriaGasto.objects.filter(negocio=factura.negocio, activo=True),
+        },
+    )
+
 
 @login_required
 def ver_gasto(request, gasto_id):
     gasto = get_object_or_404(
         Gasto.objects.select_related("factura", "categoria"),
-        id=gasto_id
+        id=gasto_id,
     )
-    return render(request, "gastos/ver_factura.html", {
-        "gasto": gasto
-    })
+    return render(request, "gastos/ver_factura.html", {"gasto": gasto})
 
-# apps/gastos/views/gasto.py
-
-from django.db.models import Q
 
 @login_required
 def listado_gastos(request):
     negocio_id = request.session.get("negocio_activo_id")
+    if not negocio_id:
+        return redirect("core:home")
 
-    gastos = Gasto.objects.filter(
-        negocio_id=negocio_id
-    ).select_related(
-        "categoria", "factura"
-    ).order_by("-fecha_gasto")
+    gastos = (
+        Gasto.objects.filter(negocio_id=negocio_id)
+        .select_related("categoria", "factura")
+        .order_by("-fecha_gasto")
+    )
 
-    q = request.GET.get("q")
-    categoria = request.GET.get("categoria")
-    metodo_pago = request.GET.get("metodo_pago")
-    fecha_desde = request.GET.get("fecha_desde")
-    fecha_hasta = request.GET.get("fecha_hasta")
+    q = (request.GET.get("q") or "").strip()
+    categoria = (request.GET.get("categoria") or "").strip()
+    metodo_pago = (request.GET.get("metodo_pago") or "").strip()
+    fecha_desde = (request.GET.get("fecha_desde") or "").strip()
+    fecha_hasta = (request.GET.get("fecha_hasta") or "").strip()
 
     if q:
         gastos = gastos.filter(
-            Q(factura__proveedor__icontains=q) |
-            Q(factura__numero_factura__icontains=q)
+            Q(factura__proveedor__icontains=q) | Q(factura__numero_factura__icontains=q)
         )
 
     if categoria:
@@ -104,20 +101,31 @@ def listado_gastos(request):
 
     context = {
         "gastos": gastos,
-        "categorias": CategoriaGasto.objects.filter(
-            negocio_id=negocio_id,
-           
-        ),
+        "categorias": CategoriaGasto.objects.filter(negocio_id=negocio_id, activo=True),
+        "filtros": {
+            "q": q,
+            "categoria": categoria,
+            "metodo_pago": metodo_pago,
+            "fecha_desde": fecha_desde,
+            "fecha_hasta": fecha_hasta,
+        },
+        "kpi": {
+            "total": gastos.count(),
+            "registrados": gastos.filter(estado="registrado").count(),
+            "anulados": gastos.filter(estado="anulado").count(),
+        },
     }
 
     return render(request, "gastos/listado_gastos.html", context)
+
 
 @login_required
 def anular_gasto(request, gasto_id):
     gasto = get_object_or_404(Gasto, id=gasto_id)
     gasto.estado = "anulado"
-    gasto.save()
+    gasto.save(update_fields=["estado"])
     return redirect("gastos:listado_gastos")
+
 
 @login_required
 def editar_gasto(request, gasto_id):
@@ -132,9 +140,13 @@ def editar_gasto(request, gasto_id):
 
         return redirect("gastos:listado_gastos")
 
-    categorias = CategoriaGasto.objects.all()
+    categorias = CategoriaGasto.objects.filter(negocio_id=gasto.negocio_id, activo=True)
 
-    return render(request, "gastos/editar_gasto.html", {
-        "gasto": gasto,
-        "categorias": categorias
-    })
+    return render(
+        request,
+        "gastos/editar_gasto.html",
+        {
+            "gasto": gasto,
+            "categorias": categorias,
+        },
+    )

@@ -175,3 +175,27 @@ Tener un sistema usable por 1 negocio piloto que permita:
 4. **Alta / Medio:** hardening y pruebas críticas (fase 4).
 
 En resumen: si quieres resultados rápidos, empieza por **cerrar el flujo `accounts + gastos`** y congelar temporalmente lo demás.
+
+
+## 10) Fase 1 ejecutada (ajustes aplicados en código)
+Se aplicaron correcciones iniciales de estabilización para reducir deuda técnica inmediata:
+
+- **Servicio de sincronización desacoplado de capa web**
+  - `sync_facturas` ya no depende de `@login_required`.
+  - Queda utilizable tanto desde vistas como desde command (`sync_facturas_correo`) sin semántica HTTP mezclada.
+
+- **Cliente IMAP saneado**
+  - Se eliminó la duplicidad de `mark_seen`.
+  - Se añadieron validaciones de conexión (`self.conn`) antes de operaciones IMAP para errores más claros.
+
+- **Sincronización AJAX alineada con su contrato**
+  - `sync_facturas_ajax` ahora ejecuta con `solo_unread=True` para respetar el comportamiento descrito.
+
+- **Hardening de configuración base**
+  - `SECRET_KEY` y `DEBUG` pasan a depender de variables de entorno (`DJANGO_SECRET_KEY`, `DJANGO_DEBUG`) con fallback seguro de desarrollo.
+
+### Resultado esperado tras estos cambios
+1. Menor acoplamiento entre vistas y servicios.
+2. Menos riesgo de errores silenciosos en IMAP.
+3. Comportamiento consistente entre documentación y ejecución.
+4. Primer paso hacia configuración segura para entornos no locales.

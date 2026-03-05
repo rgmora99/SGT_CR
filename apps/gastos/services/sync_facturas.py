@@ -1,5 +1,7 @@
 from django.utils import timezone
-from apps.gastos.models import ConfigCorreoFactura,FacturaGasto
+from django.shortcuts import redirect
+
+from apps.gastos.models import ConfigCorreoFactura, FacturaGasto
 from apps.gastos.services import (
     IMAPClient,
     parse_email,
@@ -8,11 +10,9 @@ from apps.gastos.services import (
     crear_factura_desde_correo,
     existe_por_message_id,
 )
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
 from apps.gastos.services.gastos_fijos import aplicar_gasto_fijo_a_factura
 
-@login_required
+
 def sync_facturas(*, year=None, solo_unread=True):
     """
     Sincroniza facturas desde correo.
@@ -39,12 +39,11 @@ def sync_facturas(*, year=None, solo_unread=True):
             client.connect(cfg.username, cfg.password)
             client.select_folder(cfg.carpeta)
 
-            # 🔍 Buscar correos
             if year:
                 ids = client.search_by_year(
                     year=year,
                     subject="factura",
-                    unseen_only=solo_unread
+                    unseen_only=solo_unread,
                 )
             else:
                 ids = client.search_unseen()
@@ -66,7 +65,6 @@ def sync_facturas(*, year=None, solo_unread=True):
 
                 factura_data = parse_factura_xml(xml_bytes)
 
-                # 🔒 Seguridad
                 if not factura_data.get("fecha_emision"):
                     continue
 
@@ -90,27 +88,29 @@ def sync_facturas(*, year=None, solo_unread=True):
         finally:
             client.logout()
 
-        resultados.append({
-            "negocio": cfg.negocio_id,
-            "creadas": creadas,
-            "omitidas": omitidas,
-        })
+        resultados.append(
+            {
+                "negocio": cfg.negocio_id,
+                "creadas": creadas,
+                "omitidas": omitidas,
+            }
+        )
 
     return resultados
 
 
-@login_required
 def aplicar_reglas_gastos_fijos(request):
+    """Aplica reglas de gastos fijos sobre facturas pendientes del negocio activo."""
     negocio_id = request.session.get("negocio_activo_id")
     if not negocio_id:
         return redirect("gastos:bandeja_facturas")
 
     facturas = FacturaGasto.objects.filter(
         negocio_id=negocio_id,
-        estado__in=["pendiente", "en_registro"]
+        estado__in=["pendiente", "en_registro"],
     ).select_related("categoria")
 
-    for f in facturas:
-        aplicar_gasto_fijo_a_factura(f)
+    for factura in facturas:
+        aplicar_gasto_fijo_a_factura(factura)
 
     return redirect("gastos:bandeja_facturas")

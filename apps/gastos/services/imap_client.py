@@ -1,6 +1,7 @@
 import imaplib
 from datetime import date
 
+
 class IMAPClient:
     def __init__(self, host: str, port: int, use_ssl: bool):
         self.host = host
@@ -16,26 +17,22 @@ class IMAPClient:
 
         self.conn.login(username, password)
         return self.conn
-    
-    def mark_seen(self, msg_id: bytes):
-        """
-        Marca un correo como leído (SEEN)
-        """
+
+    def select_folder(self, folder: str):
         if not self.conn:
             raise RuntimeError("Conexión IMAP no inicializada")
 
-        self.conn.store(msg_id, "+FLAGS", "\\Seen")
-
-    def select_folder(self, folder: str):
         typ, data = self.conn.select(folder)
         if typ != "OK":
             raise RuntimeError(f"No se pudo abrir carpeta IMAP: {folder}")
         return data
 
-    # ✅ NUEVO: buscar por AÑO (solo ese año)
     def search_by_year(self, year: int, subject: str = None, unseen_only: bool = False):
-        since = date(year, 1, 1).strftime("%d-%b-%Y")      # 01-Jan-YYYY
-        before = date(year + 1, 1, 1).strftime("%d-%b-%Y") # 01-Jan-(YYYY+1)
+        if not self.conn:
+            raise RuntimeError("Conexión IMAP no inicializada")
+
+        since = date(year, 1, 1).strftime("%d-%b-%Y")
+        before = date(year + 1, 1, 1).strftime("%d-%b-%Y")
 
         parts = []
         if unseen_only:
@@ -45,7 +42,6 @@ class IMAPClient:
         parts.append(f"BEFORE {before}")
 
         if subject:
-            # SUBJECT "factura"
             parts.append(f'SUBJECT "{subject}"')
 
         query = f'({" ".join(parts)})'
@@ -55,20 +51,28 @@ class IMAPClient:
             return []
         return data[0].split()
 
-    # (tu método original, si lo quieres conservar)
     def search_unseen(self):
+        if not self.conn:
+            raise RuntimeError("Conexión IMAP no inicializada")
+
         typ, data = self.conn.search(None, '(UNSEEN SUBJECT "factura")')
         if typ != "OK":
             return []
         return data[0].split()
 
     def fetch_rfc822(self, msg_id: bytes):
+        if not self.conn:
+            raise RuntimeError("Conexión IMAP no inicializada")
+
         typ, data = self.conn.fetch(msg_id, "(RFC822)")
         if typ != "OK":
             raise RuntimeError("No se pudo leer el correo.")
         return data[0][1]
 
     def mark_seen(self, msg_id: bytes):
+        if not self.conn:
+            raise RuntimeError("Conexión IMAP no inicializada")
+
         self.conn.store(msg_id, "+FLAGS", "\\Seen")
 
     def logout(self):

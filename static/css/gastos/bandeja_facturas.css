@@ -4,11 +4,13 @@
   --brand-accent: #60a5fa;
   --brand-bg: #f8fafc;
   --brand-gray: #64748b;
-  --brand-border: rgba(0, 0, 0, 0.08);
-
+  --brand-border: rgba(15, 23, 42, 0.12);
   --btn-radius: 12px;
   --card-radius: 16px;
-  --transition-base: 0.25s ease;
+}
+
+.bandeja-page {
+  padding-bottom: 1rem;
 }
 
 .bandeja-header {
@@ -19,9 +21,27 @@
   gap: 12px;
 }
 
+.sync-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--brand-border);
+  border-radius: 999px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.82rem;
+}
+
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -44,9 +64,17 @@
   font-size: 0.84rem;
 }
 
-.kpi-card.warning { border-left: 4px solid #f59e0b; }
-.kpi-card.info { border-left: 4px solid #3b82f6; }
-.kpi-card.success { border-left: 4px solid #10b981; }
+.kpi-card.warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.kpi-card.info {
+  border-left: 4px solid #3b82f6;
+}
+
+.kpi-card.success {
+  border-left: 4px solid #10b981;
+}
 
 .bandeja-card {
   background: #fff;
@@ -62,11 +90,117 @@
   margin-bottom: 4px;
 }
 
+.sync-controls {
+  align-items: center;
+}
+
+.auto-sync-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+  background: #f8fafc;
+  min-height: 38px;
+}
+
+.auto-sync-switch .form-check-input {
+  margin: 0;
+  float: none;
+}
+
+.auto-sync-switch .form-check-label {
+  margin: 0;
+  line-height: 1;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.sync-feedback {
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.9rem;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+}
+
+.sync-feedback.info {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.sync-feedback.success {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.sync-feedback.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.bandeja-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.bandeja-table thead th,
+.bandeja-table tbody td {
+  vertical-align: middle;
+}
+
+.bandeja-table thead th {
+  border-bottom-width: 1px;
+  border-bottom-color: #d1d5db;
+}
+
+.bandeja-table th:nth-child(1),
+.bandeja-table td:nth-child(1) {
+  width: 34%;
+}
+
+.bandeja-table th:nth-child(2),
+.bandeja-table td:nth-child(2) {
+  width: 16%;
+}
+
+.bandeja-table th:nth-child(3),
+.bandeja-table td:nth-child(3) {
+  width: 10%;
+}
+
+.bandeja-table th:nth-child(4),
+.bandeja-table td:nth-child(4) {
+  width: 10%;
+}
+
+.bandeja-table th:nth-child(5),
+.bandeja-table td:nth-child(5) {
+  width: 12%;
+}
+
+.bandeja-table th:nth-child(6),
+.bandeja-table td:nth-child(6) {
+  width: 18%;
+  text-align: right;
+}
+
+.proveedor-name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 .badge-estado {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  justify-content: center;
+  min-width: 96px;
+  padding: 6px 12px;
   border-radius: 999px;
   font-weight: 600;
   font-size: 0.82rem;
@@ -99,9 +233,46 @@
   border-color: rgba(239, 68, 68, 0.35);
 }
 
-@media (max-width: 768px) {
+.action-col {
+  text-align: right;
+}
+
+.action-wrap {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.action-wrap .btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  .bandeja-table {
+    table-layout: auto;
+  }
+
+  .bandeja-table th,
+  .bandeja-table td {
+    white-space: nowrap;
+  }
+
+  .bandeja-table td:first-child {
+    white-space: normal;
+    min-width: 320px;
+  }
+}
+
+@media (max-width: 992px) {
   .bandeja-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .sync-controls {
+    justify-content: flex-start !important;
+  }
+
+  .action-wrap {
+    min-width: 240px;
   }
 }

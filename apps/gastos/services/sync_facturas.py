@@ -13,13 +13,14 @@ from apps.gastos.services import (
 from apps.gastos.services.gastos_fijos import aplicar_gasto_fijo_a_factura
 
 
-def sync_facturas(*, year=None, solo_unread=True):
+def sync_facturas(*, year=None, solo_unread=True, negocio_id=None):
     """
     Sincroniza facturas desde correo.
 
     Args:
         year (int | None): año a sincronizar
         solo_unread (bool): solo correos no leídos
+        negocio_id (int | None): si se envía, limita la sincronización a un negocio
 
     Returns:
         list[dict]: resultados por negocio
@@ -28,6 +29,8 @@ def sync_facturas(*, year=None, solo_unread=True):
     resultados = []
 
     configs = ConfigCorreoFactura.objects.filter(activo=True)
+    if negocio_id:
+        configs = configs.filter(negocio_id=negocio_id)
 
     for cfg in configs:
         creadas = 0

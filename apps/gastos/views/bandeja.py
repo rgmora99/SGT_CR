@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.db.models import Q
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import redirect, render
 
-from apps.gastos.models import FacturaGasto
 from apps.gastos.forms import FiltroBandejaFacturasForm
+from apps.gastos.models import ConfigCorreoFactura, FacturaGasto
 
 
 @login_required
@@ -50,6 +50,12 @@ def bandeja_facturas(request):
     if "page" in query_string:
         query_string.pop("page")
 
+    conexiones_activas = ConfigCorreoFactura.objects.filter(
+        negocio_id=negocio_id,
+        activo=True,
+    )
+    ultima_sync = conexiones_activas.order_by("-ultima_sync").values_list("ultima_sync", flat=True).first()
+
     return render(
         request,
         "gastos/bandeja_facturas.html",
@@ -58,5 +64,7 @@ def bandeja_facturas(request):
             "facturas": facturas,
             "kpi": kpi,
             "query_string": query_string.urlencode(),
+            "conexiones_activas_count": conexiones_activas.count(),
+            "ultima_sync": ultima_sync,
         },
     )

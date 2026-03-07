@@ -10,6 +10,17 @@
     <p>Agrega uno o varios correos. Solo completa lo esencial; el sistema autocompleta el resto.</p>
   </div>
 
+  {% if messages %}
+    <div class="alerts-stack mb-3" aria-live="polite">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <div class="row g-4">
     <div class="col-lg-7">
       <div class="card correo-card">
@@ -18,8 +29,8 @@
           <p class="text-muted mb-0">Cada conexión activa se usa para detectar facturas automáticamente.</p>
         </div>
 
-        <div class="table-responsive mt-3">
-          <table class="table table-hover align-middle mb-0">
+        <div class="table-responsive mt-3 conexiones-table-wrap">
+          <table class="table table-hover align-middle mb-0 conexiones-table">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -32,22 +43,24 @@
             <tbody>
               {% for c in conexiones %}
                 <tr>
-                  <td class="fw-semibold">{{ c.nombre }}</td>
-                  <td>{{ c.email }}</td>
+                  <td class="fw-semibold nombre-col">{{ c.nombre }}</td>
+                  <td class="email-col">{{ c.email }}</td>
                   <td>{{ c.carpeta }}</td>
                   <td>
                     <span class="badge {% if c.activo %}badge-on{% else %}badge-off{% endif %}">
                       {% if c.activo %}Activo{% else %}Inactivo{% endif %}
                     </span>
                   </td>
-                  <td class="text-end d-flex justify-content-end gap-2">
-                    <a href="{% url 'gastos:config_correo_facturas' %}?edit={{ c.id }}" class="btn btn-sm btn-outline-primary">Editar</a>
-                    <form method="post" onsubmit="return confirm('¿Deseas eliminar esta conexión?');">
-                      {% csrf_token %}
-                      <input type="hidden" name="action" value="delete">
-                      <input type="hidden" name="config_id" value="{{ c.id }}">
-                      <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-                    </form>
+                  <td class="acciones-col">
+                    <div class="acciones-wrap">
+                      <a href="{% url 'gastos:config_correo_facturas' %}?edit={{ c.id }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                      <form method="post" onsubmit="return confirm('¿Deseas eliminar esta conexión?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="config_id" value="{{ c.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               {% empty %}
@@ -70,7 +83,9 @@
 
         <form method="post" novalidate class="mt-3">
           {% if form.non_field_errors %}
-            <div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>
+            <div class="alert alert-danger py-2 mb-3">
+              {{ form.non_field_errors }}
+            </div>
           {% endif %}
 
           {% csrf_token %}
@@ -79,56 +94,63 @@
           {% endif %}
 
           <div class="mb-3">
-            <label class="form-label">Nombre de la conexión</label>
+            <label class="form-label" for="id_nombre">Nombre de la conexión</label>
             {{ form.nombre }}
+            {% for error in form.nombre.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Correo</label>
+            <label class="form-label" for="id_email">Correo</label>
             {{ form.email }}
+            {% for error in form.email.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Contraseña / App Password</label>
+            <label class="form-label" for="id_password">Contraseña / App Password</label>
             {{ form.password }}
             <small class="form-hint">{{ form.password.help_text }}</small>
+            {% for error in form.password.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Carpeta</label>
+            <label class="form-label" for="id_carpeta">Carpeta</label>
             {{ form.carpeta }}
+            {% for error in form.carpeta.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
           </div>
 
           <div class="form-check mb-3">
             {{ form.activo }}
-            <label class="form-check-label ms-1">Usar esta conexión para sincronizar facturas</label>
+            <label class="form-check-label ms-1" for="id_activo">Usar esta conexión para sincronizar facturas</label>
           </div>
 
-          <details class="advanced-box mb-3">
+          <details class="advanced-box mb-3" {% if form.username.errors or form.imap_host.errors or form.imap_port.errors %}open{% endif %}>
             <summary>Ajustes avanzados (opcional)</summary>
             <div class="row mt-3 g-2">
               <div class="col-12">
-                <label class="form-label">Usuario IMAP</label>
+                <label class="form-label" for="id_username">Usuario IMAP</label>
                 {{ form.username }}
+                {% for error in form.username.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
               </div>
-              <div class="col-8">
-                <label class="form-label">Servidor IMAP</label>
+              <div class="col-8 col-sm-8">
+                <label class="form-label" for="id_imap_host">Servidor IMAP</label>
                 {{ form.imap_host }}
+                {% for error in form.imap_host.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
               </div>
-              <div class="col-4">
-                <label class="form-label">Puerto</label>
+              <div class="col-4 col-sm-4">
+                <label class="form-label" for="id_imap_port">Puerto</label>
                 {{ form.imap_port }}
+                {% for error in form.imap_port.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
               </div>
               <div class="col-12">
                 <div class="form-check mt-2">
                   {{ form.imap_ssl }}
-                  <label class="form-check-label ms-1">Conexión SSL</label>
+                  <label class="form-check-label ms-1" for="id_imap_ssl">Conexión SSL</label>
                 </div>
               </div>
             </div>
           </details>
 
-          <div class="d-flex justify-content-end gap-2">
+          <div class="d-flex justify-content-end gap-2 flex-wrap">
             <a class="btn btn-light" href="{% url 'gastos:bandeja_facturas' %}">Volver</a>
             {% if edit_instance %}
               <a class="btn btn-outline-secondary" href="{% url 'gastos:config_correo_facturas' %}">Nueva</a>

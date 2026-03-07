@@ -11,6 +11,10 @@
   top: 88px;
 }
 
+.alerts-stack .alert {
+  margin-bottom: 0.5rem;
+}
+
 .card-header-lite h5 {
   font-weight: 700;
   color: #0f172a;
@@ -31,6 +35,12 @@
   display: block;
   margin-top: 0.3rem;
   font-size: 0.82rem;
+}
+
+.field-error {
+  color: #b91c1c;
+  font-size: 0.82rem;
+  margin-top: 0.25rem;
 }
 
 .badge {
@@ -63,9 +73,54 @@
   font-weight: 600;
 }
 
-.table thead th {
-  font-size: 0.8rem;
+.conexiones-table {
+  min-width: 680px;
+}
+
+.conexiones-table thead th {
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: .03em;
   color: #64748b;
+}
+
+.nombre-col,
+.email-col {
+  overflow-wrap: anywhere;
+}
+
+.acciones-col {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.acciones-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.acciones-wrap form {
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .correo-config-page .form-card {
+    position: static;
+  }
+
+  .conexiones-table {
+    min-width: 620px;
+  }
+}
+
+@media (max-width: 576px) {
+  .correo-config-page .correo-card {
+    padding: 1rem;
+  }
+
+  .conexiones-table {
+    min-width: 560px;
+  }
 }

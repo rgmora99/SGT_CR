@@ -37,6 +37,7 @@ def config_correo_facturas(request):
 
         form = ConfigCorreoFacturaForm(request.POST, instance=target_instance)
         if form.is_valid():
+            is_edit = bool(target_instance)
             cfg = form.save(commit=False)
             cfg.negocio_id = negocio_id
 
@@ -62,10 +63,14 @@ def config_correo_facturas(request):
                 )
 
             cfg.save()
-            messages.success(request, "Conexión guardada y validada correctamente.")
+            if is_edit:
+                messages.success(request, "Conexión actualizada y validada correctamente.")
+            else:
+                messages.success(request, "Conexión creada y validada correctamente.")
             return redirect("gastos:config_correo_facturas")
 
-        messages.error(request, "Revisa los campos del formulario.")
+        first_error = next(iter(form.errors.values()))[0] if form.errors else "Revisa los campos del formulario."
+        messages.error(request, f"Corrige los errores del formulario: {first_error}")
     else:
         form = ConfigCorreoFacturaForm(instance=edit_instance)
 

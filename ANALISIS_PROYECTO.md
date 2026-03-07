@@ -199,3 +199,48 @@ Se aplicaron correcciones iniciales de estabilización para reducir deuda técni
 2. Menos riesgo de errores silenciosos en IMAP.
 3. Comportamiento consistente entre documentación y ejecución.
 4. Primer paso hacia configuración segura para entornos no locales.
+
+## 11) Lectura funcional en dos perfiles: contador y usuario final
+
+### 11.1 Perspectiva de un contador
+**¿Qué valor aporta?**
+- El sistema está orientado a centralizar la evidencia fiscal del negocio (facturas de gasto con XML/PDF), con estados operativos que permiten seguimiento contable (`pendiente`, `en_registro`, `registrada`, `rechazada`).
+- Existe estructura de configuración fiscal por negocio (identificación, régimen IVA, porcentaje IVA, periodicidad, declaración de renta), útil para parametrizar la lógica tributaria por cliente.
+- La arquitectura multi-negocio permite atender varios negocios sin mezclar datos, clave para despacho contable o asesor externo.
+
+**Fortalezas contables observadas**
+1. **Trazabilidad documental:** se conserva origen de correo, `message_id`, archivos XML/PDF y estado de procesamiento.
+2. **Control de duplicados:** restricción única por `negocio + email_message_id`, importante para evitar doble registro.
+3. **Flujo de formalización:** la factura detectada pasa a gasto registrado con categoría, fecha y método de pago.
+4. **KPIs operativos iniciales:** la bandeja y listados muestran pendientes/registrados/anulados para control diario.
+
+**Riesgos o vacíos desde contabilidad**
+- No se observa aún conciliación avanzada (bancos, cuentas contables, asientos dobles).
+- El dashboard inicial tiene indicadores demo/estáticos en la portada.
+- El módulo de ventas está en etapa temprana, por lo que la visión completa ingreso-egreso todavía es parcial.
+
+### 11.2 Perspectiva de usuario final (dueño/administrador pyme)
+**Experiencia principal esperada**
+1. Crear cuenta e iniciar sesión.
+2. Completar onboarding (crear negocio + datos fiscales).
+3. Configurar correo para lectura de facturas.
+4. Sincronizar y revisar facturas en bandeja.
+5. Registrar gasto en pocos clics y consultar histórico.
+
+**Lo que sí resuelve hoy para usuario final**
+- Reduce trabajo manual al capturar facturas desde correo.
+- Organiza el proceso con estados claros y acciones concretas (registrar/rechazar/continuar).
+- Permite filtrar y consultar gastos por proveedor, categoría, método de pago y fechas.
+
+**Puntos de fricción probables para usuario no técnico**
+- La configuración IMAP puede ser sensible (credenciales, carpeta, puertos).
+- Algunos módulos visibles en navegación parecen no estar completos todavía.
+- La portada promete funciones de reportes/IVA que en parte todavía se perciben en desarrollo.
+
+### 11.3 Concepto del sistema (síntesis)
+El concepto central de SGT_CR es ser un **asistente operativo contable-fiscal para pymes**, priorizando primero el frente de **gastos con soporte documental electrónico**, y construyendo alrededor un marco multi-negocio con onboarding fiscal guiado. Es un enfoque pragmático: primero ordenar la captura y registro de evidencia tributaria, luego escalar hacia analítica y cumplimiento más avanzado.
+
+### 11.4 Recomendación estratégica por perfil
+- **Para contador:** posicionarlo como “hub de documentación fiscal + precontabilidad”, evitando venderlo aún como ERP completo.
+- **Para usuario final:** enfatizar beneficios inmediatos (menos papeleo, mayor orden, visibilidad de pendientes).
+- **Para producto:** cerrar totalmente el ciclo gastos + tablero real (KPIs dinámicos) antes de expandir ventas/reportes avanzados.

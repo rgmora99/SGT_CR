@@ -4,11 +4,18 @@
 
 <link rel="stylesheet" href="{% static '/css/gastos/bandeja_facturas.css' %}">
 
-<div class="container-fluid">
+<div class="container-fluid bandeja-page" data-sync-url="{% url 'gastos:sync_facturas_ajax' %}">
   <div class="bandeja-header">
     <div>
       <h2>Bandeja de facturas</h2>
-      <p>Centraliza tus facturas detectadas por correo para revisarlas y registrarlas rápidamente.</p>
+      <p>Revisa, registra y da seguimiento a tus facturas detectadas automáticamente por correo.</p>
+      <div class="sync-meta mt-2">
+        <span class="meta-pill">Conexiones activas: <strong>{{ conexiones_activas_count }}</strong></span>
+        <span class="meta-pill">
+          Última sincronización:
+          <strong>{% if ultima_sync %}{{ ultima_sync|date:"d/m/Y H:i" }}{% else %}Sin registros{% endif %}</strong>
+        </span>
+      </div>
     </div>
     <div class="actions">
       <a href="{% url 'gastos:config_correo_facturas' %}" class="btn btn-outline-primary">
@@ -37,28 +44,42 @@
   </section>
 
   <div class="card bandeja-card">
+    <div id="syncFeedback" class="sync-feedback d-none" role="status" aria-live="polite"></div>
+
     <form method="get" class="row g-2 mb-3 align-items-end" aria-label="Filtros de facturas">
-      <div class="col-md-4">
+      <div class="col-lg-4 col-md-6">
         <label for="id_q" class="form-label">Buscar</label>
         {{ form.q }}
       </div>
-      <div class="col-md-3">
+      <div class="col-lg-3 col-md-6">
         <label for="id_estado" class="form-label">Estado</label>
         {{ form.estado }}
       </div>
-      <div class="col-md-2 d-grid">
+      <div class="col-lg-2 col-md-4 d-grid">
         <button class="btn btn-primary" type="submit">Filtrar</button>
       </div>
-      <div class="col-md-3 d-grid">
-        <button id="btnSync" class="btn btn-outline-success" type="button">Sincronizar ahora</button>
+      <div class="col-lg-3 col-md-8 d-flex flex-wrap gap-2 justify-content-lg-end sync-controls">
+        <button
+          id="btnSync"
+          class="btn btn-outline-success"
+          type="button"
+          {% if conexiones_activas_count == 0 %}disabled{% endif %}
+        >
+          ⟳ Sincronizar ahora
+        </button>
+        <div class="form-check form-switch auto-sync-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="autoSyncToggle" checked>
+          <label class="form-check-label" for="autoSyncToggle">Auto</label>
+        </div>
       </div>
-      <div class="col-12">
+      <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
         <a href="{% url 'gastos:bandeja_facturas' %}" class="btn btn-link btn-sm p-0">Limpiar filtros</a>
+        <small class="text-muted">Sincronización automática cada 2 minutos (solo en esta pantalla).</small>
       </div>
     </form>
 
     <div class="table-responsive">
-      <table class="table table-hover align-middle">
+      <table class="table table-hover align-middle bandeja-table">
         <thead>
           <tr>
             <th>Proveedor</th>
@@ -73,50 +94,41 @@
           {% for f in facturas %}
           <tr>
             <td>
-              <div class="fw-semibold">{{ f.proveedor }}</div>
-              <div class="text-muted small">{{ f.email_from|default:"Sin correo origen" }}</div>
+              <div class="fw-semibold proveedor-name">{{ f.proveedor }}</div>
+              <div class="text-muted small text-truncate" style="max-width:360px;">{{ f.email_from|default:"Sin correo origen" }}</div>
+              {% if f.alerta_ingesta %}
+                <div class="ingesta-alert" title="{{ f.alerta_ingesta }}">⚠ {{ f.tipo_documento_xml|default:"xml"|title }}</div>
+              {% endif %}
             </td>
             <td>{{ f.numero_factura }}</td>
             <td>{{ f.fecha_emision|date:"d/m/Y" }}</td>
-            <td>₡ {{ f.total }}</td>
+            <td><span class="money-pill">{{ f.moneda|default:"CRC" }} {{ f.total }}</span></td>
             <td>
-              <span class="badge badge-estado {{ f.estado }}">
-                {{ f.get_estado_display }}
-              </span>
+              <span class="badge badge-estado {{ f.estado }}">{{ f.get_estado_display }}</span>
             </td>
-            <td class="text-end d-flex flex-wrap justify-content-end gap-1">
-
+            <td class="action-col">
+              <div class="d-flex flex-wrap justify-content-end gap-1 action-wrap">
               {% if f.xml_file %}
-                <a class="btn btn-sm btn-light" href="{{ f.xml_file.url }}" target="_blank" rel="noopener">XML</a>
+                <a class="btn btn-sm btn-light action-btn action-doc" href="{{ f.xml_file.url }}" target="_blank" rel="noopener" title="Ver XML">XML</a>
               {% endif %}
               {% if f.pdf_file %}
-                <a class="btn btn-sm btn-light" href="{{ f.pdf_file.url }}" target="_blank" rel="noopener">PDF</a>
+                <a class="btn btn-sm btn-light action-btn action-doc" href="{{ f.pdf_file.url }}" target="_blank" rel="noopener" title="Ver PDF">PDF</a>
               {% endif %}
 
               {% if f.estado == "pendiente" %}
-                <a class="btn btn-sm btn-success" href="{% url 'gastos:registrar' f.id %}">
-                  Registrar gasto
-                </a>
-                <a class="btn btn-sm btn-danger" href="{% url 'gastos:rechazar_factura' f.id %}">
-                  Rechazar
-                </a>
-
+                <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Registrar gasto de esta factura">Registrar gasto</a>
+                <a class="btn btn-sm btn-danger action-btn" href="{% url 'gastos:rechazar_factura' f.id %}" title="Rechazar factura">Rechazar</a>
               {% elif f.estado == "en_registro" %}
-                <a class="btn btn-sm btn-success" href="{% url 'gastos:registrar' f.id %}">
-                  Continuar
-                </a>
-
+                <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Continuar registro de gasto">Continuar</a>
               {% elif f.estado == "registrada" and f.gasto %}
-                <a class="btn btn-sm btn-outline-primary" href="{% url 'gastos:ver_gasto' f.gasto.id %}">
-                  Ver gasto
-                </a>
-
+                <a class="btn btn-sm btn-outline-primary action-btn" href="{% url 'gastos:ver_gasto' f.gasto.id %}" title="Ver gasto registrado">Ver gasto</a>
               {% endif %}
+              </div>
             </td>
           </tr>
           {% empty %}
           <tr>
-            <td colspan="6" class="text-center text-muted py-4">
+            <td colspan="6" class="text-center text-muted py-5">
               No hay facturas en la bandeja.
             </td>
           </tr>
@@ -126,7 +138,6 @@
 
       <nav class="mt-3" aria-label="Paginación de facturas">
         <ul class="pagination justify-content-center">
-
           {% if facturas.has_previous %}
             <li class="page-item">
               <a class="page-link" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ facturas.previous_page_number }}">Anterior</a>
@@ -142,7 +153,6 @@
               <a class="page-link" href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ facturas.next_page_number }}">Siguiente</a>
             </li>
           {% endif %}
-
         </ul>
       </nav>
     </div>

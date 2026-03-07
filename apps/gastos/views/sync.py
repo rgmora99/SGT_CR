@@ -18,9 +18,11 @@ def sync_facturas_ajax(request):
     year_actual = now().year
 
     try:
+        negocio_id = request.session.get("negocio_activo_id")
         resultados = sync_facturas(
             year=year_actual,
-            solo_unread=True
+            solo_unread=True,
+            negocio_id=negocio_id,
         )
 
         total_creadas = sum(r["creadas"] for r in resultados)

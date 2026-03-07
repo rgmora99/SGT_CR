@@ -4,9 +4,11 @@ from decimal import Decimal
 from apps.accounts.models import TB_NEGOCIOS # ajusta el import según tu proyecto
 
 class ConfigCorreoFactura(models.Model):
-    negocio = models.OneToOneField(
+    negocio = models.ForeignKey(
         TB_NEGOCIOS, on_delete=models.CASCADE, related_name="correo_facturas"
     )
+
+    nombre = models.CharField(max_length=100, default="Correo principal")
 
     # IMAP
     imap_host = models.CharField(max_length=120, default="imap.gmail.com")
@@ -15,7 +17,7 @@ class ConfigCorreoFactura(models.Model):
 
     email = models.EmailField()
     username = models.CharField(max_length=120)
-    password = models.CharField(max_length=200)  # luego ciframos
+    password = models.CharField(max_length=200)  # TODO: cifrar en siguiente fase
     carpeta = models.CharField(max_length=80, default="INBOX")
 
     activo = models.BooleanField(default=True)
@@ -23,8 +25,17 @@ class ConfigCorreoFactura(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["negocio", "email"],
+                name="uniq_config_correo_por_negocio_email",
+            )
+        ]
+
     def __str__(self):
-        return f"Correo facturas ({self.negocio_id}) - {self.email}"
+        return f"{self.nombre} - {self.email}"
     
 class CategoriaGasto(models.Model):
     negocio = models.ForeignKey(

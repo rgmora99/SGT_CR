@@ -96,10 +96,13 @@
             <td>
               <div class="fw-semibold proveedor-name">{{ f.proveedor }}</div>
               <div class="text-muted small text-truncate" style="max-width:360px;">{{ f.email_from|default:"Sin correo origen" }}</div>
+              {% if f.alerta_ingesta %}
+                <div class="ingesta-alert" title="{{ f.alerta_ingesta }}">⚠ {{ f.tipo_documento_xml|default:"xml"|title }}</div>
+              {% endif %}
             </td>
             <td>{{ f.numero_factura }}</td>
             <td>{{ f.fecha_emision|date:"d/m/Y" }}</td>
-            <td>₡ {{ f.total }}</td>
+            <td><span class="money-pill">{{ f.moneda|default:"CRC" }} {{ f.total }}</span></td>
             <td>
               <span class="badge badge-estado {{ f.estado }}">{{ f.get_estado_display }}</span>
             </td>

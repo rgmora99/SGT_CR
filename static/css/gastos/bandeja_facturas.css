@@ -290,3 +290,23 @@
 .action-doc {
   min-width: 46px;
 }
+
+.money-pill {
+  display: inline-block;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ingesta-alert {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #92400e;
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  max-width: 100%;
+}

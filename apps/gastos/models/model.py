@@ -70,6 +70,10 @@ class FacturaGasto(models.Model):
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     iva = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     total = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    moneda = models.CharField(max_length=10, default="CRC")
+
+    tipo_documento_xml = models.CharField(max_length=40, default="factura_electronica")
+    alerta_ingesta = models.CharField(max_length=255, null=True, blank=True)
 
     categoria = models.ForeignKey(
         "CategoriaGasto", on_delete=models.SET_NULL, null=True, blank=True

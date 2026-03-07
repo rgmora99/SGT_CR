@@ -46,22 +46,28 @@ def sync_facturas_ajax(request):
         )
 
     try:
-        negocio_id = request.session.get("negocio_activo_id")
         resultados = sync_facturas(
             year=year_actual,
             solo_unread=True,
             negocio_id=negocio_id,
         )
 
-        total_creadas = sum(r["creadas"] for r in resultados)
-        total_omitidas = sum(r["omitidas"] for r in resultados)
+        resumen = {
+            "facturas_creadas": sum(r["creadas"] for r in resultados),
+            "facturas_omitidas": sum(r["omitidas"] for r in resultados),
+            "facturas_duplicadas": sum(r["duplicadas"] for r in resultados),
+            "correos_sin_xml": sum(r["sin_xml"] for r in resultados),
+            "xml_invalidos": sum(r["xml_invalido"] for r in resultados),
+            "errores": sum(r["errores"] for r in resultados),
+            "correos_procesados": sum(r["procesadas"] for r in resultados),
+        }
 
         return JsonResponse(
             {
                 "ok": True,
                 "year": year_actual,
-                "facturas_creadas": total_creadas,
-                "facturas_omitidas": total_omitidas,
+                "resultados": resultados,
+                **resumen,
             }
         )
 

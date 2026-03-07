@@ -276,3 +276,17 @@
     min-width: 240px;
   }
 }
+
+#btnSync {
+  white-space: nowrap;
+}
+
+.action-btn {
+  min-height: 32px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.action-doc {
+  min-width: 46px;
+}

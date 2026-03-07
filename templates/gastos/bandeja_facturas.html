@@ -65,7 +65,7 @@
           type="button"
           {% if conexiones_activas_count == 0 %}disabled{% endif %}
         >
-          Sincronizar ahora
+          ⟳ Sincronizar ahora
         </button>
         <div class="form-check form-switch auto-sync-switch">
           <input class="form-check-input" type="checkbox" role="switch" id="autoSyncToggle" checked>
@@ -106,19 +106,19 @@
             <td class="action-col">
               <div class="d-flex flex-wrap justify-content-end gap-1 action-wrap">
               {% if f.xml_file %}
-                <a class="btn btn-sm btn-light" href="{{ f.xml_file.url }}" target="_blank" rel="noopener">XML</a>
+                <a class="btn btn-sm btn-light action-btn action-doc" href="{{ f.xml_file.url }}" target="_blank" rel="noopener" title="Ver XML">XML</a>
               {% endif %}
               {% if f.pdf_file %}
-                <a class="btn btn-sm btn-light" href="{{ f.pdf_file.url }}" target="_blank" rel="noopener">PDF</a>
+                <a class="btn btn-sm btn-light action-btn action-doc" href="{{ f.pdf_file.url }}" target="_blank" rel="noopener" title="Ver PDF">PDF</a>
               {% endif %}
 
               {% if f.estado == "pendiente" %}
-                <a class="btn btn-sm btn-success" href="{% url 'gastos:registrar' f.id %}">Registrar gasto</a>
-                <a class="btn btn-sm btn-danger" href="{% url 'gastos:rechazar_factura' f.id %}">Rechazar</a>
+                <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Registrar gasto de esta factura">Registrar gasto</a>
+                <a class="btn btn-sm btn-danger action-btn" href="{% url 'gastos:rechazar_factura' f.id %}" title="Rechazar factura">Rechazar</a>
               {% elif f.estado == "en_registro" %}
-                <a class="btn btn-sm btn-success" href="{% url 'gastos:registrar' f.id %}">Continuar</a>
+                <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Continuar registro de gasto">Continuar</a>
               {% elif f.estado == "registrada" and f.gasto %}
-                <a class="btn btn-sm btn-outline-primary" href="{% url 'gastos:ver_gasto' f.gasto.id %}">Ver gasto</a>
+                <a class="btn btn-sm btn-outline-primary action-btn" href="{% url 'gastos:ver_gasto' f.gasto.id %}" title="Ver gasto registrado">Ver gasto</a>
               {% endif %}
               </div>
             </td>

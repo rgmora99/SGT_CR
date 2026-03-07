@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const syncFacturas = async ({ silent = false } = {}) => {
-    if (isSyncing || btnSync.disabled && !silent) return;
+    if (isSyncing || (btnSync.disabled && !silent)) return;
 
     isSyncing = true;
     setButtonState(true);
@@ -66,16 +66,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const total = Number(data.facturas_creadas || 0);
-      const omitidas = Number(data.facturas_omitidas || 0);
+      const duplicadas = Number(data.facturas_duplicadas || 0);
+      const sinXml = Number(data.correos_sin_xml || 0);
+      const xmlInvalidos = Number(data.xml_invalidos || 0);
+      const errores = Number(data.errores || 0);
+      const procesados = Number(data.correos_procesados || 0);
 
       if (total > 0) {
-        showFeedback(`Se detectaron ${total} factura(s) nueva(s). Actualizando bandeja...`, "success");
+        showFeedback(
+          `✔ ${total} factura(s) nueva(s). Correos procesados: ${procesados}. Duplicadas: ${duplicadas}.`,
+          "success"
+        );
         setTimeout(() => window.location.reload(), 900);
         return;
       }
 
       if (!silent) {
-        showFeedback(`Sin cambios nuevos. Facturas omitidas por duplicado: ${omitidas}.`, "info");
+        showFeedback(
+          `Sin nuevas facturas. Procesados: ${procesados}, duplicadas: ${duplicadas}, sin XML: ${sinXml}, XML inválidos: ${xmlInvalidos}, errores: ${errores}.`,
+          errores > 0 ? "error" : "info"
+        );
       }
     } catch (error) {
       if (!silent) {

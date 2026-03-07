@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" href="{% static '/css/gastos/bandeja_facturas.css' %}">
 
-<div class="container-fluid bandeja-page" data-sync-url="{% url 'gastos:sync_facturas_ajax' %}">
+<div class="container-fluid bandeja-page" data-sync-url="{% url 'gastos:sync_facturas_ajax' %}" data-reload-url="{% url 'gastos:recargar_metadata_facturas_ajax' %}">
   <div class="bandeja-header">
     <div>
       <h2>Bandeja de facturas</h2>
@@ -61,12 +61,13 @@
       <div class="col-lg-3 col-md-8 d-flex flex-wrap gap-2 justify-content-lg-end sync-controls">
         <button
           id="btnSync"
-          class="btn btn-outline-success"
+          class="btn btn-outline-success btn-sm"
           type="button"
           {% if conexiones_activas_count == 0 %}disabled{% endif %}
         >
-          ⟳ Sincronizar ahora
+          ⟳ Sync
         </button>
+        <button id="btnReloadMeta" class="btn btn-outline-secondary btn-sm" type="button" title="Recalcular moneda y alertas desde XML guardado">↻ Recalcular</button>
         <div class="form-check form-switch auto-sync-switch">
           <input class="form-check-input" type="checkbox" role="switch" id="autoSyncToggle" checked>
           <label class="form-check-label" for="autoSyncToggle">Auto</label>
@@ -116,7 +117,7 @@
               {% endif %}
 
               {% if f.estado == "pendiente" %}
-                <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Registrar gasto de esta factura">Registrar gasto</a>
+                <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Registrar gasto de esta factura">Registrar</a>
                 <a class="btn btn-sm btn-danger action-btn" href="{% url 'gastos:rechazar_factura' f.id %}" title="Rechazar factura">Rechazar</a>
               {% elif f.estado == "en_registro" %}
                 <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Continuar registro de gasto">Continuar</a>

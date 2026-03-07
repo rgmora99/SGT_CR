@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const page = document.querySelector(".bandeja-page");
   const btnSync = document.getElementById("btnSync");
+  const btnReloadMeta = document.getElementById("btnReloadMeta");
   const feedback = document.getElementById("syncFeedback");
   const autoSyncToggle = document.getElementById("autoSyncToggle");
 
@@ -9,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const SYNC_INTERVAL_MS = 2 * 60 * 1000;
   const STORAGE_KEY = "bandeja_auto_sync_enabled";
   const syncUrl = page.dataset.syncUrl;
+  const reloadUrl = page.dataset.reloadUrl;
   let isSyncing = false;
   let intervalId = null;
 
@@ -35,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const setButtonState = (syncing) => {
     btnSync.disabled = syncing;
-    btnSync.innerText = syncing ? "Sincronizando..." : "Sincronizar ahora";
+    if (btnReloadMeta) btnReloadMeta.disabled = syncing;
+    btnSync.innerText = syncing ? "Sincronizando..." : "⟳ Sync";
   };
 
   const syncFacturas = async ({ silent = false } = {}) => {
@@ -74,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (total > 0) {
         showFeedback(
-          `✔ ${total} factura(s) nueva(s). Correos procesados: ${procesados}. Duplicadas: ${duplicadas}.`,
+          `✔ ${total} nuevas. Procesados: ${procesados}. Duplicadas: ${duplicadas}.`,
           "success"
         );
         setTimeout(() => window.location.reload(), 900);
@@ -83,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!silent) {
         showFeedback(
-          `Sin nuevas facturas. Procesados: ${procesados}, duplicadas: ${duplicadas}, sin XML: ${sinXml}, XML inválidos: ${xmlInvalidos}, errores: ${errores}.`,
+          `Sin nuevas. Procesados: ${procesados}, duplicadas: ${duplicadas}, sin XML: ${sinXml}, XML inválidos: ${xmlInvalidos}, errores: ${errores}.`,
           errores > 0 ? "error" : "info"
         );
       }
@@ -91,6 +94,42 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!silent) {
         showFeedback("Error inesperado durante la sincronización.", "error");
       }
+    } finally {
+      isSyncing = false;
+      setButtonState(false);
+    }
+  };
+
+  const recargarMetadata = async () => {
+    if (!reloadUrl || isSyncing) return;
+
+    isSyncing = true;
+    setButtonState(true);
+    showFeedback("Recalculando moneda y alertas desde XML guardado...", "info");
+
+    try {
+      const res = await fetch(reloadUrl, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        showFeedback(data.error || "No se pudo recalcular metadata.", "error");
+        return;
+      }
+
+      showFeedback(
+        `Recálculo completado. Actualizadas: ${data.actualizadas}, sin XML: ${data.sin_xml}, errores: ${data.errores}.`,
+        data.errores > 0 ? "info" : "success"
+      );
+
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (error) {
+      showFeedback("Error inesperado durante recálculo.", "error");
     } finally {
       isSyncing = false;
       setButtonState(false);
@@ -121,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   btnSync.addEventListener("click", () => syncFacturas({ silent: false }));
+  if (btnReloadMeta) btnReloadMeta.addEventListener("click", recargarMetadata);
 
   if (!btnSync.disabled) {
     syncFacturas({ silent: true });

@@ -310,3 +310,30 @@
   border: 1px solid rgba(251, 191, 36, 0.45);
   max-width: 100%;
 }
+
+
+.sync-controls .btn {
+  padding: 0.28rem 0.55rem;
+  font-size: 0.82rem;
+  line-height: 1.1;
+}
+
+.action-wrap {
+  gap: 0.3rem !important;
+}
+
+.action-btn {
+  min-height: 26px;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.78rem;
+  border-radius: 7px;
+  font-weight: 600;
+}
+
+.action-doc {
+  min-width: 36px;
+}
+
+.action-col {
+  min-width: 200px;
+}

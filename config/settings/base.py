@@ -9,8 +9,8 @@ load_dotenv(BASE_DIR / ".env")
 # ==========================
 # SECURITY
 # ==========================
-SECRET_KEY = 'django-insecure-6)#)ltfm!^*t*xzh%^zed@az#!d8^j&@uv@4#psv^5$1@3gw5c'
-DEBUG = True
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-change-me')
+DEBUG = os.getenv('DJANGO_DEBUG', 'true').lower() in ('1', 'true', 'yes')
 ALLOWED_HOSTS = []
 
 # ==========================

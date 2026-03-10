@@ -95,7 +95,12 @@
           </td>
           <td>{{ g.categoria.nombre }}</td>
           <td>{{ g.fecha_gasto|date:"d/m/Y" }}</td>
-          <td>₡ {{ g.total }}</td>
+          <td>
+            <div class="fw-semibold">{{ g.factura.moneda|default:'CRC' }} {{ g.total }}</div>
+            {% if g.total_moneda_base and g.factura.moneda and g.factura.moneda != g.negocio.moneda_base %}
+              <small class="text-muted">Base {{ g.negocio.moneda_base }}: {{ g.total_moneda_base }}</small>
+            {% endif %}
+          </td>
           <td>
             {% if g.estado == "registrado" %}
               <span class="badge-estado registrada">Registrado</span>

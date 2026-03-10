@@ -1,60 +1,147 @@
 {% extends "base/menu.html" %}
+{% load static %}
 {% block content %}
 
-<div class="container-fluid">
-  <h2>Editar gasto</h2>
-  <p class="text-muted">Solo se permiten cambios administrativos.</p>
+<link rel="stylesheet" href="{% static 'css/gastos/editar_gasto.css' %}">
 
-  <form method="post" class="card p-4">
-    {% csrf_token %}
-
-    <div class="row g-3">
-
-      <div class="col-md-4">
-        <label>Categoría</label>
-        <select name="categoria" class="form-select">
-          {% for c in categorias %}
-            <option value="{{ c.id }}"
-              {% if gasto.categoria_id == c.id %}selected{% endif %}>
-              {{ c.nombre }}
-            </option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <div class="col-md-4">
-        <label>Fecha del gasto</label>
-        <input type="date"
-               name="fecha_gasto"
-               class="form-control"
-               value="{{ gasto.fecha_gasto|date:'Y-m-d' }}">
-      </div>
-
-      <div class="col-md-4">
-        <label>Método de pago</label>
-        <select name="metodo_pago" class="form-select">
-          <option value="">---</option>
-          <option value="EFECTIVO" {% if gasto.metodo_pago == "EFECTIVO" %}selected{% endif %}>Efectivo</option>
-          <option value="TRANSFERENCIA" {% if gasto.metodo_pago == "TRANSFERENCIA" %}selected{% endif %}>Transferencia</option>
-          <option value="TARJETA" {% if gasto.metodo_pago == "TARJETA" %}selected{% endif %}>Tarjeta</option>
-        </select>
-      </div>
-
-      <div class="col-md-12">
-        <label>Notas</label>
-        <textarea name="notas" class="form-control">{{ gasto.notas }}</textarea>
-      </div>
-
+<div class="container-fluid editar-page">
+  <div class="page-header">
+    <div>
+      <h2>Editar gasto</h2>
+      <p>Actualiza datos administrativos sin perder trazabilidad contable.</p>
     </div>
+    <a href="{% url 'gastos:listado_gastos' %}" class="btn btn-outline-secondary">Volver al listado</a>
+  </div>
 
-    <div class="mt-3 text-end">
-      <a href="{% url 'gastos:listado_gastos' %}" class="btn btn-outline-secondary">
-        Cancelar
-      </a>
-      <button class="btn btn-primary">Guardar cambios</button>
-    </div>
+  <div class="card editar-card">
+    <form method="post" id="editarGastoForm" novalidate>
+      {% csrf_token %}
 
-  </form>
+      <section class="section-card">
+        <h5>Factura relacionada</h5>
+        <div class="row g-3">
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Proveedor</label>
+            <input class="form-control" value="{{ gasto.factura.proveedor }}" readonly>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Número factura</label>
+            <input class="form-control" value="{{ gasto.factura.numero_factura }}" readonly>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Estado</label>
+            <input class="form-control" value="{{ gasto.get_estado_display }}" readonly>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Moneda factura</label>
+            <input class="form-control fw-semibold" value="{{ moneda_factura }}" readonly>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Moneda base negocio</label>
+            <input class="form-control fw-semibold" value="{{ moneda_base }}" readonly>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Total factura</label>
+            <input class="form-control fw-semibold" value="{{ simbolo_factura }} {{ gasto.total }}" readonly>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Total base</label>
+            <input class="form-control fw-semibold" value="{{ simbolo_base }} {{ gasto.total_moneda_base|default:gasto.total }}" readonly>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <h5>Datos editables</h5>
+
+        <div class="row g-3">
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Categoría *</label>
+            <select name="categoria" class="form-select" required>
+              <option value="">Seleccione…</option>
+              {% for c in categorias %}
+                <option value="{{ c.id }}" {% if draft.categoria == c.id|stringformat:'s' %}selected{% endif %}>{{ c.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Fecha del gasto *</label>
+            <input type="date" name="fecha_gasto" class="form-control" value="{{ draft.fecha_gasto }}" required>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Método de pago</label>
+            <select name="metodo_pago" class="form-select">
+              <option value="" {% if not draft.metodo_pago %}selected{% endif %}>---</option>
+              <option value="EFECTIVO" {% if draft.metodo_pago == 'EFECTIVO' %}selected{% endif %}>Efectivo</option>
+              <option value="TRANSFERENCIA" {% if draft.metodo_pago == 'TRANSFERENCIA' %}selected{% endif %}>Transferencia</option>
+              <option value="TARJETA" {% if draft.metodo_pago == 'TARJETA' %}selected{% endif %}>Tarjeta</option>
+            </select>
+          </div>
+
+          <div class="col-lg-6 col-md-6">
+            <label class="form-label">Referencia contable</label>
+            <input
+              type="text"
+              name="referencia_contable"
+              class="form-control"
+              maxlength="80"
+              value="{{ draft.referencia_contable }}"
+              placeholder="Ej: Asiento, consecutivo interno, # comprobante"
+            >
+          </div>
+
+          <div class="col-lg-6 col-md-6">
+            <label class="form-label">Tipo de cambio {% if moneda_factura != moneda_base %}*{% endif %}</label>
+            <input
+              type="number"
+              name="tipo_cambio"
+              class="form-control"
+              step="0.0001"
+              min="0"
+              value="{{ draft.tipo_cambio }}"
+              {% if moneda_factura == moneda_base %}readonly{% endif %}
+              placeholder="Ej: 534.2500"
+            >
+            {% if moneda_factura == moneda_base %}
+              <small class="text-muted">No requerido porque la moneda coincide con la moneda base.</small>
+            {% else %}
+              <small class="text-muted">Obligatorio para mantener el total en {{ moneda_base }}.</small>
+            {% endif %}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Notas</label>
+            <textarea name="notas" class="form-control" rows="3" placeholder="Observaciones para auditoría contable">{{ draft.notas }}</textarea>
+          </div>
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <a href="{% url 'gastos:listado_gastos' %}" class="btn btn-outline-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      </div>
+    </form>
+  </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.GASTOS_MESSAGES = [
+    {% for message in messages %}
+      {
+        level: "{{ message.tags|default:'info'|escapejs }}",
+        text: "{{ message|escapejs }}"
+      },
+    {% endfor %}
+  ];
+  window.GASTO_EDITAR_META = {
+    monedaFactura: "{{ moneda_factura|escapejs }}",
+    monedaBase: "{{ moneda_base|escapejs }}"
+  };
+</script>
+<script src="{% static 'js/gastos/editar_gasto.js' %}"></script>
 
 {% endblock %}

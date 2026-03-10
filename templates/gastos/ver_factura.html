@@ -13,7 +13,7 @@
       <p>Gasto registrado a partir de una factura.</p>
     </div>
     <a href="{% url 'gastos:listado_gastos' %}" class="btn btn-outline">
-      Volver a bandeja
+      Volver al listado
     </a>
   </div>
 
@@ -35,6 +35,14 @@
           <label>Fecha de emisión</label>
           <input value="{{ gasto.factura.fecha_emision|date:'d/m/Y' }}" readonly>
         </div>
+        <div class="field">
+          <label>Moneda factura</label>
+          <input value="{{ moneda_factura }}" readonly>
+        </div>
+        <div class="field">
+          <label>Moneda base negocio</label>
+          <input value="{{ moneda_base }}" readonly>
+        </div>
       </div>
     </section>
 
@@ -52,7 +60,15 @@
         </div>
         <div class="field">
           <label>Método de pago</label>
-          <input value="{{ gasto.metodo_pago }}" readonly>
+          <input value="{{ gasto.metodo_pago|default:'No especificado' }}" readonly>
+        </div>
+        <div class="field">
+          <label>Referencia contable</label>
+          <input value="{{ gasto.referencia_contable|default:'No especificada' }}" readonly>
+        </div>
+        <div class="field">
+          <label>Tipo de cambio</label>
+          <input value="{{ gasto.tipo_cambio|default:'No aplica' }}" readonly>
         </div>
       </div>
     </section>
@@ -63,16 +79,22 @@
       <div class="grid-3">
         <div class="field">
           <label>Subtotal</label>
-          <input value="₡ {{ gasto.subtotal }}" readonly>
+          <input value="{{ simbolo_factura }} {{ gasto.subtotal }}" readonly>
         </div>
         <div class="field">
           <label>IVA</label>
-          <input value="₡ {{ gasto.iva }}" readonly>
+          <input value="{{ simbolo_factura }} {{ gasto.iva }}" readonly>
         </div>
         <div class="field highlight">
           <label>Total</label>
-          <input value="₡ {{ gasto.total }}" readonly>
+          <input value="{{ simbolo_factura }} {{ gasto.total }}" readonly>
         </div>
+        {% if mostrar_moneda_base %}
+        <div class="field highlight">
+          <label>Total moneda base</label>
+          <input value="{{ simbolo_base }} {{ gasto.total_moneda_base|default:gasto.total }}" readonly>
+        </div>
+        {% endif %}
       </div>
     </section>
 

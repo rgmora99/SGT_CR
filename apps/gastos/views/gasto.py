@@ -10,6 +10,17 @@ from django.shortcuts import get_object_or_404, redirect, render
 from apps.gastos.models import CategoriaGasto, FacturaGasto, Gasto
 
 
+MONEDA_SIMBOLOS = {
+    "CRC": "₡",
+    "USD": "$",
+    "EUR": "€",
+}
+
+
+def _simbolo_moneda(codigo):
+    return MONEDA_SIMBOLOS.get((codigo or "").upper(), (codigo or ""))
+
+
 @login_required
 @transaction.atomic
 def registrar_gasto(request, factura_id):
@@ -113,11 +124,28 @@ def registrar_gasto(request, factura_id):
 
 @login_required
 def ver_gasto(request, gasto_id):
+    negocio_id = request.session.get("negocio_activo_id")
+    if not negocio_id:
+        return redirect("core:home")
+
     gasto = get_object_or_404(
-        Gasto.objects.select_related("factura", "categoria"),
+        Gasto.objects.select_related("factura", "categoria", "negocio"),
         id=gasto_id,
+        negocio_id=negocio_id,
     )
-    return render(request, "gastos/ver_factura.html", {"gasto": gasto})
+
+    moneda_factura = (gasto.factura.moneda or "CRC").upper()
+    moneda_base = (gasto.negocio.moneda_base or moneda_factura).upper()
+    context = {
+        "gasto": gasto,
+        "moneda_factura": moneda_factura,
+        "moneda_base": moneda_base,
+        "simbolo_factura": _simbolo_moneda(moneda_factura),
+        "simbolo_base": _simbolo_moneda(moneda_base),
+        "mostrar_moneda_base": moneda_factura != moneda_base,
+    }
+
+    return render(request, "gastos/ver_factura.html", context)
 
 
 @login_required
@@ -128,7 +156,7 @@ def listado_gastos(request):
 
     gastos = (
         Gasto.objects.filter(negocio_id=negocio_id)
-        .select_related("categoria", "factura")
+        .select_related("categoria", "factura", "negocio")
         .order_by("-fecha_gasto")
     )
 
@@ -228,16 +256,34 @@ def editar_gasto(request, gasto_id):
         messages.warning(request, "Solo puedes editar gastos en estado registrado.")
         return redirect("gastos:listado_gastos")
 
+    moneda_factura = (gasto.factura.moneda or "CRC").upper()
+    moneda_base = (gasto.negocio.moneda_base or moneda_factura).upper()
+
+    draft = {
+        "categoria": str(gasto.categoria_id or ""),
+        "fecha_gasto": gasto.fecha_gasto.isoformat() if gasto.fecha_gasto else "",
+        "metodo_pago": gasto.metodo_pago or "",
+        "referencia_contable": gasto.referencia_contable or "",
+        "tipo_cambio": str(gasto.tipo_cambio or ""),
+        "notas": gasto.notas or "",
+    }
+
     if request.method == "POST":
-        categoria_id = (request.POST.get("categoria") or "").strip()
-        fecha_gasto = (request.POST.get("fecha_gasto") or "").strip()
-        metodo_pago = (request.POST.get("metodo_pago") or "").strip()
-        notas = (request.POST.get("notas") or "").strip()
+        draft.update(
+            {
+                "categoria": (request.POST.get("categoria") or "").strip(),
+                "fecha_gasto": (request.POST.get("fecha_gasto") or "").strip(),
+                "metodo_pago": (request.POST.get("metodo_pago") or "").strip(),
+                "referencia_contable": (request.POST.get("referencia_contable") or "").strip(),
+                "tipo_cambio": (request.POST.get("tipo_cambio") or "").strip(),
+                "notas": (request.POST.get("notas") or "").strip(),
+            }
+        )
 
         has_error = False
 
         categoria = CategoriaGasto.objects.filter(
-            id=categoria_id,
+            id=draft["categoria"],
             negocio_id=negocio_id,
             activo=True,
         ).first()
@@ -245,24 +291,79 @@ def editar_gasto(request, gasto_id):
             has_error = True
             messages.error(request, "Debes seleccionar una categoría válida.")
 
-        fecha_gasto_parsed = parse_date(fecha_gasto)
+        fecha_gasto_parsed = parse_date(draft["fecha_gasto"])
         if not fecha_gasto_parsed:
             has_error = True
             messages.error(request, "Debes indicar una fecha válida para el gasto.")
 
         metodos_pago_validos = {"", "EFECTIVO", "TRANSFERENCIA", "TARJETA"}
-        if metodo_pago not in metodos_pago_validos:
+        if draft["metodo_pago"] not in metodos_pago_validos:
             has_error = True
             messages.error(request, "El método de pago seleccionado no es válido.")
 
+        if len(draft["referencia_contable"]) > 80:
+            has_error = True
+            messages.error(request, "La referencia contable no puede exceder 80 caracteres.")
+
+        tipo_cambio = None
+        total_moneda_base = gasto.total
+        if moneda_factura != moneda_base:
+            if not draft["tipo_cambio"]:
+                has_error = True
+                messages.error(
+                    request,
+                    f"Debes indicar tipo de cambio porque la factura está en {moneda_factura} y el negocio en {moneda_base}.",
+                )
+            else:
+                try:
+                    tipo_cambio = Decimal(draft["tipo_cambio"])
+                    if tipo_cambio <= 0:
+                        raise InvalidOperation
+                    total_moneda_base = (gasto.total * tipo_cambio).quantize(Decimal("0.01"))
+                except (InvalidOperation, ValueError, TypeError):
+                    has_error = True
+                    messages.error(request, "El tipo de cambio debe ser un número mayor que cero.")
+        elif draft["tipo_cambio"]:
+            try:
+                tipo_cambio = Decimal(draft["tipo_cambio"])
+            except (InvalidOperation, ValueError, TypeError):
+                tipo_cambio = None
+
         if has_error:
-            return redirect("gastos:editar_gasto", gasto_id=gasto.id)
+            categorias = CategoriaGasto.objects.filter(negocio_id=gasto.negocio_id, activo=True)
+            return render(
+                request,
+                "gastos/editar_gasto.html",
+                {
+                    "gasto": gasto,
+                    "categorias": categorias,
+                    "draft": draft,
+                    "moneda_factura": moneda_factura,
+                    "moneda_base": moneda_base,
+                    "simbolo_factura": _simbolo_moneda(moneda_factura),
+                    "simbolo_base": _simbolo_moneda(moneda_base),
+                },
+            )
 
         gasto.categoria = categoria
         gasto.fecha_gasto = fecha_gasto_parsed
-        gasto.metodo_pago = metodo_pago or None
-        gasto.notas = notas or None
-        gasto.save(update_fields=["categoria", "fecha_gasto", "metodo_pago", "notas", "actualizado_en"])
+        gasto.metodo_pago = draft["metodo_pago"] or None
+        gasto.referencia_contable = draft["referencia_contable"] or None
+        gasto.tipo_cambio = tipo_cambio if moneda_factura != moneda_base else None
+        gasto.total_moneda_base = total_moneda_base
+        gasto.notas = draft["notas"] or None
+        gasto.save(
+            update_fields=[
+                "categoria",
+                "fecha_gasto",
+                "metodo_pago",
+                "referencia_contable",
+                "tipo_cambio",
+                "total_moneda_base",
+                "notas",
+                "actualizado_en",
+            ]
+        )
 
         messages.success(request, "Gasto actualizado correctamente.")
 
@@ -276,5 +377,10 @@ def editar_gasto(request, gasto_id):
         {
             "gasto": gasto,
             "categorias": categorias,
+            "draft": draft,
+            "moneda_factura": moneda_factura,
+            "moneda_base": moneda_base,
+            "simbolo_factura": _simbolo_moneda(moneda_factura),
+            "simbolo_base": _simbolo_moneda(moneda_base),
         },
     )

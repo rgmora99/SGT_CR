@@ -75,7 +75,7 @@
               <div class="fw-semibold">{{ cliente.nombre }}</div>
               {% if cliente.direccion %}<small class="text-muted">{{ cliente.direccion|truncatechars:60 }}</small>{% endif %}
             </td>
-            <td>{{ cliente.identificacion }}</td>
+            <td><div>{{ cliente.identificacion }}</div><small class="text-muted">{{ cliente.tipo_identificacion.nombre }}</small></td>
             <td>
               <div>{{ cliente.correo_electronico|default:'-' }}</div>
               <small class="text-muted">{{ cliente.telefono|default:'-' }}</small>

@@ -6,6 +6,7 @@ from .views import (
     cliente_editar,
     cliente_eliminar,
     cliente_listar,
+    validar_identificacion,
 )
 
 app_name = "clientes"
@@ -16,4 +17,5 @@ urlpatterns = [
     path("<int:cliente_id>/", cliente_detalle, name="detalle"),
     path("<int:cliente_id>/editar/", cliente_editar, name="editar"),
     path("<int:cliente_id>/eliminar/", cliente_eliminar, name="eliminar"),
+    path("validar-identificacion/", validar_identificacion, name="validar_identificacion"),
 ]

@@ -1,118 +1,84 @@
 (function () {
-  const form = document.querySelector('.registrar-card form');
+  const hasSwal = typeof window.Swal !== 'undefined';
+  const form = document.getElementById('registrarGastoForm');
   if (!form) return;
 
-  const categoria = form.querySelector('[name="categoria"]');
-  const fechaGasto = form.querySelector('[name="fecha_gasto"]');
-  const tipoCambio = form.querySelector('[name="tipo_cambio"]');
+  const meta = window.GASTO_REGISTRAR_META || {};
+  const monedaFactura = String(meta.monedaFactura || '').toUpperCase();
+  const monedaBase = String(meta.monedaBase || '').toUpperCase();
 
-  const monedasDistintas = (form.dataset.monedasDistintas || '0') === '1';
-
-  const showAlert = ({ icon = 'info', title = 'Información', text = '' }) => {
-    if (typeof Swal !== 'undefined' && Swal.fire) {
-      return Swal.fire({
-        icon,
-        title,
-        text,
-        confirmButtonText: 'Entendido',
-        customClass: { confirmButton: 'btn btn-primary' },
-        buttonsStyling: false,
-      });
-    }
-    alert(`${title}\n\n${text}`.trim());
-    return Promise.resolve();
+  const toIcon = (level) => {
+    const normalized = String(level || '').toLowerCase();
+    if (normalized.includes('error')) return 'error';
+    if (normalized.includes('warning')) return 'warning';
+    if (normalized.includes('success')) return 'success';
+    return 'info';
   };
 
-  const markInvalid = (field, invalid = true) => {
-    if (!field) return;
-    field.classList.toggle('is-invalid', invalid);
-  };
-
-  const parseServerMessages = () => {
-    const node = document.getElementById('django-messages-json');
-    if (!node) return [];
-    try {
-      return JSON.parse(node.textContent || '[]');
-    } catch {
-      return [];
-    }
-  };
-
-  const showServerMessages = () => {
-    const messages = parseServerMessages();
+  const showMessages = async () => {
+    const messages = Array.isArray(window.GASTOS_MESSAGES)
+      ? window.GASTOS_MESSAGES.filter((m) => m && m.text)
+      : [];
     if (!messages.length) return;
 
-    messages.forEach((message, index) => {
-      const tag = String(message.tags || '').toLowerCase();
-      let icon = 'info';
-      let title = 'Información';
+    if (!hasSwal) {
+      window.alert(messages.map((m) => `- ${m.text}`).join('\n'));
+      return;
+    }
 
-      if (tag.includes('error')) {
-        icon = 'error';
-        title = 'Validación';
-      } else if (tag.includes('warning')) {
-        icon = 'warning';
-        title = 'Atención';
-      } else if (tag.includes('success')) {
-        icon = 'success';
-        title = 'Correcto';
-      }
+    const priority = { error: 4, warning: 3, success: 2, info: 1 };
+    const icon = messages
+      .map((m) => toIcon(m.level))
+      .sort((a, b) => (priority[b] || 0) - (priority[a] || 0))[0] || 'info';
 
-      setTimeout(() => {
-        showAlert({ icon, title, text: message.text || '' });
-      }, index * 120);
+    await Swal.fire({
+      icon,
+      title: messages.length > 1 ? 'Revisa el formulario' : 'Información',
+      html: `<ul style="text-align:left; padding-left:1rem; margin:0;">${messages.map((m) => `<li>${m.text}</li>`).join('')}</ul>`,
+      confirmButtonText: 'Entendido',
     });
   };
 
-  showServerMessages();
-
-  [categoria, fechaGasto, tipoCambio].forEach((field) => {
-    if (!field) return;
-    field.addEventListener('input', () => markInvalid(field, false));
-    field.addEventListener('change', () => markInvalid(field, false));
-  });
-
   form.addEventListener('submit', async (event) => {
-    const categoriaVal = (categoria?.value || '').trim();
-    const fechaVal = (fechaGasto?.value || '').trim();
-    const tipoCambioVal = (tipoCambio?.value || '').trim();
+    const categoria = (form.querySelector('[name="categoria"]')?.value || '').trim();
+    const fecha = (form.querySelector('[name="fecha_gasto"]')?.value || '').trim();
+    const metodo = (form.querySelector('[name="metodo_pago"]')?.value || '').trim();
+    const referencia = (form.querySelector('[name="referencia_contable"]')?.value || '').trim();
+    const tipoCambio = (form.querySelector('[name="tipo_cambio"]')?.value || '').trim();
 
-    if (!categoriaVal) {
-      event.preventDefault();
-      markInvalid(categoria, true);
-      await showAlert({
-        icon: 'warning',
-        title: 'Falta categoría',
-        text: 'Debes seleccionar una categoría para registrar el gasto.',
-      });
-      categoria?.focus();
-      return;
-    }
+    const allowed = new Set(['', 'EFECTIVO', 'TRANSFERENCIA', 'TARJETA']);
+    let error = '';
 
-    if (!fechaVal) {
-      event.preventDefault();
-      markInvalid(fechaGasto, true);
-      await showAlert({
-        icon: 'warning',
-        title: 'Falta fecha del gasto',
-        text: 'Indica la fecha del gasto para continuar.',
-      });
-      fechaGasto?.focus();
-      return;
-    }
-
-    if (monedasDistintas) {
-      const tc = Number(tipoCambioVal);
-      if (!tipoCambioVal || Number.isNaN(tc) || tc <= 0) {
-        event.preventDefault();
-        markInvalid(tipoCambio, true);
-        await showAlert({
-          icon: 'error',
-          title: 'Tipo de cambio inválido',
-          text: 'La factura está en una moneda distinta a la base del negocio. Ingresa un tipo de cambio mayor que cero.',
-        });
-        tipoCambio?.focus();
+    if (!categoria) {
+      error = 'Debes seleccionar una categoría para registrar el gasto.';
+    } else if (!fecha) {
+      error = 'Debes indicar la fecha del gasto.';
+    } else if (!allowed.has(metodo)) {
+      error = 'El método de pago seleccionado no es válido.';
+    } else if (referencia.length > 80) {
+      error = 'La referencia contable no puede superar 80 caracteres.';
+    } else if (monedaFactura && monedaBase && monedaFactura !== monedaBase) {
+      const val = Number(tipoCambio);
+      if (!tipoCambio || Number.isNaN(val) || val <= 0) {
+        error = `Debes ingresar un tipo de cambio válido (> 0) para convertir de ${monedaFactura} a ${monedaBase}.`;
       }
     }
+
+    if (!error) return;
+
+    event.preventDefault();
+    if (!hasSwal) {
+      window.alert(error);
+      return;
+    }
+
+    await Swal.fire({
+      icon: 'warning',
+      title: 'Revisa el formulario',
+      text: error,
+      confirmButtonText: 'Entendido',
+    });
   });
+
+  showMessages();
 })();

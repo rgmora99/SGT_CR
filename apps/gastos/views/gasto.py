@@ -59,55 +59,71 @@ def registrar_gasto(request, factura_id):
             }
         )
 
-        if not draft["categoria"]:
+        categoria = CategoriaGasto.objects.filter(
+            id=draft["categoria"],
+            negocio=factura.negocio,
+            activo=True,
+        ).first()
+        if not categoria:
             has_error = True
-            messages.error(request, "Debes seleccionar una categoría.")
-        elif not draft["fecha_gasto"]:
+            messages.error(request, "Debes seleccionar una categoría válida.")
+
+        fecha_gasto_parsed = parse_date(draft["fecha_gasto"])
+        if not fecha_gasto_parsed:
             has_error = True
-            messages.error(request, "Debes indicar la fecha del gasto.")
-        else:
-            tipo_cambio = None
-            total_moneda_base = factura.total
+            messages.error(request, "Debes indicar una fecha válida para el gasto.")
 
-            if (factura.moneda or "CRC") != factura.negocio.moneda_base:
-                if not draft["tipo_cambio"]:
-                    has_error = True
-                    messages.error(
-                        request,
-                        f"La factura está en {factura.moneda} y tu negocio usa {factura.negocio.moneda_base}. Ingresa tipo de cambio.",
-                    )
-                else:
-                    try:
-                        tipo_cambio = Decimal(draft["tipo_cambio"])
-                        if tipo_cambio <= 0:
-                            raise InvalidOperation
-                        total_moneda_base = (factura.total * tipo_cambio).quantize(Decimal("0.01"))
-                    except (InvalidOperation, ValueError, TypeError):
-                        has_error = True
-                        messages.error(request, "El tipo de cambio debe ser un número mayor que cero.")
+        metodos_pago_validos = {"", "EFECTIVO", "TRANSFERENCIA", "TARJETA"}
+        if draft["metodo_pago"] not in metodos_pago_validos:
+            has_error = True
+            messages.error(request, "El método de pago seleccionado no es válido.")
 
-            if not has_error:
-                Gasto.objects.create(
-                    negocio=factura.negocio,
-                    factura=factura,
-                    categoria_id=draft["categoria"],
-                    fecha_gasto=draft["fecha_gasto"],
-                    metodo_pago=draft["metodo_pago"] or None,
-                    referencia_contable=draft["referencia_contable"] or None,
-                    tipo_cambio=tipo_cambio,
-                    total_moneda_base=total_moneda_base,
-                    subtotal=factura.subtotal,
-                    iva=factura.iva,
-                    total=factura.total,
-                    notas=draft["notas"] or None,
-                    creado_por=request.user,
+        if len(draft["referencia_contable"]) > 80:
+            has_error = True
+            messages.error(request, "La referencia contable no puede exceder 80 caracteres.")
+
+        tipo_cambio = None
+        total_moneda_base = factura.total
+
+        if (factura.moneda or "CRC") != factura.negocio.moneda_base:
+            if not draft["tipo_cambio"]:
+                has_error = True
+                messages.error(
+                    request,
+                    f"Debes indicar tipo de cambio porque la factura está en {factura.moneda} y tu negocio usa {factura.negocio.moneda_base}.",
                 )
+            else:
+                try:
+                    tipo_cambio = Decimal(draft["tipo_cambio"])
+                    if tipo_cambio <= 0:
+                        raise InvalidOperation
+                    total_moneda_base = (factura.total * tipo_cambio).quantize(Decimal("0.01"))
+                except (InvalidOperation, ValueError, TypeError):
+                    has_error = True
+                    messages.error(request, "El tipo de cambio debe ser un número mayor que cero.")
 
-                factura.estado = "registrada"
-                factura.save(update_fields=["estado"])
+        if not has_error:
+            Gasto.objects.create(
+                negocio=factura.negocio,
+                factura=factura,
+                categoria=categoria,
+                fecha_gasto=fecha_gasto_parsed,
+                metodo_pago=draft["metodo_pago"] or None,
+                referencia_contable=draft["referencia_contable"] or None,
+                tipo_cambio=tipo_cambio,
+                total_moneda_base=total_moneda_base,
+                subtotal=factura.subtotal,
+                iva=factura.iva,
+                total=factura.total,
+                notas=draft["notas"] or None,
+                creado_por=request.user,
+            )
 
-                messages.success(request, "Gasto registrado correctamente.")
-                return redirect("gastos:bandeja_facturas")
+            factura.estado = "registrada"
+            factura.save(update_fields=["estado"])
+
+            messages.success(request, "Gasto registrado correctamente.")
+            return redirect("gastos:bandeja_facturas")
 
     return render(
         request,

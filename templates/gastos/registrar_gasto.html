@@ -13,26 +13,8 @@
     <a href="{% url 'gastos:bandeja_facturas' %}" class="btn btn-outline-primary btn-sm">Volver a bandeja</a>
   </div>
 
-  {% if messages %}
-    <script id="django-messages-json" type="application/json">[
-      {% for message in messages %}
-        {"tags": "{{ message.tags|default:'info'|escapejs }}", "text": "{{ message|escapejs }}"}{% if not forloop.last %},{% endif %}
-      {% endfor %}
-    ]</script>
-    <noscript>
-      <div class="alerts-stack" aria-live="polite">
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      </div>
-    </noscript>
-  {% endif %}
-
   <div class="card registrar-card">
-    <form method="post" novalidate data-monedas-distintas="{% if moneda_factura != moneda_base_negocio %}1{% else %}0{% endif %}">
+    <form method="post" novalidate id="registrarGastoForm">
       {% csrf_token %}
 
       <section class="section-card">
@@ -150,7 +132,21 @@
   </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.GASTOS_MESSAGES = [
+    {% for message in messages %}
+      {
+        level: "{{ message.tags|default:'info'|escapejs }}",
+        text: "{{ message|escapejs }}"
+      },
+    {% endfor %}
+  ];
+  window.GASTO_REGISTRAR_META = {
+    monedaFactura: "{{ moneda_factura|escapejs }}",
+    monedaBase: "{{ moneda_base_negocio|escapejs }}"
+  };
+</script>
 <script src="{% static 'js/gastos/registrar_gasto.js' %}"></script>
 
 {% endblock %}

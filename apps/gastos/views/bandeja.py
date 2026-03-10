@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 
 from apps.gastos.forms import FiltroBandejaFacturasForm
 from apps.gastos.models import ConfigCorreoFactura, FacturaGasto
+from apps.gastos.services.proveedores import defaults_proveedor_desde_factura, registrar_o_recuperar_proveedor
 
 
 @login_required
@@ -21,7 +22,7 @@ def bandeja_facturas(request):
         estado__in=["pendiente", "en_registro"],
     ).order_by("-fecha_emision")
 
-    qs = base_qs
+    qs = base_qs.select_related("proveedor_registrado", "negocio")
 
     if form.is_valid():
         q = (form.cleaned_data.get("q") or "").strip()
@@ -49,6 +50,13 @@ def bandeja_facturas(request):
     query_string = request.GET.copy()
     if "page" in query_string:
         query_string.pop("page")
+
+    for factura in facturas:
+        if not factura.proveedor_registrado:
+            defaults = defaults_proveedor_desde_factura(factura)
+            proveedor = registrar_o_recuperar_proveedor(factura.negocio, factura.proveedor, defaults=defaults)
+            factura.proveedor_registrado = proveedor
+            factura.save(update_fields=["proveedor_registrado"])
 
     conexiones_activas = ConfigCorreoFactura.objects.filter(
         negocio_id=negocio_id,

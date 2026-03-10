@@ -7,6 +7,9 @@ def crear_factura_desde_correo(*, negocio, usuario, meta, factura_data, xml_byte
     f = FacturaGasto.objects.create(
         negocio=negocio,
         proveedor=factura_data["proveedor"],
+        proveedor_identificacion=factura_data.get("proveedor_cedula") or None,
+        proveedor_email=factura_data.get("proveedor_email") or None,
+        proveedor_telefono=factura_data.get("proveedor_telefono") or None,
         numero_factura=factura_data["numero_factura"],
         fecha_emision=factura_data["fecha_emision"],
         subtotal=factura_data["subtotal"],

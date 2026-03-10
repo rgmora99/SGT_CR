@@ -49,6 +49,41 @@ class CategoriaGasto(models.Model):
     def __str__(self):
         return self.nombre
 
+
+class ProveedorGasto(models.Model):
+    negocio = models.ForeignKey(
+        TB_NEGOCIOS,
+        on_delete=models.CASCADE,
+        related_name="proveedores_gasto",
+    )
+    nombre = models.CharField(max_length=180)
+    nombre_normalizado = models.CharField(max_length=180)
+    identificacion = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    telefono = models.CharField(max_length=25, blank=True, null=True)
+    activo = models.BooleanField(default=True)
+    creado_en = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["nombre"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["negocio", "nombre_normalizado"],
+                name="uniq_proveedor_gasto_nombre_por_negocio",
+            )
+        ]
+        indexes = [
+            models.Index(fields=["negocio", "activo"]),
+            models.Index(fields=["negocio", "nombre_normalizado"]),
+        ]
+
+    def save(self, *args, **kwargs):
+        self.nombre_normalizado = (self.nombre or "").strip().lower()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nombre
+
 class FacturaGasto(models.Model):
 
     ESTADOS = (
@@ -63,6 +98,16 @@ class FacturaGasto(models.Model):
     )
 
     proveedor = models.CharField(max_length=150)
+    proveedor_identificacion = models.CharField(max_length=50, null=True, blank=True)
+    proveedor_email = models.EmailField(null=True, blank=True)
+    proveedor_telefono = models.CharField(max_length=25, null=True, blank=True)
+    proveedor_registrado = models.ForeignKey(
+        "ProveedorGasto",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="facturas",
+    )
     numero_factura = models.CharField(max_length=50)
     fecha_emision = models.DateField()
     fecha_registro = models.DateTimeField(auto_now_add=True)

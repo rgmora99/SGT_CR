@@ -66,4 +66,11 @@ class ClienteForm(forms.ModelForm):
                     f"La identificación no cumple el formato esperado para {tipo_identificacion.nombre}.{ejemplo}",
                 )
 
+        if identificacion:
+            queryset = Cliente.objects.filter(identificacion=identificacion)
+            if self.instance and self.instance.pk:
+                queryset = queryset.exclude(pk=self.instance.pk)
+            if queryset.exists():
+                self.add_error("identificacion", "Ya existe un cliente registrado con esta identificación.")
+
         return cleaned_data

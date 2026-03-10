@@ -29,7 +29,7 @@ class Cliente(models.Model):
         on_delete=models.PROTECT,
         related_name="clientes",
     )
-    identificacion = models.CharField(max_length=30)
+    identificacion = models.CharField(max_length=30, unique=True)
     correo_electronico = models.EmailField(blank=True)
     telefono = models.CharField(max_length=25, blank=True)
     direccion = models.TextField(blank=True)

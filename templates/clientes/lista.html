@@ -50,9 +50,11 @@
 </form>
 
 {% if messages %}
+<script id="clientes-messages" type="application/json">[
   {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {"tags": "{{ message.tags|escapejs }}", "text": "{{ message|escapejs }}"}{% if not forloop.last %},{% endif %}
   {% endfor %}
+]</script>
 {% endif %}
 
 <div class="card tabla-clientes">
@@ -87,7 +89,7 @@
             <td class="text-end acciones">
               <a class="btn btn-sm btn-outline-primary" href="{% url 'clientes:detalle' cliente.id %}"><i class="bi bi-eye"></i></a>
               <a class="btn btn-sm btn-outline-secondary" href="{% url 'clientes:editar' cliente.id %}"><i class="bi bi-pencil"></i></a>
-              <form method="post" action="{% url 'clientes:eliminar' cliente.id %}" class="d-inline" onsubmit="return confirm('¿Desea eliminar este cliente?');">
+              <form method="post" action="{% url 'clientes:eliminar' cliente.id %}" class="d-inline js-eliminar-cliente" data-cliente="{{ cliente.nombre|escape }}">
                 {% csrf_token %}
                 <button class="btn btn-sm btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>
               </form>
@@ -114,4 +116,9 @@
   </ul>
 </nav>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/clientes/lista.js' %}"></script>
 {% endblock %}

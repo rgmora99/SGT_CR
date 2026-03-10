@@ -4,6 +4,7 @@
   const totalForms = document.getElementById('id_detalleingreso_set-TOTAL_FORMS');
   const ingresoForm = document.getElementById('ingreso-form');
   const monedaSelect = document.getElementById('id_moneda');
+  const fechaIngresoInput = document.getElementById('id_fecha_ingreso');
   const tipoCambioWrap = document.querySelector('.js-tipo-cambio-wrap');
   const tipoCambioInput = document.getElementById('id_tipo_cambio');
   const tipoCambioBtn = document.getElementById('btnTipoCambioAuto');
@@ -14,6 +15,20 @@
       window.Swal.fire({ icon, text, confirmButtonText: 'Entendido' });
     } else {
       alert(text);
+    }
+  };
+
+  const showToast = (icon, title) => {
+    if (window.Swal) {
+      window.Swal.fire({
+        icon,
+        title,
+        toast: true,
+        position: 'top-end',
+        timer: 1800,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
     }
   };
 
@@ -30,7 +45,7 @@
 
   const addDetalleLinea = () => {
     if (!addBtn || !container || !totalForms) return;
-    const index = parseInt(totalForms.value, 10);
+    const index = Number(totalForms.value || 0);
 
     const firstProducto = container.querySelector('select[name$="-producto"]');
     const productOptions = firstProducto ? firstProducto.innerHTML : '<option value="">---------</option>';
@@ -47,7 +62,7 @@
 
     container.insertAdjacentHTML('beforeend', html);
     totalForms.value = index + 1;
-    showAlert('success', 'Línea agregada correctamente.');
+    showToast('success', 'Línea agregada correctamente');
   };
 
   const hasAtLeastOneDetalle = () => {
@@ -64,6 +79,16 @@
     });
   };
 
+  const validateFechaIngresoHoy = () => {
+    if (!fechaIngresoInput || !fechaIngresoInput.value) return true;
+    const today = new Date().toISOString().slice(0, 10);
+    if (fechaIngresoInput.value !== today) {
+      showAlert('error', 'La fecha de ingreso debe ser la fecha actual.');
+      return false;
+    }
+    return true;
+  };
+
   const loadTipoCambio = async () => {
     if (!window.INGRESOS_TIPO_CAMBIO_API || !tipoCambioInput) return;
     try {
@@ -76,7 +101,7 @@
       if (tipoCambioSource) {
         tipoCambioSource.textContent = `Fuente: ${data.fuente}`;
       }
-      showAlert('success', 'Tipo de cambio actualizado automáticamente.');
+      showToast('success', 'Tipo de cambio actualizado');
     } catch (error) {
       showAlert('warning', error.message || 'No fue posible obtener tipo de cambio automático.');
     }
@@ -84,6 +109,12 @@
 
   if (addBtn) {
     addBtn.addEventListener('click', addDetalleLinea);
+  }
+
+  if (fechaIngresoInput) {
+    const today = new Date().toISOString().slice(0, 10);
+    fechaIngresoInput.min = today;
+    fechaIngresoInput.max = today;
   }
 
   if (monedaSelect) {
@@ -102,6 +133,10 @@
 
   if (ingresoForm) {
     ingresoForm.addEventListener('submit', (e) => {
+      if (!validateFechaIngresoHoy()) {
+        e.preventDefault();
+      }
+
       if (!hasAtLeastOneDetalle()) {
         e.preventDefault();
         showAlert('error', 'Debes agregar al menos una línea de detalle para guardar el ingreso.');

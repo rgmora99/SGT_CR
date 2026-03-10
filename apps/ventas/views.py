@@ -1,5 +1,6 @@
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from datetime import date
+import json
 import re
 
 from django.contrib import messages
@@ -54,6 +55,49 @@ def _generar_consecutivo_cr(negocio_id):
     return f"{prefijo}{secuencia:010d}"
 
 
+def _almacen_por_defecto(negocio_id):
+    return (
+        Almacen.objects.filter(negocio_id=negocio_id, activo=True)
+        .order_by("-es_principal", "id")
+        .first()
+    )
+
+
+def _parse_lineas_json(lineas_raw, negocio_id):
+    try:
+        lineas_data = json.loads(lineas_raw or "[]")
+    except json.JSONDecodeError as exc:
+        raise ValueError("No se pudo interpretar el detalle de la factura.") from exc
+
+    if not isinstance(lineas_data, list) or not lineas_data:
+        raise ValueError("Debes agregar al menos una línea de producto o servicio.")
+
+    lineas = []
+    for idx, item in enumerate(lineas_data, start=1):
+        if not isinstance(item, dict):
+            raise ValueError(f"La línea #{idx} no es válida.")
+
+        producto_id = item.get("producto_id")
+        try:
+            cantidad = Decimal(str(item.get("cantidad")))
+            descuento = Decimal(str(item.get("descuento", 0)))
+        except (InvalidOperation, TypeError):
+            raise ValueError(f"Cantidad o descuento inválidos en la línea #{idx}.")
+
+        if cantidad <= 0:
+            raise ValueError(f"La cantidad de la línea #{idx} debe ser mayor a cero.")
+        if descuento < 0 or descuento > 100:
+            raise ValueError(f"El descuento de la línea #{idx} debe estar entre 0 y 100.")
+
+        producto = ProductoServicio.objects.filter(pk=producto_id, negocio_id=negocio_id, activo=True).first()
+        if not producto:
+            raise ValueError(f"Producto inválido en la línea #{idx}.")
+
+        lineas.append({"producto": producto, "cantidad": cantidad, "descuento": descuento})
+
+    return lineas
+
+
 @login_required
 def listar_venta(request):
     negocio_id = _negocio_id(request)
@@ -77,17 +121,15 @@ def crear_venta(request):
     if request.method == "POST":
         cliente_id = request.POST.get("cliente")
         almacen_id = request.POST.get("almacen") or None
-        producto_id = request.POST.get("producto")
-        cantidad_raw = request.POST.get("cantidad")
-        descuento_raw = request.POST.get("porcentaje_descuento") or "0"
         consecutivo = _generar_consecutivo_cr(negocio_id)
         moneda = (request.POST.get("moneda") or "CRC").strip().upper()
         tipo_cambio_raw = (request.POST.get("tipo_cambio") or "").strip()
         fecha_emision_raw = (request.POST.get("fecha_emision") or "").strip()
         fecha_vencimiento_raw = (request.POST.get("fecha_vencimiento") or "").strip()
+        lineas_raw = request.POST.get("lineas_json")
 
-        if not cliente_id or not producto_id:
-            messages.error(request, "Debes seleccionar cliente y producto.")
+        if not cliente_id:
+            messages.error(request, "Debes seleccionar un cliente.")
             return redirect("ventas:crear")
 
         if moneda not in {"CRC", "USD"}:
@@ -95,14 +137,9 @@ def crear_venta(request):
             return redirect("ventas:crear")
 
         try:
-            cantidad = Decimal(cantidad_raw)
-            descuento = Decimal(descuento_raw)
-            if cantidad <= 0:
-                raise ValueError
-            if descuento < 0 or descuento > 100:
-                raise ValueError
-        except Exception:
-            messages.error(request, "Cantidad o descuento inválidos.")
+            lineas = _parse_lineas_json(lineas_raw, negocio_id)
+        except ValueError as exc:
+            messages.error(request, str(exc))
             return redirect("ventas:crear")
 
         try:
@@ -138,21 +175,34 @@ def crear_venta(request):
                 return redirect("ventas:crear")
 
         cliente = get_object_or_404(Cliente, pk=cliente_id)
-        producto = get_object_or_404(ProductoServicio, pk=producto_id, negocio_id=negocio_id, activo=True)
 
-        if producto.maneja_inventario and not almacen_id:
-            messages.error(request, "Selecciona almacén para productos con inventario.")
-            return redirect("ventas:crear")
-
-        if request.POST.get("emitir") == "SI" and producto.maneja_inventario:
-            existencia = Existencia.objects.filter(almacen_id=almacen_id, producto=producto).first()
-            stock_libre = existencia.cantidad_libre if existencia else Decimal("0.000")
-            if stock_libre < cantidad:
-                messages.error(
-                    request,
-                    f"Stock insuficiente para {producto.nombre}. Disponible: {stock_libre}. Solicitado: {cantidad}.",
-                )
+        tiene_lineas_inventario = any(linea["producto"].maneja_inventario for linea in lineas)
+        if tiene_lineas_inventario and not almacen_id:
+            almacen_default = _almacen_por_defecto(negocio_id)
+            if not almacen_default:
+                messages.error(request, "Debes configurar al menos un almacén activo para productos con inventario.")
                 return redirect("ventas:crear")
+            almacen_id = str(almacen_default.id)
+
+        if request.POST.get("emitir") == "SI":
+            requeridas_por_producto = {}
+            for linea in lineas:
+                producto = linea["producto"]
+                if not producto.maneja_inventario:
+                    continue
+                requeridas_por_producto.setdefault(producto.id, Decimal("0.000"))
+                requeridas_por_producto[producto.id] += linea["cantidad"]
+
+            for producto_id, cantidad_requerida in requeridas_por_producto.items():
+                producto = ProductoServicio.objects.get(pk=producto_id, negocio_id=negocio_id)
+                existencia = Existencia.objects.filter(almacen_id=almacen_id, producto_id=producto_id).first()
+                stock_libre = existencia.cantidad_libre if existencia else Decimal("0.000")
+                if stock_libre < cantidad_requerida:
+                    messages.error(
+                        request,
+                        f"Stock insuficiente para {producto.nombre}. Disponible: {stock_libre}. Solicitado: {cantidad_requerida}.",
+                    )
+                    return redirect("ventas:crear")
 
         if FacturaVenta.objects.filter(negocio_id=negocio_id, consecutivo__iexact=consecutivo).exists():
             messages.error(request, "El consecutivo ya existe para este negocio.")
@@ -172,15 +222,17 @@ def crear_venta(request):
                 notas=request.POST.get("notas") or "",
             )
 
-            LineaFacturaVenta.objects.create(
-                factura=factura,
-                producto=producto,
-                descripcion=producto.nombre,
-                cantidad=cantidad,
-                precio_unitario=producto.precio_venta,
-                porcentaje_descuento=descuento,
-                porcentaje_impuesto=producto.impuesto.porcentaje if producto.impuesto else Decimal("0.00"),
-            )
+            for linea in lineas:
+                producto = linea["producto"]
+                LineaFacturaVenta.objects.create(
+                    factura=factura,
+                    producto=producto,
+                    descripcion=producto.nombre,
+                    cantidad=linea["cantidad"],
+                    precio_unitario=producto.precio_venta,
+                    porcentaje_descuento=linea["descuento"],
+                    porcentaje_impuesto=producto.impuesto.porcentaje if producto.impuesto else Decimal("0.00"),
+                )
 
             if request.POST.get("emitir") == "SI":
                 try:
@@ -197,6 +249,17 @@ def crear_venta(request):
         "almacenes": almacenes,
         "productos": productos,
         "consecutivo_sugerido": consecutivo_sugerido,
+        "productos_json": json.dumps([
+            {
+                "id": p.id,
+                "codigo": p.codigo,
+                "nombre": p.nombre,
+                "precio": str(p.precio_venta),
+                "maneja_inventario": p.maneja_inventario,
+                "impuesto": str(p.impuesto.porcentaje) if p.impuesto else "0.00",
+            }
+            for p in productos
+        ]),
     }
     return render(request, "ventas/factura_simple_form.html", context)
 
@@ -214,10 +277,16 @@ def stock_disponible_api(request):
     if not producto.maneja_inventario:
         return JsonResponse({"ok": True, "maneja_inventario": False, "stock_libre": "0.000"})
 
-    if not almacen_id:
-        return JsonResponse({"ok": False, "error": "Debes seleccionar almacén."}, status=400)
+    almacen = None
+    if almacen_id:
+        almacen = Almacen.objects.filter(pk=almacen_id, negocio_id=negocio_id, activo=True).first()
+    if not almacen:
+        almacen = _almacen_por_defecto(negocio_id)
 
-    existencia = Existencia.objects.filter(almacen_id=almacen_id, producto=producto).first()
+    if not almacen:
+        return JsonResponse({"ok": False, "error": "No hay almacenes activos configurados."}, status=400)
+
+    existencia = Existencia.objects.filter(almacen=almacen, producto=producto).first()
     stock_libre = existencia.cantidad_libre if existencia else Decimal("0.000")
     return JsonResponse(
         {
@@ -225,6 +294,8 @@ def stock_disponible_api(request):
             "maneja_inventario": True,
             "stock_libre": f"{stock_libre:.3f}",
             "producto": producto.nombre,
+            "almacen_id": almacen.id,
+            "almacen": almacen.nombre,
         }
     )
 

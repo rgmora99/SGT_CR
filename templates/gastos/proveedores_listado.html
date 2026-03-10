@@ -7,39 +7,44 @@
   <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <div>
       <h2 class="mb-0">Proveedores de gastos</h2>
-      <small class="text-muted">Catálogo de proveedores vinculados a la bandeja de facturas.</small>
+      <small class="text-muted">Catálogo maestro vinculado a la bandeja de facturas.</small>
     </div>
-    <a href="{% url 'gastos:crear_proveedor' %}" class="btn btn-primary">+ Nuevo proveedor</a>
+    <a href="{% url 'gastos:crear_proveedor' %}" class="btn btn-primary">
+      <i class="bi bi-plus-lg"></i> Nuevo proveedor
+    </a>
   </div>
 
   <div class="row g-3 mb-3">
-    <div class="col-md-3">
-      <div class="card card-body">
-        <small class="text-muted">Total</small>
-        <h4 class="mb-0">{{ kpi_total }}</h4>
-      </div>
+    <div class="col-lg-3 col-md-4">
+      <div class="card shadow-sm border-0 h-100"><div class="card-body"><small class="text-muted">Total</small><h4 class="mb-0">{{ kpi_total }}</h4></div></div>
     </div>
-    <div class="col-md-3">
-      <div class="card card-body">
-        <small class="text-muted">Activos</small>
-        <h4 class="mb-0">{{ kpi_activos }}</h4>
-      </div>
+    <div class="col-lg-3 col-md-4">
+      <div class="card shadow-sm border-0 h-100"><div class="card-body"><small class="text-muted">Activos</small><h4 class="mb-0 text-success">{{ kpi_activos }}</h4></div></div>
+    </div>
+    <div class="col-lg-3 col-md-4">
+      <div class="card shadow-sm border-0 h-100"><div class="card-body"><small class="text-muted">Inactivos</small><h4 class="mb-0 text-secondary">{{ kpi_inactivos }}</h4></div></div>
     </div>
   </div>
 
-  <form method="get" class="row g-2 mb-3">
-    <div class="col-md-6">
-      <input type="text" name="q" class="form-control" placeholder="Buscar por nombre, identificación o email" value="{{ q }}">
-    </div>
-    <div class="col-md-2 d-grid">
-      <button class="btn btn-outline-primary" type="submit">Buscar</button>
+  <form method="get" class="card card-body mb-3 border-0 shadow-sm">
+    <div class="row g-2 align-items-end">
+      <div class="col-lg-8">
+        <label class="form-label">Buscar</label>
+        <input type="text" name="q" class="form-control" placeholder="Nombre, identificación, correo o teléfono" value="{{ q }}">
+      </div>
+      <div class="col-lg-2 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Buscar</button>
+      </div>
+      <div class="col-lg-2 d-grid">
+        <a class="btn btn-light" href="{% url 'gastos:proveedores' %}">Limpiar</a>
+      </div>
     </div>
   </form>
 
-  <div class="card">
+  <div class="card border-0 shadow-sm">
     <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead>
+      <table class="table table-hover mb-0 align-middle">
+        <thead class="table-light">
           <tr>
             <th>Proveedor</th>
             <th>Identificación</th>
@@ -47,12 +52,13 @@
             <th>Teléfono</th>
             <th>Facturas</th>
             <th>Estado</th>
+            <th class="text-end">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {% for p in proveedores %}
           <tr>
-            <td>{{ p.nombre }}</td>
+            <td class="fw-semibold">{{ p.nombre }}</td>
             <td>{{ p.identificacion|default:'-' }}</td>
             <td>{{ p.email|default:'-' }}</td>
             <td>{{ p.telefono|default:'-' }}</td>
@@ -64,9 +70,21 @@
                 <span class="badge text-bg-secondary">Inactivo</span>
               {% endif %}
             </td>
+            <td class="text-end">
+              <div class="d-flex justify-content-end gap-1">
+                <a href="{% url 'gastos:ver_proveedor' p.id %}" class="btn btn-sm btn-outline-primary">Ver</a>
+                <a href="{% url 'gastos:editar_proveedor' p.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                <form method="post" action="{% url 'gastos:toggle_estado_proveedor' p.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm {% if p.activo %}btn-outline-danger{% else %}btn-outline-success{% endif %}">
+                    {% if p.activo %}Inactivar{% else %}Activar{% endif %}
+                  </button>
+                </form>
+              </div>
+            </td>
           </tr>
           {% empty %}
-          <tr><td colspan="6" class="text-center text-muted py-4">No hay proveedores registrados.</td></tr>
+          <tr><td colspan="7" class="text-center text-muted py-4">No hay proveedores registrados.</td></tr>
           {% endfor %}
         </tbody>
       </table>

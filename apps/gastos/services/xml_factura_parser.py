@@ -17,6 +17,20 @@ def _find_text(root, *candidates):
     return ""
 
 
+def _find_node(root, candidate):
+    target = candidate.lower()
+    for node in root.iter():
+        if _tag_local_name(node.tag).lower() == target:
+            return node
+    return None
+
+
+def _find_text_in_node(node, *candidates):
+    if node is None:
+        return ""
+    return _find_text(node, *candidates)
+
+
 def _to_decimal(value, default="0"):
     try:
         return Decimal(str(value or default).strip())
@@ -38,9 +52,27 @@ def _to_date(value):
 def parse_factura_xml(xml_bytes):
     root = ET.fromstring(xml_bytes)
     root_name = _tag_local_name(root.tag).lower()
+    emisor_node = _find_node(root, "Emisor")
 
     numero = _find_text(root, "NumeroConsecutivo", "NumeroConsecutivoReceptor", "NumeroDocumento") or "SIN_NUM"
-    proveedor = _find_text(root, "Nombre", "NombreEmisor") or "Proveedor desconocido"
+    proveedor = (
+        _find_text_in_node(emisor_node, "Nombre", "NombreComercial")
+        or _find_text(root, "NombreEmisor", "Nombre")
+        or "Proveedor desconocido"
+    )
+
+    proveedor_cedula = (
+        _find_text_in_node(emisor_node, "Numero")
+        or _find_text(root, "NumeroCedulaEmisor", "NumeroEmisor")
+    )
+    proveedor_email = (
+        _find_text_in_node(emisor_node, "CorreoElectronico", "Correo")
+        or _find_text(root, "CorreoEmisor")
+    )
+    proveedor_telefono = (
+        _find_text_in_node(emisor_node, "NumTelefono", "Telefono")
+        or _find_text(root, "TelefonoEmisor")
+    )
 
     fecha_emision, alerta_fecha = _to_date(_find_text(root, "FechaEmision", "FechaEmisionDoc"))
 
@@ -83,7 +115,9 @@ def parse_factura_xml(xml_bytes):
         "iva": iva,
         "total": total,
         "proveedor": proveedor,
-        "proveedor_cedula": _find_text(root, "Numero", "NumeroCedulaEmisor"),
+        "proveedor_cedula": proveedor_cedula,
+        "proveedor_email": proveedor_email,
+        "proveedor_telefono": proveedor_telefono,
         "moneda": moneda,
         "tipo_documento_xml": tipo_documento,
         "alerta_ingesta": alerta,

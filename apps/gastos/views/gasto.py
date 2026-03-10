@@ -8,7 +8,7 @@ from django.utils.dateparse import parse_date
 from django.shortcuts import get_object_or_404, redirect, render
 
 from apps.gastos.models import CategoriaGasto, FacturaGasto, Gasto
-from apps.gastos.services.proveedores import registrar_o_recuperar_proveedor
+from apps.gastos.services.proveedores import defaults_proveedor_desde_factura, registrar_o_recuperar_proveedor
 
 
 MONEDA_SIMBOLOS = {
@@ -105,10 +105,11 @@ def registrar_gasto(request, factura_id):
 
         if not has_error:
             if not factura.proveedor_registrado:
+                defaults = defaults_proveedor_desde_factura(factura)
                 factura.proveedor_registrado = registrar_o_recuperar_proveedor(
                     factura.negocio,
                     factura.proveedor,
-                    defaults={"email": factura.email_from or None},
+                    defaults=defaults,
                 )
             Gasto.objects.create(
                 negocio=factura.negocio,

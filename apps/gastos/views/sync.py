@@ -118,7 +118,16 @@ def recargar_metadata_facturas_ajax(request):
         facturas = FacturaGasto.objects.filter(
             negocio_id=negocio_id,
             estado__in=["pendiente", "en_registro", "registrada"],
-        ).only("id", "xml_file", "moneda", "tipo_documento_xml", "alerta_ingesta")
+        ).only(
+            "id",
+            "xml_file",
+            "moneda",
+            "tipo_documento_xml",
+            "alerta_ingesta",
+            "proveedor_identificacion",
+            "proveedor_email",
+            "proveedor_telefono",
+        )
 
         for factura in facturas:
             if not factura.xml_file:
@@ -134,7 +143,19 @@ def recargar_metadata_facturas_ajax(request):
                 factura.moneda = data.get("moneda", factura.moneda or "CRC")
                 factura.tipo_documento_xml = data.get("tipo_documento_xml", factura.tipo_documento_xml)
                 factura.alerta_ingesta = data.get("alerta_ingesta")
-                factura.save(update_fields=["moneda", "tipo_documento_xml", "alerta_ingesta"])
+                factura.proveedor_identificacion = data.get("proveedor_cedula") or factura.proveedor_identificacion
+                factura.proveedor_email = data.get("proveedor_email") or factura.proveedor_email
+                factura.proveedor_telefono = data.get("proveedor_telefono") or factura.proveedor_telefono
+                factura.save(
+                    update_fields=[
+                        "moneda",
+                        "tipo_documento_xml",
+                        "alerta_ingesta",
+                        "proveedor_identificacion",
+                        "proveedor_email",
+                        "proveedor_telefono",
+                    ]
+                )
                 actualizadas += 1
             except Exception:
                 errores += 1

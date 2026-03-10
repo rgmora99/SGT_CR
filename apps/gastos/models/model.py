@@ -98,6 +98,9 @@ class FacturaGasto(models.Model):
     )
 
     proveedor = models.CharField(max_length=150)
+    proveedor_identificacion = models.CharField(max_length=50, null=True, blank=True)
+    proveedor_email = models.EmailField(null=True, blank=True)
+    proveedor_telefono = models.CharField(max_length=25, null=True, blank=True)
     proveedor_registrado = models.ForeignKey(
         "ProveedorGasto",
         on_delete=models.SET_NULL,

@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.core.paginator import Paginator
+from django.db.models import ProtectedError
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -72,6 +74,26 @@ def cliente_editar(request, cliente_id):
 def cliente_eliminar(request, cliente_id):
     cliente = get_object_or_404(Cliente, id=cliente_id)
     if request.method == "POST":
-        cliente.delete()
-        messages.success(request, "Cliente eliminado correctamente.")
+        try:
+            cliente.delete()
+            messages.success(request, "Cliente eliminado correctamente.")
+        except ProtectedError:
+            messages.error(
+                request,
+                "No se puede eliminar el cliente porque tiene movimientos asociados. "
+                "Desactívelo o elimine primero sus registros relacionados.",
+            )
     return redirect("clientes:listar")
+
+
+@login_required
+def validar_identificacion(request):
+    identificacion = (request.GET.get("identificacion") or "").strip().upper().replace(" ", "")
+    cliente_id = request.GET.get("cliente_id")
+
+    queryset = Cliente.objects.filter(identificacion=identificacion)
+    if cliente_id and str(cliente_id).isdigit():
+        queryset = queryset.exclude(pk=int(cliente_id))
+
+    existe = bool(identificacion) and queryset.exists()
+    return JsonResponse({"duplicado": existe})

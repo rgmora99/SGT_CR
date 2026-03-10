@@ -3,14 +3,15 @@ from decimal import Decimal
 from django.test import TestCase
 
 from apps.accounts.models import TB_NEGOCIOS
-from apps.clientes.models import Cliente
+from apps.clientes.models import Cliente, TipoIdentificacion
 from apps.ingresos.models import CategoriaIngreso, DetalleIngreso, Ingreso
 
 
 class IngresosModelTests(TestCase):
     def test_calculo_detalle(self):
         negocio = TB_NEGOCIOS.objects.create(nombre_comercial="Demo")
-        cliente = Cliente.objects.create(nombre="Cliente", identificacion="123")
+        tipo_id = TipoIdentificacion.objects.create(codigo="GEN", nombre="Genérico")
+        cliente = Cliente.objects.create(nombre="Cliente", tipo_identificacion=tipo_id, identificacion="123")
         categoria = CategoriaIngreso.objects.create(negocio=negocio, nombre="Servicios")
         ingreso = Ingreso.objects.create(
             negocio=negocio,

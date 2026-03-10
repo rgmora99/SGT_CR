@@ -82,6 +82,8 @@ def crear_ingreso(request):
                 ingreso.save(update_fields=["subtotal", "iva", "total"])
                 messages.success(request, "Ingreso registrado correctamente.")
                 return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
+        else:
+            messages.error(request, "No se pudo guardar el ingreso. Revisa los campos requeridos.")
     else:
         form = IngresoForm(negocio_id=negocio_id)
         formset = DetalleIngresoFormSet()
@@ -107,6 +109,8 @@ def editar_ingreso(request, ingreso_id):
             ingreso.save(update_fields=["subtotal", "iva", "total", "actualizado_en"])
             messages.success(request, "Ingreso actualizado correctamente.")
             return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
+        else:
+            messages.error(request, "No se pudo actualizar el ingreso. Revisa la información ingresada.")
     else:
         form = IngresoForm(instance=ingreso, negocio_id=negocio_id)
         formset = DetalleIngresoFormSet(instance=ingreso)

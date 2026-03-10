@@ -23,9 +23,17 @@ class IngresoForm(forms.ModelForm):
             "estado",
         ]
         widgets = {
-            "fecha_ingreso": forms.DateInput(attrs={"type": "date"}),
-            "fecha_vencimiento": forms.DateInput(attrs={"type": "date"}),
-            "notas": forms.Textarea(attrs={"rows": 3}),
+            "cliente": forms.Select(attrs={"class": "form-select"}),
+            "categoria": forms.Select(attrs={"class": "form-select"}),
+            "consecutivo": forms.TextInput(attrs={"class": "form-control", "placeholder": "Ej: ING-2026-0001"}),
+            "fecha_ingreso": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "fecha_vencimiento": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "moneda": forms.TextInput(attrs={"class": "form-control"}),
+            "tipo_cambio": forms.NumberInput(attrs={"class": "form-control", "step": "0.0001", "min": "0"}),
+            "metodo_pago": forms.Select(attrs={"class": "form-select"}),
+            "referencia_externa": forms.TextInput(attrs={"class": "form-control"}),
+            "notas": forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
+            "estado": forms.Select(attrs={"class": "form-select"}),
         }
 
     def __init__(self, *args, negocio_id=None, **kwargs):
@@ -37,6 +45,12 @@ class DetalleIngresoForm(forms.ModelForm):
     class Meta:
         model = DetalleIngreso
         fields = ["descripcion", "cantidad", "precio_unitario", "porcentaje_iva"]
+        widgets = {
+            "descripcion": forms.TextInput(attrs={"class": "form-control", "placeholder": "Detalle del servicio o producto"}),
+            "cantidad": forms.NumberInput(attrs={"class": "form-control", "step": "0.01", "min": "0.01", "placeholder": "Cantidad"}),
+            "precio_unitario": forms.NumberInput(attrs={"class": "form-control", "step": "0.01", "min": "0", "placeholder": "Precio unitario"}),
+            "porcentaje_iva": forms.NumberInput(attrs={"class": "form-control", "step": "0.01", "min": "0"}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()

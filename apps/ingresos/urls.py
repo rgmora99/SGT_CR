@@ -10,4 +10,5 @@ urlpatterns = [
     path("<int:ingreso_id>/", views.ver_ingreso, name="ver_ingreso"),
     path("<int:ingreso_id>/editar/", views.editar_ingreso, name="editar"),
     path("<int:ingreso_id>/anular/", views.anular_ingreso, name="anular"),
+    path("api/tipo-cambio/", views.tipo_cambio_bcr, name="tipo_cambio_bcr"),
 ]

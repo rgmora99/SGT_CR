@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet, inlineformset_factory
 
 from .models import CategoriaIngreso, DetalleIngreso, Ingreso, ProductoIngreso
@@ -43,6 +44,19 @@ class IngresoForm(forms.ModelForm):
             self.fields["consecutivo"].initial = consecutivo_sugerido
         self.fields["consecutivo"].help_text = "Se genera automáticamente al guardar."
 
+    def clean(self):
+        cleaned_data = super().clean()
+        moneda = cleaned_data.get("moneda")
+        tipo_cambio = cleaned_data.get("tipo_cambio")
+
+        if moneda == Ingreso.Moneda.USD:
+            if not tipo_cambio or tipo_cambio <= 0:
+                self.add_error("tipo_cambio", "Para ingresos en USD debes indicar un tipo de cambio mayor a cero.")
+        else:
+            cleaned_data["tipo_cambio"] = None
+
+        return cleaned_data
+
 
 class DetalleIngresoForm(forms.ModelForm):
     class Meta:
@@ -63,6 +77,9 @@ class DetalleIngresoForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        if self.cleaned_data.get("DELETE"):
+            return cleaned_data
+
         cantidad = cleaned_data.get("cantidad") or Decimal("0")
         if cantidad <= 0:
             self.add_error("cantidad", "La cantidad debe ser mayor a cero.")
@@ -81,6 +98,27 @@ class DetalleIngresoBaseFormSet(BaseInlineFormSet):
     def _construct_form(self, i, **kwargs):
         kwargs["negocio_id"] = self.negocio_id
         return super()._construct_form(i, **kwargs)
+
+    def clean(self):
+        super().clean()
+        if any(self.errors):
+            return
+
+        filas_validas = 0
+        for form in self.forms:
+            if form.cleaned_data.get("DELETE"):
+                continue
+
+            producto = form.cleaned_data.get("producto")
+            descripcion = (form.cleaned_data.get("descripcion") or "").strip()
+            cantidad = form.cleaned_data.get("cantidad")
+            precio_unitario = form.cleaned_data.get("precio_unitario")
+
+            if producto or descripcion or cantidad or precio_unitario:
+                filas_validas += 1
+
+        if filas_validas == 0:
+            raise ValidationError("Debes agregar al menos una línea de detalle antes de guardar.")
 
 
 DetalleIngresoFormSet = inlineformset_factory(

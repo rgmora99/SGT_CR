@@ -23,9 +23,15 @@
     <div class="ingresos-card mb-3">
       <div class="row g-3">
         {% for field in form %}
-          <div class="col-md-4">
+          <div class="col-md-4 {% if field.name == 'tipo_cambio' %}js-tipo-cambio-wrap{% endif %}">
             <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
+            {% if field.name == 'tipo_cambio' %}
+              <div class="d-flex gap-2 mt-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnTipoCambioAuto">Actualizar desde API</button>
+                <small class="text-muted" id="tipoCambioSource"></small>
+              </div>
+            {% endif %}
             {% if field.help_text %}<small class="text-muted d-block">{{ field.help_text }}</small>{% endif %}
             <div class="text-danger small">{{ field.errors }}</div>
           </div>
@@ -36,6 +42,11 @@
     <div class="ingresos-card">
       <h5>Detalle del ingreso (ligado a catálogo de inventario/servicios)</h5>
       {{ formset.management_form }}
+
+      {% if formset.non_form_errors %}
+        <div class="alert alert-danger py-2">{{ formset.non_form_errors }}</div>
+      {% endif %}
+
       <div id="detalles-container">
       {% for detalle_form in formset %}
         <div class="detalle-row row g-2 mb-2 border-bottom pb-2">
@@ -68,11 +79,12 @@
     {% endfor %}
   ];
   window.INGRESOS_FORM_ERRORS = {{ form.errors|yesno:'true,false' }} || {{ formset.non_form_errors|yesno:'true,false' }};
+  window.INGRESOS_TIPO_CAMBIO_API = "{% url 'ingresos:tipo_cambio_bcr' %}";
 </script>
 <script src="{% static 'js/ingresos/messages.js' %}"></script>
 <script>
   if (window.Swal && window.INGRESOS_FORM_ERRORS) {
-    Swal.fire({ icon: 'error', text: 'Hay campos inválidos. Revisa el formulario.', confirmButtonText: 'Entendido' });
+    Swal.fire({ icon: 'error', text: 'Hay campos inválidos. Revisa el formulario y el detalle.', confirmButtonText: 'Entendido' });
   }
 </script>
 <script src="{% static 'js/ingresos/form_ingreso.js' %}"></script>

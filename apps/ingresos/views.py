@@ -1,9 +1,14 @@
+import json
+from urllib.error import URLError
+from urllib.request import urlopen
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Sum
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 from .forms import DetalleIngresoFormSet, IngresoForm
 from .models import CategoriaIngreso, Ingreso
@@ -81,27 +86,26 @@ def crear_ingreso(request):
             ingreso.save()
 
             detalles = formset.save(commit=False)
-            if not detalles:
-                ingreso.delete()
-                messages.error(request, "Debes agregar al menos una línea de detalle.")
-            else:
-                for detalle in detalles:
-                    detalle.ingreso = ingreso
-                    if detalle.producto and not detalle.descripcion:
-                        detalle.descripcion = detalle.producto.nombre
-                    if detalle.producto and (not detalle.precio_unitario or detalle.precio_unitario == 0):
-                        detalle.precio_unitario = detalle.producto.precio_base
-                    detalle.save()
+            for detalle in detalles:
+                detalle.ingreso = ingreso
+                if detalle.producto and not detalle.descripcion:
+                    detalle.descripcion = detalle.producto.nombre
+                if detalle.producto and (not detalle.precio_unitario or detalle.precio_unitario == 0):
+                    detalle.precio_unitario = detalle.producto.precio_base
+                detalle.save()
 
-                subtotal, iva, total = calcular_totales_ingreso(ingreso.detalles.all())
-                ingreso.subtotal = subtotal
-                ingreso.iva = iva
-                ingreso.total = total
-                ingreso.save(update_fields=["subtotal", "iva", "total"])
-                messages.success(request, f"Ingreso {ingreso.consecutivo} registrado correctamente.")
-                return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
-        else:
-            messages.error(request, "No se pudo guardar el ingreso. Revisa los campos requeridos.")
+            for obj in formset.deleted_objects:
+                obj.delete()
+
+            subtotal, iva, total = calcular_totales_ingreso(ingreso.detalles.all())
+            ingreso.subtotal = subtotal
+            ingreso.iva = iva
+            ingreso.total = total
+            ingreso.save(update_fields=["subtotal", "iva", "total"])
+            messages.success(request, f"Ingreso {ingreso.consecutivo} registrado correctamente.")
+            return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
+
+        messages.error(request, "No se pudo guardar el ingreso. Revisa los campos requeridos.")
     else:
         form = IngresoForm(negocio_id=negocio_id, consecutivo_sugerido=consecutivo_sugerido)
         formset = DetalleIngresoFormSet(negocio_id=negocio_id)
@@ -142,8 +146,8 @@ def editar_ingreso(request, ingreso_id):
             ingreso.save(update_fields=["subtotal", "iva", "total", "actualizado_en"])
             messages.success(request, "Ingreso actualizado correctamente.")
             return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
-        else:
-            messages.error(request, "No se pudo actualizar el ingreso. Revisa la información ingresada.")
+
+        messages.error(request, "No se pudo actualizar el ingreso. Revisa la información ingresada.")
     else:
         form = IngresoForm(instance=ingreso, negocio_id=negocio_id)
         formset = DetalleIngresoFormSet(instance=ingreso, negocio_id=negocio_id)
@@ -167,3 +171,35 @@ def anular_ingreso(request, ingreso_id):
     ingreso.save(update_fields=["estado", "actualizado_en"])
     messages.success(request, "Ingreso anulado correctamente.")
     return redirect("ingresos:listado")
+
+
+@require_GET
+@login_required
+def tipo_cambio_bcr(request):
+    """
+    Endpoint de consulta de tipo de cambio.
+    Fuente principal: API pública de Hacienda CR (referencia oficial en CR).
+    Fallback: exchangerate.host
+    """
+    urls = [
+        "https://api.hacienda.go.cr/indicadores/tc",
+        "https://api.exchangerate.host/latest?base=USD&symbols=CRC",
+    ]
+
+    for url in urls:
+        try:
+            with urlopen(url, timeout=8) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+
+            if "venta" in payload and isinstance(payload.get("venta"), dict):
+                valor = payload["venta"].get("valor")
+                if valor:
+                    return JsonResponse({"ok": True, "fuente": "hacienda", "tipo_cambio": float(valor)})
+
+            rates = payload.get("rates") if isinstance(payload, dict) else None
+            if rates and rates.get("CRC"):
+                return JsonResponse({"ok": True, "fuente": "exchangerate.host", "tipo_cambio": float(rates["CRC"])})
+        except (URLError, TimeoutError, ValueError, json.JSONDecodeError):
+            continue
+
+    return JsonResponse({"ok": False, "error": "No se pudo obtener tipo de cambio en este momento."}, status=503)

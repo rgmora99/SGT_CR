@@ -1,0 +1,32 @@
+{% extends "base/menu.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">{% if modo == 'editar' %}Editar{% else %}Nuevo{% endif %} Producto / Servicio</h3>
+  <a class="btn btn-outline-dark" href="{% url 'ventas:productos' %}">Volver</a>
+</div>
+
+<div class="card"><div class="card-body">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="row g-3">
+      {% for field in form %}
+      <div class="col-md-4">
+        <label class="form-label">{{ field.label }}</label>
+        {{ field }}
+        {% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% include "base/_swal_messages.html" %}
+<script src="{% static 'js/ventas/inventario.js' %}"></script>
+{% endblock %}

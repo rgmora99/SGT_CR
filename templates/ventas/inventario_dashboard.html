@@ -1,0 +1,24 @@
+{% extends "base/menu.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h3 class="mb-0">Inventario y Facturación</h3>
+    <p class="text-muted mb-0">Controla catálogo, stock y emisión de facturas.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-primary" href="{% url 'ventas:catalogos' %}">Catálogos</a>
+    <a class="btn btn-primary" href="{% url 'ventas:productos' %}">Productos/Servicios</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-3"><div class="card"><div class="card-body"><small>Productos</small><h4>{{ kpi.productos }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><small>Servicios</small><h4>{{ kpi.servicios }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><small>Almacenes</small><h4>{{ kpi.almacenes }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><small>Facturas emitidas</small><h4>{{ kpi.facturas_emitidas }}</h4></div></div></div>
+</div>
+<div class="card mt-3"><div class="card-body"><strong>Stock total:</strong> {{ kpi.stock_total }}</div></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% include "base/_swal_messages.html" %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base/menu.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Mantenimiento de catálogos</h3>
+  <a class="btn btn-outline-primary" href="{% url 'ventas:inventario' %}">Volver a inventario</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card"><div class="card-body">
+      <h5>Nueva categoría</h5>
+      <form method="post" novalidate>{% csrf_token %}
+        <input type="hidden" name="action" value="categoria">
+        {{ categoria_form.as_p }}
+        <button class="btn btn-primary">Guardar categoría</button>
+      </form>
+      <hr>
+      <ul class="list-group list-group-flush">{% for c in categorias %}<li class="list-group-item">{{ c.nombre }}</li>{% empty %}<li class="list-group-item text-muted">Sin datos</li>{% endfor %}</ul>
+    </div></div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card"><div class="card-body">
+      <h5>Nueva unidad de medida</h5>
+      <form method="post" novalidate>{% csrf_token %}
+        <input type="hidden" name="action" value="unidad">
+        {{ unidad_form.as_p }}
+        <button class="btn btn-primary">Guardar unidad</button>
+      </form>
+      <hr>
+      <ul class="list-group list-group-flush">{% for u in unidades %}<li class="list-group-item">{{ u.codigo }} - {{ u.nombre }}</li>{% empty %}<li class="list-group-item text-muted">Sin datos</li>{% endfor %}</ul>
+    </div></div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card"><div class="card-body">
+      <h5>Nuevo impuesto</h5>
+      <form method="post" novalidate>{% csrf_token %}
+        <input type="hidden" name="action" value="impuesto">
+        {{ impuesto_form.as_p }}
+        <button class="btn btn-primary">Guardar impuesto</button>
+      </form>
+      <hr>
+      <ul class="list-group list-group-flush">{% for i in impuestos %}<li class="list-group-item">{{ i.nombre }} ({{ i.porcentaje }}%)</li>{% empty %}<li class="list-group-item text-muted">Sin datos</li>{% endfor %}</ul>
+    </div></div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card"><div class="card-body">
+      <h5>Nuevo almacén</h5>
+      <form method="post" novalidate>{% csrf_token %}
+        <input type="hidden" name="action" value="almacen">
+        {{ almacen_form.as_p }}
+        <button class="btn btn-primary">Guardar almacén</button>
+      </form>
+      <hr>
+      <ul class="list-group list-group-flush">{% for a in almacenes %}<li class="list-group-item">{{ a.nombre }}</li>{% empty %}<li class="list-group-item text-muted">Sin datos</li>{% endfor %}</ul>
+    </div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% include "base/_swal_messages.html" %}
+<script src="{% static 'js/ventas/inventario.js' %}"></script>
+{% endblock %}

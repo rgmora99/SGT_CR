@@ -1,0 +1,19 @@
+{% if messages %}
+<script>
+  (function () {
+    if (!window.Swal) return;
+    const items = [
+      {% for message in messages %}
+      {level: "{{ message.tags|default:'info' }}", text: "{{ message|escapejs }}"},
+      {% endfor %}
+    ];
+    items.forEach(function (item) {
+      let icon = 'info';
+      if (item.level.includes('success')) icon = 'success';
+      if (item.level.includes('error')) icon = 'error';
+      if (item.level.includes('warning')) icon = 'warning';
+      Swal.fire({icon: icon, text: item.text, confirmButtonText: 'OK'});
+    });
+  })();
+</script>
+{% endif %}

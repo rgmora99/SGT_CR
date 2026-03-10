@@ -1,0 +1,33 @@
+{% extends "base/menu.html" %}
+{% block content %}
+<div class="container-fluid">
+  <a href="{% url 'ingresos:listado' %}" class="btn btn-link ps-0">← Volver al listado</a>
+  <h2>Ingreso {{ ingreso.consecutivo }}</h2>
+  <p><strong>Cliente:</strong> {{ ingreso.cliente.nombre }} | <strong>Fecha:</strong> {{ ingreso.fecha_ingreso|date:'d/m/Y' }}</p>
+  <p><strong>Categoría:</strong> {{ ingreso.categoria.nombre }} | <strong>Estado:</strong> {{ ingreso.get_estado_display }}</p>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <table class="table">
+        <thead><tr><th>Descripción</th><th>Cantidad</th><th>P/U</th><th>IVA</th><th>Total</th></tr></thead>
+        <tbody>
+          {% for detalle in ingreso.detalles.all %}
+          <tr>
+            <td>{{ detalle.descripcion }}</td>
+            <td>{{ detalle.cantidad }}</td>
+            <td>{{ ingreso.moneda }} {{ detalle.precio_unitario }}</td>
+            <td>{{ ingreso.moneda }} {{ detalle.monto_iva }}</td>
+            <td>{{ ingreso.moneda }} {{ detalle.total_linea }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="text-end">
+        <p>Subtotal: <strong>{{ ingreso.moneda }} {{ ingreso.subtotal }}</strong></p>
+        <p>IVA: <strong>{{ ingreso.moneda }} {{ ingreso.iva }}</strong></p>
+        <p>Total: <strong>{{ ingreso.moneda }} {{ ingreso.total }}</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

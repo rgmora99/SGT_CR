@@ -1,0 +1,75 @@
+{% extends "base/menu.html" %}
+
+{% block title %}Módulo fiscal{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h4 mb-0">IVA y renta (borrador de declaración)</h2>
+  <a class="btn btn-outline-primary" href="{% url 'fiscal:exportar_csv' %}?anio={{ anio }}&mes={{ mes|default:'' }}&tasa_renta={{ tasa_renta_porcentaje }}">Exportar CSV</a>
+</div>
+
+<form method="get" class="card card-body mb-3">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-3">
+      <label class="form-label">Año</label>
+      <input type="number" class="form-control" name="anio" value="{{ anio }}" min="2000" max="2100">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Mes (vacío = anual)</label>
+      <input type="number" class="form-control" name="mes" value="{{ mes|default:'' }}" min="1" max="12">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Tasa renta (%)</label>
+      <input type="number" class="form-control" name="tasa_renta" value="{{ tasa_renta_porcentaje }}" min="0" max="100" step="0.01">
+    </div>
+    <div class="col-md-3">
+      <button class="btn btn-primary w-100" type="submit">Recalcular</button>
+    </div>
+  </div>
+</form>
+
+<div class="row g-3 mb-3">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">IVA compras (crédito fiscal)</div>
+      <div class="card-body">
+        <p class="mb-1">Compras gravadas: <strong>₡{{ resumen.compras_gravadas }}</strong></p>
+        <p class="mb-1">Compras exentas: <strong>₡{{ resumen.compras_exentas }}</strong></p>
+        <p class="mb-0">Crédito fiscal: <strong>₡{{ resumen.credito_fiscal }}</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">IVA ventas (débito fiscal)</div>
+      <div class="card-body">
+        <p class="mb-1">Ventas gravadas: <strong>₡{{ resumen.ventas_gravadas }}</strong></p>
+        <p class="mb-1">Ventas exentas: <strong>₡{{ resumen.ventas_exentas }}</strong></p>
+        <p class="mb-0">Débito fiscal: <strong>₡{{ resumen.debito_fiscal }}</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h3 class="h6">Resultado del período</h3>
+    <p class="mb-1">IVA por pagar: <strong>₡{{ resumen.iva_por_pagar }}</strong></p>
+    <p class="mb-1">Utilidad proyectada: <strong>₡{{ resumen.utilidad_proyectada }}</strong></p>
+    <p class="mb-0">Impuesto sobre la renta proyectado: <strong>₡{{ resumen.impuesto_renta_proyectado }}</strong></p>
+  </div>
+</div>
+
+<form method="post" class="card card-body">
+  {% csrf_token %}
+  <input type="hidden" name="accion" value="cerrar">
+  <div class="mb-2">
+    <label class="form-label">Observaciones de cierre</label>
+    <textarea class="form-control" name="observaciones" rows="2">{% if cierre %}{{ cierre.observaciones }}{% endif %}</textarea>
+  </div>
+  <button class="btn btn-success" type="submit">Cerrar período y guardar borrador</button>
+  {% if cierre %}
+    <small class="text-muted mt-2">Estado actual: {{ cierre.estado }} {% if cierre.cerrado_en %}({{ cierre.cerrado_en }}){% endif %}</small>
+  {% endif %}
+</form>
+{% endblock %}

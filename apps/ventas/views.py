@@ -1,8 +1,10 @@
 from decimal import Decimal
 from datetime import date
+import re
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.db import transaction
 from django.db.models import DecimalField, Q, Sum, Value
 from django.db.models.functions import Coalesce
@@ -34,6 +36,24 @@ def _negocio_id(request):
     return request.session.get("negocio_activo_id")
 
 
+CONSECUTIVO_REGEX_CR = re.compile(r"^\d{20}$")
+
+
+def _generar_consecutivo_cr(negocio_id):
+    prefijo = "0010000101"  # 001 sucursal + 00001 punto venta + 01 factura electrónica
+    secuencia = 1
+
+    for consecutivo in FacturaVenta.objects.filter(negocio_id=negocio_id).order_by("-id").values_list("consecutivo", flat=True)[:500]:
+        if not CONSECUTIVO_REGEX_CR.match(consecutivo or ""):
+            continue
+        if not consecutivo.startswith(prefijo):
+            continue
+        secuencia = int(consecutivo[-10:]) + 1
+        break
+
+    return f"{prefijo}{secuencia:010d}"
+
+
 @login_required
 def listar_venta(request):
     negocio_id = _negocio_id(request)
@@ -52,21 +72,19 @@ def crear_venta(request):
     almacenes = Almacen.objects.filter(negocio_id=negocio_id, activo=True).order_by("nombre")
     productos = ProductoServicio.objects.filter(negocio_id=negocio_id, activo=True).select_related("impuesto").order_by("nombre")
 
+    consecutivo_sugerido = _generar_consecutivo_cr(negocio_id)
+
     if request.method == "POST":
         cliente_id = request.POST.get("cliente")
         almacen_id = request.POST.get("almacen") or None
         producto_id = request.POST.get("producto")
         cantidad_raw = request.POST.get("cantidad")
         descuento_raw = request.POST.get("porcentaje_descuento") or "0"
-        consecutivo = (request.POST.get("consecutivo") or "").strip()
+        consecutivo = _generar_consecutivo_cr(negocio_id)
         moneda = (request.POST.get("moneda") or "CRC").strip().upper()
         tipo_cambio_raw = (request.POST.get("tipo_cambio") or "").strip()
         fecha_emision_raw = (request.POST.get("fecha_emision") or "").strip()
         fecha_vencimiento_raw = (request.POST.get("fecha_vencimiento") or "").strip()
-
-        if not consecutivo:
-            messages.error(request, "Debes indicar un consecutivo.")
-            return redirect("ventas:crear")
 
         if not cliente_id or not producto_id:
             messages.error(request, "Debes seleccionar cliente y producto.")
@@ -126,6 +144,16 @@ def crear_venta(request):
             messages.error(request, "Selecciona almacén para productos con inventario.")
             return redirect("ventas:crear")
 
+        if request.POST.get("emitir") == "SI" and producto.maneja_inventario:
+            existencia = Existencia.objects.filter(almacen_id=almacen_id, producto=producto).first()
+            stock_libre = existencia.cantidad_libre if existencia else Decimal("0.000")
+            if stock_libre < cantidad:
+                messages.error(
+                    request,
+                    f"Stock insuficiente para {producto.nombre}. Disponible: {stock_libre}. Solicitado: {cantidad}.",
+                )
+                return redirect("ventas:crear")
+
         if FacturaVenta.objects.filter(negocio_id=negocio_id, consecutivo__iexact=consecutivo).exists():
             messages.error(request, "El consecutivo ya existe para este negocio.")
             return redirect("ventas:crear")
@@ -168,8 +196,37 @@ def crear_venta(request):
         "clientes": clientes,
         "almacenes": almacenes,
         "productos": productos,
+        "consecutivo_sugerido": consecutivo_sugerido,
     }
     return render(request, "ventas/factura_simple_form.html", context)
+
+
+@login_required
+def stock_disponible_api(request):
+    negocio_id = _negocio_id(request)
+    producto_id = request.GET.get("producto_id")
+    almacen_id = request.GET.get("almacen_id")
+
+    if not negocio_id or not producto_id:
+        return JsonResponse({"ok": False, "error": "Parámetros incompletos."}, status=400)
+
+    producto = get_object_or_404(ProductoServicio, pk=producto_id, negocio_id=negocio_id)
+    if not producto.maneja_inventario:
+        return JsonResponse({"ok": True, "maneja_inventario": False, "stock_libre": "0.000"})
+
+    if not almacen_id:
+        return JsonResponse({"ok": False, "error": "Debes seleccionar almacén."}, status=400)
+
+    existencia = Existencia.objects.filter(almacen_id=almacen_id, producto=producto).first()
+    stock_libre = existencia.cantidad_libre if existencia else Decimal("0.000")
+    return JsonResponse(
+        {
+            "ok": True,
+            "maneja_inventario": True,
+            "stock_libre": f"{stock_libre:.3f}",
+            "producto": producto.nombre,
+        }
+    )
 
 
 @login_required

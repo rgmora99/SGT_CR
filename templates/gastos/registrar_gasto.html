@@ -14,18 +14,25 @@
   </div>
 
   {% if messages %}
-    <div class="alerts-stack" aria-live="polite">
+    <script id="django-messages-json" type="application/json">[
       {% for message in messages %}
-        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        {"tags": "{{ message.tags|default:'info'|escapejs }}", "text": "{{ message|escapejs }}"}{% if not forloop.last %},{% endif %}
       {% endfor %}
-    </div>
+    ]</script>
+    <noscript>
+      <div class="alerts-stack" aria-live="polite">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    </noscript>
   {% endif %}
 
   <div class="card registrar-card">
-    <form method="post" novalidate>
+    <form method="post" novalidate data-monedas-distintas="{% if moneda_factura != moneda_base_negocio %}1{% else %}0{% endif %}">
       {% csrf_token %}
 
       <section class="section-card">
@@ -142,5 +149,8 @@
     </form>
   </div>
 </div>
+
+
+<script src="{% static 'js/gastos/registrar_gasto.js' %}"></script>
 
 {% endblock %}

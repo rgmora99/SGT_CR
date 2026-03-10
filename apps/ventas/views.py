@@ -1,8 +1,13 @@
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Sum
+from django.db import transaction
+from django.db.models import DecimalField, Q, Sum, Value
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
+
+from apps.clientes.models import Cliente
 
 from .forms import (
     AlmacenForm,
@@ -11,7 +16,17 @@ from .forms import (
     ProductoServicioForm,
     UnidadMedidaForm,
 )
-from .models import Almacen, CategoriaItem, Existencia, FacturaVenta, Impuesto, ProductoServicio, UnidadMedida
+from .models import (
+    Almacen,
+    CategoriaItem,
+    Existencia,
+    FacturaVenta,
+    Impuesto,
+    LineaFacturaVenta,
+    ProductoServicio,
+    UnidadMedida,
+)
+from .services import emitir_factura
 
 
 def _negocio_id(request):
@@ -20,12 +35,106 @@ def _negocio_id(request):
 
 @login_required
 def listar_venta(request):
-    return render(request, "ventas/listar_ventas.html")
+    negocio_id = _negocio_id(request)
+    facturas = FacturaVenta.objects.filter(negocio_id=negocio_id).select_related("cliente", "almacen").order_by("-fecha_emision", "-id")
+    return render(request, "ventas/facturas_lista.html", {"facturas": facturas})
 
 
 @login_required
 def crear_venta(request):
-    return render(request, "ventas/crear_venta.html")
+    negocio_id = _negocio_id(request)
+    if not negocio_id:
+        messages.warning(request, "Debes seleccionar un negocio para continuar.")
+        return redirect("core:home")
+
+    clientes = Cliente.objects.all().order_by("nombre")
+    almacenes = Almacen.objects.filter(negocio_id=negocio_id, activo=True).order_by("nombre")
+    productos = ProductoServicio.objects.filter(negocio_id=negocio_id, activo=True).select_related("impuesto").order_by("nombre")
+
+    if request.method == "POST":
+        cliente_id = request.POST.get("cliente")
+        almacen_id = request.POST.get("almacen") or None
+        producto_id = request.POST.get("producto")
+        cantidad_raw = request.POST.get("cantidad")
+        descuento_raw = request.POST.get("porcentaje_descuento") or "0"
+        consecutivo = (request.POST.get("consecutivo") or "").strip()
+
+        if not consecutivo:
+            messages.error(request, "Debes indicar un consecutivo.")
+            return redirect("ventas:crear")
+
+        try:
+            cantidad = Decimal(cantidad_raw)
+            descuento = Decimal(descuento_raw)
+            if cantidad <= 0:
+                raise ValueError
+        except Exception:
+            messages.error(request, "Cantidad o descuento inválidos.")
+            return redirect("ventas:crear")
+
+        cliente = get_object_or_404(Cliente, pk=cliente_id)
+        producto = get_object_or_404(ProductoServicio, pk=producto_id, negocio_id=negocio_id, activo=True)
+
+        if producto.maneja_inventario and not almacen_id:
+            messages.error(request, "Selecciona almacén para productos con inventario.")
+            return redirect("ventas:crear")
+
+        if FacturaVenta.objects.filter(negocio_id=negocio_id, consecutivo__iexact=consecutivo).exists():
+            messages.error(request, "El consecutivo ya existe para este negocio.")
+            return redirect("ventas:crear")
+
+        with transaction.atomic():
+            factura = FacturaVenta.objects.create(
+                negocio_id=negocio_id,
+                cliente=cliente,
+                almacen_id=almacen_id,
+                consecutivo=consecutivo.upper(),
+                fecha_emision=request.POST.get("fecha_emision"),
+                fecha_vencimiento=request.POST.get("fecha_vencimiento") or None,
+                moneda=request.POST.get("moneda") or "CRC",
+                tipo_cambio=request.POST.get("tipo_cambio") or None,
+                creado_por=request.user,
+                notas=request.POST.get("notas") or "",
+            )
+
+            LineaFacturaVenta.objects.create(
+                factura=factura,
+                producto=producto,
+                descripcion=producto.nombre,
+                cantidad=cantidad,
+                precio_unitario=producto.precio_venta,
+                porcentaje_descuento=descuento,
+                porcentaje_impuesto=producto.impuesto.porcentaje if producto.impuesto else Decimal("0.00"),
+            )
+
+            if request.POST.get("emitir") == "SI":
+                try:
+                    emitir_factura(factura, user=request.user)
+                except Exception as exc:
+                    messages.error(request, f"Factura guardada, pero no se pudo emitir: {exc}")
+                    return redirect("ventas:listar")
+
+        messages.success(request, "Factura creada correctamente.")
+        return redirect("ventas:listar")
+
+    context = {
+        "clientes": clientes,
+        "almacenes": almacenes,
+        "productos": productos,
+    }
+    return render(request, "ventas/factura_simple_form.html", context)
+
+
+@login_required
+def emitir_venta(request, factura_id):
+    negocio_id = _negocio_id(request)
+    factura = get_object_or_404(FacturaVenta, pk=factura_id, negocio_id=negocio_id)
+    try:
+        emitir_factura(factura, user=request.user)
+        messages.success(request, "Factura emitida y stock actualizado.")
+    except Exception as exc:
+        messages.error(request, f"No se pudo emitir la factura: {exc}")
+    return redirect("ventas:listar")
 
 
 @login_required
@@ -38,9 +147,16 @@ def inventario_dashboard(request):
     productos = ProductoServicio.objects.filter(negocio_id=negocio_id)
     almacenes = Almacen.objects.filter(negocio_id=negocio_id)
     facturas_emitidas = FacturaVenta.objects.filter(negocio_id=negocio_id, estado=FacturaVenta.Estado.EMITIDA).count()
-    total_stock = Existencia.objects.filter(almacen__negocio_id=negocio_id).aggregate(
-        total=Coalesce(Sum("cantidad_disponible"), 0)
-    )["total"]
+    total_stock = (
+        Existencia.objects.filter(almacen__negocio_id=negocio_id)
+        .aggregate(
+            total=Coalesce(
+                Sum("cantidad_disponible"),
+                Value(Decimal("0.000"), output_field=DecimalField(max_digits=12, decimal_places=3)),
+            )
+        )
+        .get("total")
+    )
 
     return render(
         request,

@@ -1,6 +1,10 @@
 {% extends "base/menu.html" %}
 {% load static %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/ventas/inventario.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h3 class="mb-0">Mantenimiento de catálogos</h3>

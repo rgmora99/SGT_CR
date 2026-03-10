@@ -4,124 +4,141 @@
 
 <link rel="stylesheet" href="{% static 'css/gastos/registrar_gasto.css' %}">
 
-<div class="container-fluid">
-
-  <!-- Header -->
-  <div class="bandeja-header mb-3">
+<div class="container-fluid registrar-page">
+  <div class="page-header">
     <div>
       <h2>Registrar gasto</h2>
-      <p>Clasificá y confirmá la factura antes de registrarla como gasto.</p>
+      <p>Confirma la información de la factura y clasifica el gasto contable.</p>
     </div>
-    <div class="actions">
-      <a href="{% url 'gastos:bandeja_facturas' %}" class="btn btn-outline">
-      Volver a bandeja
-    </a>
-    </div>
+    <a href="{% url 'gastos:bandeja_facturas' %}" class="btn btn-outline-primary btn-sm">Volver a bandeja</a>
   </div>
 
-  <div class="card bandeja-card p-4">
+  {% if messages %}
+    <div class="alerts-stack" aria-live="polite">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-    <form method="post">
+  <div class="card registrar-card">
+    <form method="post" novalidate>
       {% csrf_token %}
 
-      <!-- ======================
-           DATOS DE LA FACTURA
-      ======================= -->
-      <h5 class="mb-3">Datos de la factura</h5>
-
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <label class="form-label">Proveedor</label>
-          <input class="form-control" value="{{ factura.proveedor }}" readonly>
+      <section class="section-card">
+        <div class="section-head">
+          <h5>Datos de la factura</h5>
+          <span class="status-chip">{{ factura.get_estado_display }}</span>
         </div>
 
-        <div class="col-md-4">
-          <label class="form-label">Número de factura</label>
-          <input class="form-control" value="{{ factura.numero_factura }}" readonly>
+        <div class="row g-3 mb-2">
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Proveedor</label>
+            <input class="form-control" value="{{ factura.proveedor }}" readonly>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Número de factura</label>
+            <input class="form-control" value="{{ factura.numero_factura }}" readonly>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Fecha emisión</label>
+            <input class="form-control" value="{{ factura.fecha_emision|date:'d/m/Y' }}" readonly>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Moneda factura</label>
+            <input class="form-control fw-semibold" value="{{ moneda_factura }}" readonly>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Moneda base negocio</label>
+            <input class="form-control fw-semibold" value="{{ moneda_base_negocio }}" readonly>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Tipo XML</label>
+            <input class="form-control" value="{{ factura.tipo_documento_xml|default:'factura_electronica'|title }}" readonly>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Correo origen</label>
+            <input class="form-control" value="{{ factura.email_from|default:'No disponible' }}" readonly>
+          </div>
+
+          <div class="col-lg-4 col-md-4">
+            <label class="form-label">Subtotal</label>
+            <input class="form-control amount" value="{{ moneda_factura }} {{ factura.subtotal }}" readonly>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <label class="form-label">IVA</label>
+            <input class="form-control amount" value="{{ moneda_factura }} {{ factura.iva }}" readonly>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <label class="form-label">Total</label>
+            <input class="form-control amount total" value="{{ moneda_factura }} {{ factura.total }}" readonly>
+          </div>
         </div>
 
-        <div class="col-md-4">
-          <label class="form-label">Fecha emisión</label>
-          <input class="form-control"
-                 value="{{ factura.fecha_emision|date:'d/m/Y' }}" readonly>
-        </div>
+        {% if factura.alerta_ingesta %}
+          <div class="ingesta-alert">⚠ {{ factura.alerta_ingesta }}</div>
+        {% endif %}
+      </section>
 
-        <div class="col-md-4">
-          <label class="form-label">Subtotal</label>
-          <input class="form-control" value="₡ {{ factura.subtotal }}" readonly>
-        </div>
+      <section class="section-card">
+        <h5>Datos del gasto</h5>
 
-        <div class="col-md-4">
-          <label class="form-label">IVA</label>
-          <input class="form-control" value="₡ {{ factura.iva }}" readonly>
-        </div>
+        <div class="row g-3">
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Categoría *</label>
+            <select name="categoria" class="form-select" required>
+              <option value="">Seleccione…</option>
+              {% for c in categorias %}
+                <option value="{{ c.id }}" {% if draft.categoria == c.id|stringformat:'s' %}selected{% endif %}>{{ c.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
 
-        <div class="col-md-4">
-          <label class="form-label">Total</label>
-          <input class="form-control fw-bold" value="₡ {{ factura.total }}" readonly>
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Fecha del gasto *</label>
+            <input type="date" name="fecha_gasto" class="form-control" value="{{ draft.fecha_gasto }}" required>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Método de pago</label>
+            <select name="metodo_pago" class="form-select">
+              <option value="" {% if not draft.metodo_pago %}selected{% endif %}>---</option>
+              <option value="EFECTIVO" {% if draft.metodo_pago == 'EFECTIVO' %}selected{% endif %}>Efectivo</option>
+              <option value="TRANSFERENCIA" {% if draft.metodo_pago == 'TRANSFERENCIA' %}selected{% endif %}>Transferencia</option>
+              <option value="TARJETA" {% if draft.metodo_pago == 'TARJETA' %}selected{% endif %}>Tarjeta</option>
+            </select>
+          </div>
+
+          <div class="col-lg-6 col-md-6">
+            <label class="form-label">Referencia contable</label>
+            <input type="text" name="referencia_contable" class="form-control" maxlength="80" value="{{ draft.referencia_contable }}" placeholder="Ej: Asiento, consecutivo interno, # comprobante">
+          </div>
+
+          <div class="col-lg-6 col-md-6">
+            <label class="form-label">Tipo de cambio {% if moneda_factura != moneda_base_negocio %}*{% endif %}</label>
+            <input type="number" step="0.0001" min="0" name="tipo_cambio" class="form-control" value="{{ draft.tipo_cambio }}" placeholder="Ej: 534.2500" {% if moneda_factura == moneda_base_negocio %}readonly{% endif %}>
+            {% if moneda_factura == moneda_base_negocio %}
+              <small class="text-muted">No requerido porque la moneda coincide con la moneda base.</small>
+            {% else %}
+              <small class="text-muted">Factura en {{ moneda_factura }} y negocio en {{ moneda_base_negocio }}.</small>
+            {% endif %}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Notas</label>
+            <textarea name="notas" class="form-control" rows="3" placeholder="Observaciones adicionales para auditoría contable">{{ draft.notas }}</textarea>
+          </div>
         </div>
+      </section>
+
+      <div class="form-actions">
+        <a href="{% url 'gastos:bandeja_facturas' %}" class="btn btn-outline-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-success">Registrar gasto</button>
       </div>
-
-      <hr>
-
-      <!-- ======================
-           DATOS DEL GASTO
-      ======================= -->
-      <h5 class="mb-3">Datos del gasto</h5>
-
-      <div class="row g-3 mb-4">
-
-        <div class="col-md-4">
-          <label class="form-label">Categoría *</label>
-          <select name="categoria" class="form-select" required>
-            <option value="">Seleccione…</option>
-            {% for c in categorias %}
-              <option value="{{ c.id }}">{{ c.nombre }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label">Fecha del gasto *</label>
-          <input type="date"
-                 name="fecha_gasto"
-                 class="form-control"
-                 required>
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label">Método de pago</label>
-          <select name="metodo_pago" class="form-select">
-            <option value="">---</option>
-            <option value="EFECTIVO">Efectivo</option>
-            <option value="TRANSFERENCIA">Transferencia</option>
-            <option value="TARJETA">Tarjeta</option>
-          </select>
-        </div>
-
-        <div class="col-md-12">
-          <label class="form-label">Notas</label>
-          <textarea name="notas"
-                    class="form-control"
-                    rows="3"
-                    placeholder="Observaciones adicionales…"></textarea>
-        </div>
-
-      </div>
-
-      <!-- ======================
-           ACCIONES
-      ======================= -->
-      <div class="d-flex justify-content-end gap-2">
-        <a href="{% url 'gastos:bandeja_facturas' %}"
-           class="btn btn-outline-secondary">
-          Cancelar
-        </a>
-        <button type="submit" class="btn btn-success">
-          Registrar gasto
-        </button>
-      </div>
-
     </form>
   </div>
 </div>

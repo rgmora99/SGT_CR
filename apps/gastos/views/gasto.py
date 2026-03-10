@@ -1,15 +1,17 @@
+from decimal import Decimal, InvalidOperation
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.decorators import login_required
 
-from apps.gastos.models import FacturaGasto, CategoriaGasto, Gasto
+from apps.gastos.models import CategoriaGasto, FacturaGasto, Gasto
 
 
 @login_required
 @transaction.atomic
 def registrar_gasto(request, factura_id):
-
     factura = (
         FacturaGasto.objects.select_for_update().select_related("negocio").get(id=factura_id)
     )
@@ -21,36 +23,89 @@ def registrar_gasto(request, factura_id):
         factura.estado = "en_registro"
         factura.save(update_fields=["estado"])
 
-    if request.method == "POST":
-        categoria_id = request.POST.get("categoria")
-        fecha_gasto = request.POST.get("fecha_gasto")
-        metodo_pago = request.POST.get("metodo_pago")
-        notas = request.POST.get("notas")
+    categorias = CategoriaGasto.objects.filter(negocio=factura.negocio, activo=True)
 
-        Gasto.objects.create(
-            negocio=factura.negocio,
-            factura=factura,
-            categoria_id=categoria_id,
-            fecha_gasto=fecha_gasto,
-            metodo_pago=metodo_pago,
-            subtotal=factura.subtotal,
-            iva=factura.iva,
-            total=factura.total,
-            notas=notas,
-            creado_por=request.user,
+    draft = {
+        "categoria": "",
+        "fecha_gasto": factura.fecha_emision.isoformat() if factura.fecha_emision else "",
+        "metodo_pago": "",
+        "referencia_contable": factura.numero_factura or "",
+        "tipo_cambio": "1.0000" if (factura.moneda or "CRC") == factura.negocio.moneda_base else "",
+        "notas": "",
+    }
+
+    if request.method == "POST":
+        has_error = False
+        draft.update(
+            {
+                "categoria": (request.POST.get("categoria") or "").strip(),
+                "fecha_gasto": (request.POST.get("fecha_gasto") or "").strip(),
+                "metodo_pago": (request.POST.get("metodo_pago") or "").strip(),
+                "referencia_contable": (request.POST.get("referencia_contable") or "").strip(),
+                "tipo_cambio": (request.POST.get("tipo_cambio") or "").strip(),
+                "notas": (request.POST.get("notas") or "").strip(),
+            }
         )
 
-        factura.estado = "registrada"
-        factura.save(update_fields=["estado"])
+        if not draft["categoria"]:
+            has_error = True
+            messages.error(request, "Debes seleccionar una categoría.")
+        elif not draft["fecha_gasto"]:
+            has_error = True
+            messages.error(request, "Debes indicar la fecha del gasto.")
+        else:
+            tipo_cambio = None
+            total_moneda_base = factura.total
 
-        return redirect("gastos:bandeja_facturas")
+            if (factura.moneda or "CRC") != factura.negocio.moneda_base:
+                if not draft["tipo_cambio"]:
+                    has_error = True
+                    messages.error(
+                        request,
+                        f"La factura está en {factura.moneda} y tu negocio usa {factura.negocio.moneda_base}. Ingresa tipo de cambio.",
+                    )
+                else:
+                    try:
+                        tipo_cambio = Decimal(draft["tipo_cambio"])
+                        if tipo_cambio <= 0:
+                            raise InvalidOperation
+                        total_moneda_base = (factura.total * tipo_cambio).quantize(Decimal("0.01"))
+                    except (InvalidOperation, ValueError, TypeError):
+                        has_error = True
+                        messages.error(request, "El tipo de cambio debe ser un número mayor que cero.")
+
+            if not has_error:
+                Gasto.objects.create(
+                    negocio=factura.negocio,
+                    factura=factura,
+                    categoria_id=draft["categoria"],
+                    fecha_gasto=draft["fecha_gasto"],
+                    metodo_pago=draft["metodo_pago"] or None,
+                    referencia_contable=draft["referencia_contable"] or None,
+                    tipo_cambio=tipo_cambio,
+                    total_moneda_base=total_moneda_base,
+                    subtotal=factura.subtotal,
+                    iva=factura.iva,
+                    total=factura.total,
+                    notas=draft["notas"] or None,
+                    creado_por=request.user,
+                )
+
+                factura.estado = "registrada"
+                factura.save(update_fields=["estado"])
+
+                messages.success(request, "Gasto registrado correctamente.")
+                return redirect("gastos:bandeja_facturas")
 
     return render(
         request,
         "gastos/registrar_gasto.html",
         {
             "factura": factura,
-            "categorias": CategoriaGasto.objects.filter(negocio=factura.negocio, activo=True),
+            "categorias": categorias,
+            "draft": draft,
+            "moneda_factura": (factura.moneda or "CRC"),
+            "moneda_base_negocio": factura.negocio.moneda_base,
         },
     )
 

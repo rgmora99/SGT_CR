@@ -1,8 +1,10 @@
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet, inlineformset_factory
+from django.utils import timezone
 
 from .models import CategoriaIngreso, DetalleIngreso, Ingreso, ProductoIngreso
 
@@ -40,14 +42,21 @@ class IngresoForm(forms.ModelForm):
     def __init__(self, *args, negocio_id=None, consecutivo_sugerido=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["categoria"].queryset = CategoriaIngreso.objects.filter(negocio_id=negocio_id, activo=True)
+        fecha_actual_cr = timezone.now().astimezone(ZoneInfo("America/Costa_Rica")).date()
         if not self.instance.pk:
             self.fields["consecutivo"].initial = consecutivo_sugerido
+            self.fields["fecha_ingreso"].initial = fecha_actual_cr
         self.fields["consecutivo"].help_text = "Se genera automáticamente al guardar."
 
     def clean(self):
         cleaned_data = super().clean()
         moneda = cleaned_data.get("moneda")
         tipo_cambio = cleaned_data.get("tipo_cambio")
+        fecha_ingreso = cleaned_data.get("fecha_ingreso")
+
+        fecha_actual_cr = timezone.now().astimezone(ZoneInfo("America/Costa_Rica")).date()
+        if fecha_ingreso and fecha_ingreso != fecha_actual_cr:
+            self.add_error("fecha_ingreso", "La fecha de ingreso debe ser la fecha actual (CR).")
 
         if moneda == Ingreso.Moneda.USD:
             if not tipo_cambio or tipo_cambio <= 0:

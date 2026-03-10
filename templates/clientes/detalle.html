@@ -1,0 +1,24 @@
+{% extends "base/menu.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">Detalle de cliente</h2>
+  <div class="d-flex gap-2">
+    <a href="{% url 'clientes:editar' cliente.id %}" class="btn btn-primary">Editar</a>
+    <a href="{% url 'clientes:listar' %}" class="btn btn-light">Volver</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body row g-3">
+    <div class="col-md-6"><strong>Nombre:</strong><br>{{ cliente.nombre }}</div>
+    <div class="col-md-6"><strong>Identificación:</strong><br>{{ cliente.identificacion }}</div>
+    <div class="col-md-6"><strong>Correo:</strong><br>{{ cliente.correo_electronico|default:'-' }}</div>
+    <div class="col-md-6"><strong>Teléfono:</strong><br>{{ cliente.telefono|default:'-' }}</div>
+    <div class="col-md-12"><strong>Dirección:</strong><br>{{ cliente.direccion|default:'-' }}</div>
+    <div class="col-md-6"><strong>Estado:</strong><br>{{ cliente.get_estado_display }}</div>
+    <div class="col-md-6"><strong>Última actualización:</strong><br>{{ cliente.actualizado_en|date:"d/m/Y H:i" }}</div>
+    <div class="col-md-12"><strong>Notas:</strong><br>{{ cliente.notas|default:'-' }}</div>
+  </div>
+</div>
+{% endblock %}

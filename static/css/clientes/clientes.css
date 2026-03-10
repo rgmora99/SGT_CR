@@ -1,0 +1,27 @@
+.kpi-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.kpi-card strong {
+  font-size: 1.5rem;
+}
+
+.kpi-card.success { border-left: 4px solid #198754; }
+.kpi-card.warning { border-left: 4px solid #ffc107; }
+
+.filtros,
+.tabla-clientes,
+.form-cliente {
+  border-radius: 0.85rem;
+  border: 1px solid #e9ecef;
+}
+
+.acciones .btn {
+  margin-left: 0.25rem;
+}

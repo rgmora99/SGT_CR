@@ -12,7 +12,7 @@
 <div class="card">
   <div class="card-body row g-3">
     <div class="col-md-6"><strong>Nombre:</strong><br>{{ cliente.nombre }}</div>
-    <div class="col-md-6"><strong>Identificación:</strong><br>{{ cliente.identificacion }}</div>
+    <div class="col-md-6"><strong>Identificación:</strong><br>{{ cliente.identificacion }}<br><small class="text-muted">{{ cliente.tipo_identificacion.nombre }}</small></div>
     <div class="col-md-6"><strong>Correo:</strong><br>{{ cliente.correo_electronico|default:'-' }}</div>
     <div class="col-md-6"><strong>Teléfono:</strong><br>{{ cliente.telefono|default:'-' }}</div>
     <div class="col-md-12"><strong>Dirección:</strong><br>{{ cliente.direccion|default:'-' }}</div>

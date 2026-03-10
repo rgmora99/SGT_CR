@@ -25,3 +25,26 @@
 .acciones .btn {
   margin-left: 0.25rem;
 }
+
+.form-cliente {
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+}
+
+.form-section {
+  border: 1px solid #eef2f7;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: #fcfdff;
+}
+
+.section-title {
+  font-size: 1rem;
+  margin-bottom: 0.9rem;
+  color: #0f2a4d;
+}
+
+.form-cliente .form-control,
+.form-cliente .form-select {
+  min-height: 44px;
+}

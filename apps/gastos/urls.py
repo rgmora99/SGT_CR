@@ -3,7 +3,7 @@ from apps.gastos.views.acciones import aprobar_factura, rechazar_factura
 from apps.gastos.views.correo_config import  config_correo_facturas 
 from apps.gastos.views.bandeja import bandeja_facturas
 from django.urls import path
-from apps.gastos.views.sync import sync_facturas_ajax
+from apps.gastos.views.sync import sync_facturas_ajax, recargar_metadata_facturas_ajax
 from apps.gastos.views.gasto import registrar_gasto,ver_gasto,listado_gastos,anular_gasto,editar_gasto
 from apps.gastos.views.gastos_fijos import listado_gastos_fijos, crear_gasto_fijo, editar_gasto_fijo, cambiar_estado_gasto_fijo
 app_name = "gastos"
@@ -14,6 +14,7 @@ urlpatterns = [
     path("facturas/<int:factura_id>/aprobar/", aprobar_factura, name="aprobar_factura"),
     path("facturas/<int:factura_id>/rechazar/", rechazar_factura, name="rechazar_factura"),
     path("sync-facturas/", sync_facturas_ajax, name="sync_facturas_ajax"),
+    path("recargar-metadata-facturas/", recargar_metadata_facturas_ajax, name="recargar_metadata_facturas_ajax"),
 
     path("registrar/<int:factura_id>/", registrar_gasto, name="registrar"),
     path("gasto/<int:gasto_id>/", ver_gasto, name="ver_gasto"),

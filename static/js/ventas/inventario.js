@@ -6,6 +6,9 @@
   const stockApiInput = document.getElementById('stock-api-url');
   const lineasJsonInput = document.getElementById('lineas-json');
   const productosDataScript = document.getElementById('productos-data');
+  const consecutivosPorTipoScript = document.getElementById('consecutivos-por-tipo');
+  const tipoComprobante = form.querySelector('[name="tipo_comprobante"]');
+  const consecutivoCr = document.getElementById('consecutivo-cr');
   const moneda = form.querySelector('[name="moneda"]');
   const tipoCambio = form.querySelector('[name="tipo_cambio"]');
   const fechaEmision = form.querySelector('[name="fecha_emision"]');
@@ -19,8 +22,10 @@
   const btnAgregar = document.getElementById('btn-agregar-linea');
   const tablaBody = document.querySelector('#tabla-lineas tbody');
   const totalFactura = document.getElementById('total-factura');
+  const resumenMoneda = document.getElementById('resumen-moneda');
 
   const productos = JSON.parse(productosDataScript?.textContent || '[]');
+  const consecutivosPorTipo = JSON.parse(consecutivosPorTipoScript?.textContent || '{}');
   const productosMap = new Map(productos.map((p) => [String(p.id), p]));
   const lineas = [];
 
@@ -38,8 +43,28 @@
     return new Date().toISOString().split('T')[0];
   }
 
+  function monedaActual() {
+    return (moneda.value || 'CRC').toUpperCase();
+  }
+
+  function tipoCambioActual() {
+    const tc = toNum(tipoCambio.value);
+    return Number.isFinite(tc) && tc > 0 ? tc : NaN;
+  }
+
+  function precioMostrado(linea) {
+    const m = monedaActual();
+    if (m === 'USD') {
+      const tc = tipoCambioActual();
+      if (!Number.isFinite(tc)) return NaN;
+      return linea.precio_crc / tc;
+    }
+    return linea.precio_crc;
+  }
+
   function calcularTotalLinea(linea) {
-    const subtotal = linea.cantidad * linea.precio;
+    const precio = precioMostrado(linea);
+    const subtotal = linea.cantidad * precio;
     const descuentoMonto = subtotal * (linea.descuento / 100);
     const base = subtotal - descuentoMonto;
     const impuestoMonto = base * (linea.impuesto / 100);
@@ -51,21 +76,23 @@
     let total = 0;
 
     lineas.forEach((linea, idx) => {
+      const precio = precioMostrado(linea);
       const totalLinea = calcularTotalLinea(linea);
-      total += totalLinea;
+      total += Number.isFinite(totalLinea) ? totalLinea : 0;
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${linea.codigo} - ${linea.nombre}</td>
         <td class="text-end">${linea.cantidad.toFixed(3)}</td>
-        <td class="text-end">${linea.precio.toFixed(2)}</td>
+        <td class="text-end">${Number.isFinite(precio) ? precio.toFixed(2) : '---'}</td>
         <td class="text-end">${linea.descuento.toFixed(2)}</td>
         <td class="text-end">${linea.impuesto.toFixed(2)}</td>
-        <td class="text-end">${totalLinea.toFixed(2)}</td>
+        <td class="text-end">${Number.isFinite(totalLinea) ? totalLinea.toFixed(2) : '---'}</td>
         <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger" data-remove="${idx}">Quitar</button></td>
       `;
       tablaBody.appendChild(tr);
     });
 
+    if (resumenMoneda) resumenMoneda.textContent = monedaActual();
     totalFactura.textContent = total.toFixed(2);
     lineasJsonInput.value = JSON.stringify(lineas.map((l) => ({
       producto_id: l.id,
@@ -180,7 +207,7 @@
       id: Number(producto.id),
       codigo: producto.codigo,
       nombre: producto.nombre,
-      precio: toNum(producto.precio),
+      precio_crc: toNum(producto.precio),
       impuesto: toNum(producto.impuesto || '0'),
       maneja_inventario: !!producto.maneja_inventario,
       cantidad,
@@ -198,6 +225,22 @@
       lineas.splice(idx, 1);
       renderLineas();
     }
+  });
+
+
+  tipoComprobante?.addEventListener('change', function () {
+    const cod = tipoComprobante.value;
+    if (consecutivosPorTipo[cod] && consecutivoCr) {
+      consecutivoCr.value = consecutivosPorTipo[cod];
+    }
+  });
+
+  moneda?.addEventListener('change', function () {
+    renderLineas();
+  });
+
+  tipoCambio?.addEventListener('input', function () {
+    if (monedaActual() === 'USD') renderLineas();
   });
 
   form.addEventListener('submit', async function (e) {

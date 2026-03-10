@@ -21,10 +21,19 @@
       <input type="hidden" id="stock-api-url" value="{% url 'ventas:stock_disponible_api' %}">
       <input type="hidden" id="lineas-json" name="lineas_json" value="[]">
       <script id="productos-data" type="application/json">{{ productos_json|safe }}</script>
+      <script id="consecutivos-por-tipo" type="application/json">{{ consecutivos_por_tipo|safe }}</script>
 
       <div class="col-md-3">
+        <label class="form-label">Tipo de comprobante</label>
+        <select name="tipo_comprobante" id="tipo-comprobante" class="form-select" required>
+          {% for codigo, nombre in tipos_comprobante.items %}
+          <option value="{{ codigo }}" {% if codigo == '01' %}selected{% endif %}>{{ codigo }} - {{ nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
         <label class="form-label">Consecutivo (CR)</label>
-        <input name="consecutivo" class="form-control" value="{{ consecutivo_sugerido }}" readonly>
+        <input name="consecutivo" id="consecutivo-cr" class="form-control" value="{{ consecutivo_sugerido }}" readonly>
       </div>
       <div class="col-md-3">
         <label class="form-label">Fecha emisión</label>
@@ -99,7 +108,7 @@
             <tbody></tbody>
             <tfoot>
               <tr>
-                <th colspan="5" class="text-end">Total comprobante</th>
+                <th colspan="5" class="text-end">Total comprobante (<span id="resumen-moneda">CRC</span>)</th>
                 <th class="text-end" id="total-factura">0.00</th>
                 <th></th>
               </tr>

@@ -1,4 +1,4 @@
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from datetime import date
 import json
 import re
@@ -38,10 +38,20 @@ def _negocio_id(request):
 
 
 CONSECUTIVO_REGEX_CR = re.compile(r"^\d{20}$")
+TIPOS_COMPROBANTE_CR = {
+    "01": "Factura Electrónica",
+    "02": "Nota de Débito Electrónica",
+    "03": "Nota de Crédito Electrónica",
+    "04": "Tiquete Electrónico",
+    "08": "Factura Electrónica de Compra",
+    "09": "Factura Electrónica de Exportación",
+    "10": "Recibo Electrónico de Pago",
+}
 
 
-def _generar_consecutivo_cr(negocio_id):
-    prefijo = "0010000101"  # 001 sucursal + 00001 punto venta + 01 factura electrónica
+def _generar_consecutivo_cr(negocio_id, tipo_comprobante="01"):
+    tipo = tipo_comprobante if tipo_comprobante in TIPOS_COMPROBANTE_CR else "01"
+    prefijo = f"00100001{tipo}"  # 001 sucursal + 00001 punto venta + tipo comprobante
     secuencia = 1
 
     for consecutivo in FacturaVenta.objects.filter(negocio_id=negocio_id).order_by("-id").values_list("consecutivo", flat=True)[:500]:
@@ -116,12 +126,14 @@ def crear_venta(request):
     almacenes = Almacen.objects.filter(negocio_id=negocio_id, activo=True).order_by("nombre")
     productos = ProductoServicio.objects.filter(negocio_id=negocio_id, activo=True).select_related("impuesto").order_by("nombre")
 
-    consecutivo_sugerido = _generar_consecutivo_cr(negocio_id)
+    tipo_comprobante_default = "01"
+    consecutivo_sugerido = _generar_consecutivo_cr(negocio_id, tipo_comprobante_default)
 
     if request.method == "POST":
         cliente_id = request.POST.get("cliente")
         almacen_id = request.POST.get("almacen") or None
-        consecutivo = _generar_consecutivo_cr(negocio_id)
+        tipo_comprobante = (request.POST.get("tipo_comprobante") or tipo_comprobante_default).strip()
+        consecutivo = _generar_consecutivo_cr(negocio_id, tipo_comprobante)
         moneda = (request.POST.get("moneda") or "CRC").strip().upper()
         tipo_cambio_raw = (request.POST.get("tipo_cambio") or "").strip()
         fecha_emision_raw = (request.POST.get("fecha_emision") or "").strip()
@@ -130,6 +142,10 @@ def crear_venta(request):
 
         if not cliente_id:
             messages.error(request, "Debes seleccionar un cliente.")
+            return redirect("ventas:crear")
+
+        if tipo_comprobante not in TIPOS_COMPROBANTE_CR:
+            messages.error(request, "El tipo de comprobante no es válido.")
             return redirect("ventas:crear")
 
         if moneda not in {"CRC", "USD"}:
@@ -222,14 +238,25 @@ def crear_venta(request):
                 notas=request.POST.get("notas") or "",
             )
 
+            tipo_label = TIPOS_COMPROBANTE_CR[tipo_comprobante]
+            nota_tipo = f"[Comprobante {tipo_comprobante} - {tipo_label}]"
+            if not factura.notas:
+                factura.notas = nota_tipo
+            elif nota_tipo not in factura.notas:
+                factura.notas = f"{nota_tipo} {factura.notas}"
+            factura.save(update_fields=["notas", "actualizado_en"])
+
             for linea in lineas:
                 producto = linea["producto"]
+                precio_unitario = producto.precio_venta
+                if moneda == "USD" and tipo_cambio:
+                    precio_unitario = (producto.precio_venta / tipo_cambio).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
                 LineaFacturaVenta.objects.create(
                     factura=factura,
                     producto=producto,
                     descripcion=producto.nombre,
                     cantidad=linea["cantidad"],
-                    precio_unitario=producto.precio_venta,
+                    precio_unitario=precio_unitario,
                     porcentaje_descuento=linea["descuento"],
                     porcentaje_impuesto=producto.impuesto.porcentaje if producto.impuesto else Decimal("0.00"),
                 )
@@ -249,6 +276,8 @@ def crear_venta(request):
         "almacenes": almacenes,
         "productos": productos,
         "consecutivo_sugerido": consecutivo_sugerido,
+        "tipos_comprobante": TIPOS_COMPROBANTE_CR,
+        "consecutivos_por_tipo": json.dumps({k: _generar_consecutivo_cr(negocio_id, k) for k in TIPOS_COMPROBANTE_CR.keys()}),
         "productos_json": json.dumps([
             {
                 "id": p.id,

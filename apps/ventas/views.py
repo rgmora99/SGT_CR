@@ -1,4 +1,5 @@
 from decimal import Decimal
+from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -58,9 +59,21 @@ def crear_venta(request):
         cantidad_raw = request.POST.get("cantidad")
         descuento_raw = request.POST.get("porcentaje_descuento") or "0"
         consecutivo = (request.POST.get("consecutivo") or "").strip()
+        moneda = (request.POST.get("moneda") or "CRC").strip().upper()
+        tipo_cambio_raw = (request.POST.get("tipo_cambio") or "").strip()
+        fecha_emision_raw = (request.POST.get("fecha_emision") or "").strip()
+        fecha_vencimiento_raw = (request.POST.get("fecha_vencimiento") or "").strip()
 
         if not consecutivo:
             messages.error(request, "Debes indicar un consecutivo.")
+            return redirect("ventas:crear")
+
+        if not cliente_id or not producto_id:
+            messages.error(request, "Debes seleccionar cliente y producto.")
+            return redirect("ventas:crear")
+
+        if moneda not in {"CRC", "USD"}:
+            messages.error(request, "La moneda seleccionada no es válida.")
             return redirect("ventas:crear")
 
         try:
@@ -68,9 +81,43 @@ def crear_venta(request):
             descuento = Decimal(descuento_raw)
             if cantidad <= 0:
                 raise ValueError
+            if descuento < 0 or descuento > 100:
+                raise ValueError
         except Exception:
             messages.error(request, "Cantidad o descuento inválidos.")
             return redirect("ventas:crear")
+
+        try:
+            fecha_emision = date.fromisoformat(fecha_emision_raw)
+        except ValueError:
+            messages.error(request, "La fecha de emisión no es válida.")
+            return redirect("ventas:crear")
+
+        if fecha_emision > date.today():
+            messages.error(request, "La fecha de emisión no puede ser futura.")
+            return redirect("ventas:crear")
+
+        fecha_vencimiento = None
+        if fecha_vencimiento_raw:
+            try:
+                fecha_vencimiento = date.fromisoformat(fecha_vencimiento_raw)
+            except ValueError:
+                messages.error(request, "La fecha de vencimiento no es válida.")
+                return redirect("ventas:crear")
+
+            if fecha_vencimiento < fecha_emision:
+                messages.error(request, "La fecha de vencimiento no puede ser menor a la fecha de emisión.")
+                return redirect("ventas:crear")
+
+        tipo_cambio = None
+        if moneda == "USD":
+            try:
+                tipo_cambio = Decimal(tipo_cambio_raw)
+                if tipo_cambio <= 0:
+                    raise ValueError
+            except Exception:
+                messages.error(request, "Para facturas en USD debes indicar un tipo de cambio mayor a cero.")
+                return redirect("ventas:crear")
 
         cliente = get_object_or_404(Cliente, pk=cliente_id)
         producto = get_object_or_404(ProductoServicio, pk=producto_id, negocio_id=negocio_id, activo=True)
@@ -89,10 +136,10 @@ def crear_venta(request):
                 cliente=cliente,
                 almacen_id=almacen_id,
                 consecutivo=consecutivo.upper(),
-                fecha_emision=request.POST.get("fecha_emision"),
-                fecha_vencimiento=request.POST.get("fecha_vencimiento") or None,
-                moneda=request.POST.get("moneda") or "CRC",
-                tipo_cambio=request.POST.get("tipo_cambio") or None,
+                fecha_emision=fecha_emision,
+                fecha_vencimiento=fecha_vencimiento,
+                moneda=moneda,
+                tipo_cambio=tipo_cambio,
                 creado_por=request.user,
                 notas=request.POST.get("notas") or "",
             )

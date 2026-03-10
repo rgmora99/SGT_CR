@@ -1,0 +1,7 @@
+.kpi {background:#fff;border-radius:10px;padding:14px;border:1px solid #e5e7eb}
+.ingresos-card {border:1px solid #d9dee8; border-radius:12px; background:#fff;}
+.ingresos-card .card-body, .ingresos-card {padding: 1rem;}
+#ingreso-form input,#ingreso-form select,#ingreso-form textarea{width:100%;}
+#ingreso-form label{font-weight:600;margin-bottom:.35rem;}
+.detalle-row .form-check-input{margin-top:.15rem;}
+.form-errors{border:1px solid #f5c2c7;background:#fff5f5;color:#842029;padding:.75rem;border-radius:.5rem;margin-bottom:1rem;}

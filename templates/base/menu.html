@@ -65,7 +65,7 @@
     </a>
   </li>-->
 
-  <!-- INGRESOS 
+  <!-- INGRESOS -->
   <li class="nav-item has-submenu">
     <a class="nav-link toggle-submenu" href="#">
       <i class="bi bi-arrow-down-left-circle"></i>
@@ -73,11 +73,10 @@
       <i class="bi bi-chevron-right arrow"></i>
     </a>
     <ul class="submenu">
-      <li><a href="#">Registrar ingreso</a></li>
-      <li><a href="#">Historial de ingresos</a></li>
-      <li><a href="#">Cuentas por cobrar</a></li>
+      <li><a href="{% url 'ingresos:crear' %}">Registrar ingreso</a></li>
+      <li><a href="{% url 'ingresos:listado' %}">Historial de ingresos</a></li>
     </ul>
-  </li>-->
+  </li>
 
   <!-- GASTOS -->
   <li class="nav-item has-submenu">

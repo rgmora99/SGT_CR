@@ -1,0 +1,136 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Sum
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
+
+from .forms import DetalleIngresoFormSet, IngresoForm
+from .models import CategoriaIngreso, Ingreso
+from .services.calculos import calcular_totales_ingreso
+
+
+def _negocio_id(request):
+    return request.session.get("negocio_activo_id")
+
+
+@login_required
+def listado_ingresos(request):
+    negocio_id = _negocio_id(request)
+    if not negocio_id:
+        messages.warning(request, "Debes seleccionar un negocio para continuar.")
+        return redirect("core:home")
+
+    ingresos = Ingreso.objects.filter(negocio_id=negocio_id).select_related("cliente", "categoria")
+
+    q = (request.GET.get("q") or "").strip()
+    estado = (request.GET.get("estado") or "").strip()
+    categoria_id = (request.GET.get("categoria") or "").strip()
+
+    if q:
+        ingresos = ingresos.filter(Q(cliente__nombre__icontains=q) | Q(consecutivo__icontains=q))
+    if estado:
+        ingresos = ingresos.filter(estado=estado)
+    if categoria_id.isdigit():
+        ingresos = ingresos.filter(categoria_id=categoria_id)
+
+    resumen = ingresos.aggregate(total_monto=Sum("total"))
+
+    return render(
+        request,
+        "ingresos/listado_ingresos.html",
+        {
+            "ingresos": ingresos,
+            "categorias": CategoriaIngreso.objects.filter(negocio_id=negocio_id, activo=True),
+            "filtros": {"q": q, "estado": estado, "categoria": categoria_id},
+            "kpi": {
+                "total_registros": ingresos.count(),
+                "confirmados": ingresos.filter(estado=Ingreso.Estado.CONFIRMADO).count(),
+                "monto_total": resumen["total_monto"] or 0,
+            },
+        },
+    )
+
+
+@login_required
+def crear_ingreso(request):
+    negocio_id = _negocio_id(request)
+    if not negocio_id:
+        return redirect("core:home")
+
+    if request.method == "POST":
+        form = IngresoForm(request.POST, negocio_id=negocio_id)
+        formset = DetalleIngresoFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            ingreso = form.save(commit=False)
+            ingreso.negocio_id = negocio_id
+            ingreso.creado_por = request.user
+            ingreso.save()
+
+            detalles = formset.save(commit=False)
+            if not detalles:
+                ingreso.delete()
+                messages.error(request, "Debes agregar al menos una línea de detalle.")
+            else:
+                for detalle in detalles:
+                    detalle.ingreso = ingreso
+                    detalle.save()
+
+                subtotal, iva, total = calcular_totales_ingreso(ingreso.detalles.all())
+                ingreso.subtotal = subtotal
+                ingreso.iva = iva
+                ingreso.total = total
+                ingreso.save(update_fields=["subtotal", "iva", "total"])
+                messages.success(request, "Ingreso registrado correctamente.")
+                return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
+        else:
+            messages.error(request, "No se pudo guardar el ingreso. Revisa los campos requeridos.")
+    else:
+        form = IngresoForm(negocio_id=negocio_id)
+        formset = DetalleIngresoFormSet()
+
+    return render(request, "ingresos/form_ingreso.html", {"form": form, "formset": formset, "edicion": False})
+
+
+@login_required
+def editar_ingreso(request, ingreso_id):
+    negocio_id = _negocio_id(request)
+    ingreso = get_object_or_404(Ingreso, id=ingreso_id, negocio_id=negocio_id)
+
+    if request.method == "POST":
+        form = IngresoForm(request.POST, instance=ingreso, negocio_id=negocio_id)
+        formset = DetalleIngresoFormSet(request.POST, instance=ingreso)
+        if form.is_valid() and formset.is_valid():
+            ingreso = form.save()
+            formset.save()
+            subtotal, iva, total = calcular_totales_ingreso(ingreso.detalles.all())
+            ingreso.subtotal = subtotal
+            ingreso.iva = iva
+            ingreso.total = total
+            ingreso.save(update_fields=["subtotal", "iva", "total", "actualizado_en"])
+            messages.success(request, "Ingreso actualizado correctamente.")
+            return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
+        else:
+            messages.error(request, "No se pudo actualizar el ingreso. Revisa la información ingresada.")
+    else:
+        form = IngresoForm(instance=ingreso, negocio_id=negocio_id)
+        formset = DetalleIngresoFormSet(instance=ingreso)
+
+    return render(request, "ingresos/form_ingreso.html", {"form": form, "formset": formset, "ingreso": ingreso, "edicion": True})
+
+
+@login_required
+def ver_ingreso(request, ingreso_id):
+    negocio_id = _negocio_id(request)
+    ingreso = get_object_or_404(Ingreso.objects.select_related("cliente", "categoria"), id=ingreso_id, negocio_id=negocio_id)
+    return render(request, "ingresos/ver_ingreso.html", {"ingreso": ingreso})
+
+
+@require_POST
+@login_required
+def anular_ingreso(request, ingreso_id):
+    negocio_id = _negocio_id(request)
+    ingreso = get_object_or_404(Ingreso, id=ingreso_id, negocio_id=negocio_id)
+    ingreso.estado = Ingreso.Estado.ANULADO
+    ingreso.save(update_fields=["estado", "actualizado_en"])
+    messages.success(request, "Ingreso anulado correctamente.")
+    return redirect("ingresos:listado")

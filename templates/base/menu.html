@@ -56,14 +56,14 @@
       <i class="bi bi-speedometer2"></i>
       <span class="text">Clientes</span>
     </a>
-  </li>
+  </li>-->
 
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'core:home' %}">
+    <a class="nav-link" href="{% url 'gastos:proveedores' %}">
       <i class="bi bi-speedometer2"></i>
       <span class="text">Proveedores</span>
     </a>
-  </li>-->
+  </li>
 
   <!-- GASTOS -->
   <li class="nav-item has-submenu">
@@ -74,7 +74,6 @@
     </a>
     <ul class="submenu">
       <li><a href="{% url 'gastos:bandeja_facturas' %}">Bandeja de facturas</a></li>
-      <li><a href="{% url 'gastos:proveedores' %}">Proveedores</a></li>
       <li><a href="{% url 'gastos:listado_gastos' %}">Historial de gastos</a></li>      
       <li><a href="{% url 'gastos:gastos_fijos' %}">Gastos fijos</a></li>
       <li><a href="#">Categorías de gasto</a></li>

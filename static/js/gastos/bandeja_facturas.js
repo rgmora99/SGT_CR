@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnReloadMeta = document.getElementById("btnReloadMeta");
   const feedback = document.getElementById("syncFeedback");
   const autoSyncToggle = document.getElementById("autoSyncToggle");
+  const filterForm = document.querySelector('form[aria-label="Filtros de facturas"]');
+  const rejectForms = document.querySelectorAll(".reject-form");
 
   if (!page || !btnSync || !feedback || !autoSyncToggle) return;
 
@@ -13,6 +15,60 @@ document.addEventListener("DOMContentLoaded", () => {
   const reloadUrl = page.dataset.reloadUrl;
   let isSyncing = false;
   let intervalId = null;
+
+  const hasSwal = typeof Swal !== "undefined" && typeof Swal.fire === "function";
+
+  const showToast = (icon, title) => {
+    if (window.SwalToast && typeof window.SwalToast.fire === "function") {
+      window.SwalToast.fire({ icon, title });
+      return;
+    }
+    if (hasSwal) {
+      Swal.fire({ icon, title, toast: true, position: "top-end", timer: 2200, showConfirmButton: false });
+      return;
+    }
+    console.log(`${icon.toUpperCase()}: ${title}`);
+  };
+
+  const showModal = ({ icon = "info", title = "Información", text = "", confirmButtonText = "Entendido" }) => {
+    if (hasSwal) {
+      return Swal.fire({
+        icon,
+        title,
+        text,
+        confirmButtonText,
+        customClass: { confirmButton: "btn btn-primary" },
+        buttonsStyling: false,
+      });
+    }
+    alert(`${title}\n\n${text}`.trim());
+    return Promise.resolve({ isConfirmed: true });
+  };
+
+  const parseServerMessages = () => {
+    const node = document.getElementById("django-messages-json");
+    if (!node) return [];
+    try {
+      return JSON.parse(node.textContent || "[]");
+    } catch {
+      return [];
+    }
+  };
+
+  const showServerMessages = () => {
+    const messages = parseServerMessages();
+    if (!messages.length) return;
+
+    messages.forEach((message, index) => {
+      const tag = String(message.tags || "").toLowerCase();
+      let icon = "info";
+      if (tag.includes("error")) icon = "error";
+      else if (tag.includes("warning")) icon = "warning";
+      else if (tag.includes("success")) icon = "success";
+
+      window.setTimeout(() => showToast(icon, message.text || ""), index * 120);
+    });
+  };
 
   const getCookie = (name) => {
     let cookieValue = null;
@@ -42,7 +98,16 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const syncFacturas = async ({ silent = false } = {}) => {
-    if (isSyncing || (btnSync.disabled && !silent)) return;
+    if (isSyncing || (btnSync.disabled && !silent)) {
+      if (!silent && !isSyncing && btnSync.disabled) {
+        await showModal({
+          icon: "warning",
+          title: "Sin conexiones activas",
+          text: "Configura al menos un correo activo antes de sincronizar facturas.",
+        });
+      }
+      return;
+    }
 
     isSyncing = true;
     setButtonState(true);
@@ -62,8 +127,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (!res.ok || !data.ok) {
+        const errorMsg = data.error || "No se pudo sincronizar.";
         if (!silent) {
-          showFeedback(data.error || "No se pudo sincronizar.", "error");
+          showFeedback(errorMsg, "error");
+        }
+        if (data.code === "sync_in_progress") {
+          showToast("info", "Ya hay una sincronización en proceso para este negocio.");
         }
         return;
       }
@@ -80,19 +149,20 @@ document.addEventListener("DOMContentLoaded", () => {
           `✔ ${total} nuevas. Procesados: ${procesados}. Duplicadas: ${duplicadas}.`,
           "success"
         );
+        if (!silent) showToast("success", `Se agregaron ${total} factura(s) nuevas.`);
         setTimeout(() => window.location.reload(), 900);
         return;
       }
 
       if (!silent) {
-        showFeedback(
-          `Sin nuevas. Procesados: ${procesados}, duplicadas: ${duplicadas}, sin XML: ${sinXml}, XML inválidos: ${xmlInvalidos}, errores: ${errores}.`,
-          errores > 0 ? "error" : "info"
-        );
+        const summary = `Sin nuevas. Procesados: ${procesados}, duplicadas: ${duplicadas}, sin XML: ${sinXml}, XML inválidos: ${xmlInvalidos}, errores: ${errores}.`;
+        showFeedback(summary, errores > 0 ? "error" : "info");
+        showToast(errores > 0 ? "warning" : "info", summary);
       }
     } catch (error) {
       if (!silent) {
         showFeedback("Error inesperado durante la sincronización.", "error");
+        showToast("error", "Error inesperado durante la sincronización.");
       }
     } finally {
       isSyncing = false;
@@ -119,17 +189,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok || !data.ok) {
         showFeedback(data.error || "No se pudo recalcular metadata.", "error");
+        showToast("error", data.error || "No se pudo recalcular metadata.");
         return;
       }
 
-      showFeedback(
-        `Recálculo completado. Actualizadas: ${data.actualizadas}, sin XML: ${data.sin_xml}, errores: ${data.errores}.`,
-        data.errores > 0 ? "info" : "success"
-      );
+      const msg = `Recálculo completado. Actualizadas: ${data.actualizadas}, sin XML: ${data.sin_xml}, errores: ${data.errores}.`;
+      showFeedback(msg, data.errores > 0 ? "info" : "success");
+      showToast(data.errores > 0 ? "warning" : "success", msg);
 
       setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
       showFeedback("Error inesperado durante recálculo.", "error");
+      showToast("error", "Error inesperado durante recálculo.");
     } finally {
       isSyncing = false;
       setButtonState(false);
@@ -146,6 +217,63 @@ document.addEventListener("DOMContentLoaded", () => {
     }, SYNC_INTERVAL_MS);
   };
 
+  const setupFilterValidation = () => {
+    if (!filterForm) return;
+    const qInput = filterForm.querySelector("#id_q");
+
+    filterForm.addEventListener("submit", async (event) => {
+      const q = (qInput?.value || "").trim();
+      if (q && q.length < 2) {
+        event.preventDefault();
+        await showModal({
+          icon: "warning",
+          title: "Texto muy corto",
+          text: "Para buscar por texto, ingresa al menos 2 caracteres.",
+        });
+        qInput?.focus();
+      }
+    });
+  };
+
+  const setupRejectConfirmation = () => {
+    rejectForms.forEach((form) => {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const proveedor = form.dataset.proveedor || "Proveedor desconocido";
+        const numero = form.dataset.factura || "Sin número";
+
+        const result = hasSwal
+          ? await Swal.fire({
+              icon: "warning",
+              title: "¿Rechazar factura?",
+              html: `<div class="text-start small">` +
+                `<div><strong>Proveedor:</strong> ${proveedor}</div>` +
+                `<div><strong>Factura:</strong> ${numero}</div>` +
+                `<div class="mt-2">Esta acción cambiará el estado a <strong>rechazada</strong>.</div>` +
+                `</div>`,
+              showCancelButton: true,
+              confirmButtonText: "Sí, rechazar",
+              cancelButtonText: "Cancelar",
+              reverseButtons: true,
+              customClass: {
+                confirmButton: "btn btn-danger me-2",
+                cancelButton: "btn btn-outline-secondary",
+              },
+              buttonsStyling: false,
+            })
+          : { isConfirmed: confirm("¿Deseas rechazar esta factura?") };
+
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  };
+
+  showServerMessages();
+  setupFilterValidation();
+  setupRejectConfirmation();
+
   const initialAutoSync = localStorage.getItem(STORAGE_KEY);
   autoSyncToggle.checked = initialAutoSync !== "0";
 
@@ -157,6 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
         : "Sincronización automática desactivada.",
       "info"
     );
+    showToast("info", autoSyncToggle.checked ? "Auto-sync activado." : "Auto-sync desactivado.");
   });
 
   btnSync.addEventListener("click", () => syncFacturas({ silent: false }));

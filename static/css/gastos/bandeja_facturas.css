@@ -337,3 +337,20 @@
 .action-col {
   min-width: 200px;
 }
+
+
+.validation-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.validation-pill::before {
+  content: "⚠";
+  font-size: 0.75rem;
+}
+
+.reject-form {
+  display: inline-block;
+  margin: 0;
+}

@@ -173,32 +173,45 @@ def anular_ingreso(request, ingreso_id):
     return redirect("ingresos:listado")
 
 
+def _extraer_tipo_cambio(payload):
+    if not isinstance(payload, dict):
+        return None, None
+
+    if isinstance(payload.get("venta"), dict) and payload["venta"].get("valor"):
+        return float(payload["venta"]["valor"]), "hacienda"
+
+    if payload.get("dolar") and isinstance(payload.get("dolar"), dict):
+        valor_venta = payload["dolar"].get("venta")
+        if valor_venta:
+            return float(valor_venta), "bccr"
+
+    rates = payload.get("rates")
+    if isinstance(rates, dict) and rates.get("CRC"):
+        return float(rates["CRC"]), "fx"
+
+    return None, None
+
+
 @require_GET
 @login_required
 def tipo_cambio_bcr(request):
     """
-    Endpoint de consulta de tipo de cambio.
-    Fuente principal: API pública de Hacienda CR (referencia oficial en CR).
-    Fallback: exchangerate.host
+    Endpoint de consulta de tipo de cambio USD->CRC con múltiples fuentes.
     """
     urls = [
         "https://api.hacienda.go.cr/indicadores/tc",
         "https://api.exchangerate.host/latest?base=USD&symbols=CRC",
+        "https://api.frankfurter.app/latest?from=USD&to=CRC",
+        "https://open.er-api.com/v6/latest/USD",
     ]
 
     for url in urls:
         try:
             with urlopen(url, timeout=8) as response:
                 payload = json.loads(response.read().decode("utf-8"))
-
-            if "venta" in payload and isinstance(payload.get("venta"), dict):
-                valor = payload["venta"].get("valor")
-                if valor:
-                    return JsonResponse({"ok": True, "fuente": "hacienda", "tipo_cambio": float(valor)})
-
-            rates = payload.get("rates") if isinstance(payload, dict) else None
-            if rates and rates.get("CRC"):
-                return JsonResponse({"ok": True, "fuente": "exchangerate.host", "tipo_cambio": float(rates["CRC"])})
+            tipo_cambio, fuente = _extraer_tipo_cambio(payload)
+            if tipo_cambio:
+                return JsonResponse({"ok": True, "fuente": fuente, "tipo_cambio": tipo_cambio})
         except (URLError, TimeoutError, ValueError, json.JSONDecodeError):
             continue
 

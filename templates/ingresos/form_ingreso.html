@@ -26,6 +26,7 @@
           <div class="col-md-4">
             <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
+            {% if field.help_text %}<small class="text-muted d-block">{{ field.help_text }}</small>{% endif %}
             <div class="text-danger small">{{ field.errors }}</div>
           </div>
         {% endfor %}
@@ -33,17 +34,18 @@
     </div>
 
     <div class="ingresos-card">
-      <h5>Detalle del ingreso</h5>
+      <h5>Detalle del ingreso (ligado a catálogo de inventario/servicios)</h5>
       {{ formset.management_form }}
       <div id="detalles-container">
       {% for detalle_form in formset %}
         <div class="detalle-row row g-2 mb-2 border-bottom pb-2">
           {% for hidden in detalle_form.hidden_fields %}{{ hidden }}{% endfor %}
-          <div class="col-md-4">{{ detalle_form.descripcion }}</div>
+          <div class="col-md-3">{{ detalle_form.producto }}</div>
+          <div class="col-md-3">{{ detalle_form.descripcion }}</div>
           <div class="col-md-2">{{ detalle_form.cantidad }}</div>
           <div class="col-md-2">{{ detalle_form.precio_unitario }}</div>
-          <div class="col-md-2">{{ detalle_form.porcentaje_iva }}</div>
-          <div class="col-md-2 d-flex align-items-center">{{ detalle_form.DELETE }} <span class="ms-2">Eliminar</span></div>
+          <div class="col-md-1">{{ detalle_form.porcentaje_iva }}</div>
+          <div class="col-md-1 d-flex align-items-center">{{ detalle_form.DELETE }}</div>
           <div class="col-12 text-danger small">{{ detalle_form.errors }}</div>
         </div>
       {% endfor %}

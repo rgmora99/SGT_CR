@@ -2,15 +2,22 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .forms import DetalleIngresoFormSet, IngresoForm
 from .models import CategoriaIngreso, Ingreso
+from .services.bootstrap import asegurar_categorias_base, asegurar_productos_base
 from .services.calculos import calcular_totales_ingreso
 
 
 def _negocio_id(request):
     return request.session.get("negocio_activo_id")
+
+
+def _preparar_catalogos(negocio_id):
+    asegurar_categorias_base(negocio_id)
+    asegurar_productos_base(negocio_id)
 
 
 @login_required
@@ -19,6 +26,8 @@ def listado_ingresos(request):
     if not negocio_id:
         messages.warning(request, "Debes seleccionar un negocio para continuar.")
         return redirect("core:home")
+
+    _preparar_catalogos(negocio_id)
 
     ingresos = Ingreso.objects.filter(negocio_id=negocio_id).select_related("cliente", "categoria")
 
@@ -57,13 +66,18 @@ def crear_ingreso(request):
     if not negocio_id:
         return redirect("core:home")
 
+    _preparar_catalogos(negocio_id)
+
+    consecutivo_sugerido = Ingreso.generar_consecutivo(negocio_id=negocio_id, year=timezone.now().year)
+
     if request.method == "POST":
-        form = IngresoForm(request.POST, negocio_id=negocio_id)
-        formset = DetalleIngresoFormSet(request.POST)
+        form = IngresoForm(request.POST, negocio_id=negocio_id, consecutivo_sugerido=consecutivo_sugerido)
+        formset = DetalleIngresoFormSet(request.POST, negocio_id=negocio_id)
         if form.is_valid() and formset.is_valid():
             ingreso = form.save(commit=False)
             ingreso.negocio_id = negocio_id
             ingreso.creado_por = request.user
+            ingreso.consecutivo = Ingreso.generar_consecutivo(negocio_id=negocio_id, year=ingreso.fecha_ingreso.year)
             ingreso.save()
 
             detalles = formset.save(commit=False)
@@ -73,6 +87,10 @@ def crear_ingreso(request):
             else:
                 for detalle in detalles:
                     detalle.ingreso = ingreso
+                    if detalle.producto and not detalle.descripcion:
+                        detalle.descripcion = detalle.producto.nombre
+                    if detalle.producto and (not detalle.precio_unitario or detalle.precio_unitario == 0):
+                        detalle.precio_unitario = detalle.producto.precio_base
                     detalle.save()
 
                 subtotal, iva, total = calcular_totales_ingreso(ingreso.detalles.all())
@@ -80,13 +98,13 @@ def crear_ingreso(request):
                 ingreso.iva = iva
                 ingreso.total = total
                 ingreso.save(update_fields=["subtotal", "iva", "total"])
-                messages.success(request, "Ingreso registrado correctamente.")
+                messages.success(request, f"Ingreso {ingreso.consecutivo} registrado correctamente.")
                 return redirect("ingresos:ver_ingreso", ingreso_id=ingreso.id)
         else:
             messages.error(request, "No se pudo guardar el ingreso. Revisa los campos requeridos.")
     else:
-        form = IngresoForm(negocio_id=negocio_id)
-        formset = DetalleIngresoFormSet()
+        form = IngresoForm(negocio_id=negocio_id, consecutivo_sugerido=consecutivo_sugerido)
+        formset = DetalleIngresoFormSet(negocio_id=negocio_id)
 
     return render(request, "ingresos/form_ingreso.html", {"form": form, "formset": formset, "edicion": False})
 
@@ -96,12 +114,27 @@ def editar_ingreso(request, ingreso_id):
     negocio_id = _negocio_id(request)
     ingreso = get_object_or_404(Ingreso, id=ingreso_id, negocio_id=negocio_id)
 
+    _preparar_catalogos(negocio_id)
+
     if request.method == "POST":
         form = IngresoForm(request.POST, instance=ingreso, negocio_id=negocio_id)
-        formset = DetalleIngresoFormSet(request.POST, instance=ingreso)
+        formset = DetalleIngresoFormSet(request.POST, instance=ingreso, negocio_id=negocio_id)
         if form.is_valid() and formset.is_valid():
-            ingreso = form.save()
-            formset.save()
+            ingreso = form.save(commit=False)
+            ingreso.consecutivo = ingreso.__class__.objects.get(pk=ingreso.pk).consecutivo
+            ingreso.save()
+            detalles = formset.save(commit=False)
+            for detalle in detalles:
+                detalle.ingreso = ingreso
+                if detalle.producto and not detalle.descripcion:
+                    detalle.descripcion = detalle.producto.nombre
+                if detalle.producto and (not detalle.precio_unitario or detalle.precio_unitario == 0):
+                    detalle.precio_unitario = detalle.producto.precio_base
+                detalle.save()
+
+            for obj in formset.deleted_objects:
+                obj.delete()
+
             subtotal, iva, total = calcular_totales_ingreso(ingreso.detalles.all())
             ingreso.subtotal = subtotal
             ingreso.iva = iva
@@ -113,7 +146,7 @@ def editar_ingreso(request, ingreso_id):
             messages.error(request, "No se pudo actualizar el ingreso. Revisa la información ingresada.")
     else:
         form = IngresoForm(instance=ingreso, negocio_id=negocio_id)
-        formset = DetalleIngresoFormSet(instance=ingreso)
+        formset = DetalleIngresoFormSet(instance=ingreso, negocio_id=negocio_id)
 
     return render(request, "ingresos/form_ingreso.html", {"form": form, "formset": formset, "ingreso": ingreso, "edicion": True})
 

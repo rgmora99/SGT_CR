@@ -24,17 +24,39 @@ class CategoriaIngreso(models.Model):
         return self.nombre
 
 
+class ProductoIngreso(models.Model):
+    negocio = models.ForeignKey(TB_NEGOCIOS, on_delete=models.CASCADE, related_name="productos_ingreso")
+    codigo = models.CharField(max_length=40)
+    nombre = models.CharField(max_length=150)
+    precio_base = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["nombre"]
+        constraints = [
+            models.UniqueConstraint(fields=["negocio", "codigo"], name="uq_producto_ingreso_negocio_codigo"),
+        ]
+
+    def __str__(self):
+        return f"{self.codigo} - {self.nombre}"
+
+
 class Ingreso(models.Model):
     class MetodoPago(models.TextChoices):
         EFECTIVO = "EFECTIVO", "Efectivo"
         TRANSFERENCIA = "TRANSFERENCIA", "Transferencia"
         TARJETA = "TARJETA", "Tarjeta"
         SINPE = "SINPE", "SINPE"
+        CUOTAS = "CUOTAS", "A cuotas"
 
     class Estado(models.TextChoices):
         BORRADOR = "BORRADOR", "Borrador"
         CONFIRMADO = "CONFIRMADO", "Confirmado"
         ANULADO = "ANULADO", "Anulado"
+
+    class Moneda(models.TextChoices):
+        CRC = "CRC", "Colones (CRC)"
+        USD = "USD", "Dólares (USD)"
 
     negocio = models.ForeignKey(TB_NEGOCIOS, on_delete=models.CASCADE, related_name="ingresos")
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name="ingresos")
@@ -44,7 +66,7 @@ class Ingreso(models.Model):
     fecha_ingreso = models.DateField()
     fecha_vencimiento = models.DateField(null=True, blank=True)
 
-    moneda = models.CharField(max_length=10, default="CRC")
+    moneda = models.CharField(max_length=10, default=Moneda.CRC, choices=Moneda.choices)
     tipo_cambio = models.DecimalField(max_digits=12, decimal_places=4, null=True, blank=True)
 
     subtotal = models.DecimalField(max_digits=14, decimal_places=2, default=Decimal("0.00"))
@@ -74,9 +96,22 @@ class Ingreso(models.Model):
     def __str__(self):
         return f"Ingreso {self.consecutivo}"
 
+    @classmethod
+    def generar_consecutivo(cls, negocio_id, year):
+        prefijo = f"ING-{year}-"
+        ultimo = (
+            cls.objects.filter(negocio_id=negocio_id, consecutivo__startswith=prefijo)
+            .order_by("-consecutivo")
+            .values_list("consecutivo", flat=True)
+            .first()
+        )
+        ultimo_num = int(ultimo.split("-")[-1]) if ultimo and ultimo.split("-")[-1].isdigit() else 0
+        return f"{prefijo}{ultimo_num + 1:04d}"
+
 
 class DetalleIngreso(models.Model):
     ingreso = models.ForeignKey(Ingreso, on_delete=models.CASCADE, related_name="detalles")
+    producto = models.ForeignKey(ProductoIngreso, on_delete=models.PROTECT, related_name="detalles", null=True, blank=True)
     descripcion = models.CharField(max_length=200)
     cantidad = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))])
     precio_unitario = models.DecimalField(max_digits=14, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))])
@@ -95,5 +130,7 @@ class DetalleIngreso(models.Model):
         self.total_linea = self.subtotal + self.monto_iva
 
     def save(self, *args, **kwargs):
+        if self.producto and not self.descripcion:
+            self.descripcion = self.producto.nombre
         self.calcular_totales()
         super().save(*args, **kwargs)

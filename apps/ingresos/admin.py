@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CategoriaIngreso, DetalleIngreso, Ingreso
+from .models import CategoriaIngreso, DetalleIngreso, Ingreso, ProductoIngreso
 
 
 class DetalleIngresoInline(admin.TabularInline):
@@ -20,3 +20,10 @@ class IngresoAdmin(admin.ModelAdmin):
 class CategoriaIngresoAdmin(admin.ModelAdmin):
     list_display = ("nombre", "negocio", "activo")
     list_filter = ("activo",)
+
+
+@admin.register(ProductoIngreso)
+class ProductoIngresoAdmin(admin.ModelAdmin):
+    list_display = ("codigo", "nombre", "negocio", "precio_base", "activo")
+    list_filter = ("activo",)
+    search_fields = ("codigo", "nombre")

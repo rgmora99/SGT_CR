@@ -141,6 +141,9 @@ class Gasto(models.Model):
 
     fecha_gasto = models.DateField()
     metodo_pago = models.CharField(max_length=30, blank=True, null=True)
+    referencia_contable = models.CharField(max_length=80, blank=True, null=True)
+    tipo_cambio = models.DecimalField(max_digits=12, decimal_places=4, blank=True, null=True)
+    total_moneda_base = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)
     iva = models.DecimalField(max_digits=12, decimal_places=2)

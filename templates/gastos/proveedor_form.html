@@ -1,0 +1,50 @@
+{% extends "base/menu.html" %}
+
+{% block title %}Nuevo proveedor{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="max-width: 900px;">
+  <h3 class="mb-3">Registrar proveedor</h3>
+
+  {% if factura %}
+    <div class="alert alert-info">
+      Registrando proveedor para la factura <strong>{{ factura.numero_factura }}</strong> de <strong>{{ factura.proveedor }}</strong>.
+    </div>
+  {% endif %}
+
+  <form method="post" class="card card-body">
+    {% csrf_token %}
+    <input type="hidden" name="factura_id" value="{{ factura_id|default:'' }}">
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Nombre *</label>
+        {{ form.nombre }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Identificación</label>
+        {{ form.identificacion }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        {{ form.email }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Teléfono</label>
+        {{ form.telefono }}
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          {{ form.activo }}
+          <label class="form-check-label">Proveedor activo</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2 justify-content-end">
+      <a href="{% url 'gastos:proveedores' %}" class="btn btn-outline-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar proveedor</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

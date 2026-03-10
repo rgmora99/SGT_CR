@@ -6,6 +6,7 @@ from django.urls import path
 from apps.gastos.views.sync import sync_facturas_ajax, recargar_metadata_facturas_ajax
 from apps.gastos.views.gasto import registrar_gasto,ver_gasto,listado_gastos,anular_gasto,editar_gasto
 from apps.gastos.views.gastos_fijos import listado_gastos_fijos, crear_gasto_fijo, editar_gasto_fijo, cambiar_estado_gasto_fijo
+from apps.gastos.views.proveedores import listado_proveedores, crear_proveedor, registrar_proveedor_desde_factura
 app_name = "gastos"
 
 urlpatterns = [
@@ -26,4 +27,8 @@ urlpatterns = [
     path("gastos_fijos/nuevo/", crear_gasto_fijo, name="crear_gasto_fijo"),
     path("gastos_fijos/<int:id>/editar/", editar_gasto_fijo, name="editar_gasto_fijo"),
     path("gastos_fijos/<int:id>/toggle/", cambiar_estado_gasto_fijo, name="toggle_gasto_fijo"),
+
+    path("proveedores/", listado_proveedores, name="proveedores"),
+    path("proveedores/nuevo/", crear_proveedor, name="crear_proveedor"),
+    path("facturas/<int:factura_id>/registrar-proveedor/", registrar_proveedor_desde_factura, name="registrar_proveedor_desde_factura"),
 ]

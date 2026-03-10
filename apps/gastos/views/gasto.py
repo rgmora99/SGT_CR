@@ -8,6 +8,7 @@ from django.utils.dateparse import parse_date
 from django.shortcuts import get_object_or_404, redirect, render
 
 from apps.gastos.models import CategoriaGasto, FacturaGasto, Gasto
+from apps.gastos.services.proveedores import registrar_o_recuperar_proveedor
 
 
 MONEDA_SIMBOLOS = {
@@ -103,6 +104,12 @@ def registrar_gasto(request, factura_id):
                     messages.error(request, "El tipo de cambio debe ser un número mayor que cero.")
 
         if not has_error:
+            if not factura.proveedor_registrado:
+                factura.proveedor_registrado = registrar_o_recuperar_proveedor(
+                    factura.negocio,
+                    factura.proveedor,
+                    defaults={"email": factura.email_from or None},
+                )
             Gasto.objects.create(
                 negocio=factura.negocio,
                 factura=factura,
@@ -120,7 +127,7 @@ def registrar_gasto(request, factura_id):
             )
 
             factura.estado = "registrada"
-            factura.save(update_fields=["estado"])
+            factura.save(update_fields=["estado", "proveedor_registrado"])
 
             messages.success(request, "Gasto registrado correctamente.")
             return redirect("gastos:bandeja_facturas")

@@ -100,6 +100,32 @@ form .form-select:focus {
   font-size: 0.9rem;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+  white-space: nowrap;
+}
+
+
+.col-acciones {
+  width: 220px;
+  min-width: 220px;
+}
+
+.table > :not(caption) > tbody > tr > td.col-acciones,
+.table > :not(caption) > thead > tr > th.col-acciones {
+  text-align: right;
+}
+
+.action-buttons form {
+  margin: 0;
+}
+
 .badge-estado {
   padding: 6px 12px;
   border-radius: 999px;

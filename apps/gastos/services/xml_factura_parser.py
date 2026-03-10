@@ -1,41 +1,90 @@
 import xml.etree.ElementTree as ET
-from decimal import Decimal
-from datetime import datetime, date
+from datetime import date, datetime
+from decimal import Decimal, InvalidOperation
+
+
+def _tag_local_name(tag: str) -> str:
+    return tag.split("}")[-1] if "}" in tag else tag
+
+
+def _find_text(root, *candidates):
+    candidate_set = {c.lower() for c in candidates}
+    for node in root.iter():
+        if _tag_local_name(node.tag).lower() in candidate_set:
+            text = (node.text or "").strip()
+            if text:
+                return text
+    return ""
+
+
+def _to_decimal(value, default="0"):
+    try:
+        return Decimal(str(value or default).strip())
+    except (InvalidOperation, ValueError, TypeError):
+        return Decimal(default)
+
+
+def _to_date(value):
+    if not value:
+        return date.today(), "No se encontró fecha en el XML; se usó fecha actual."
+
+    value = value.strip()
+    try:
+        return datetime.fromisoformat(value[:19]).date(), None
+    except Exception:
+        return date.today(), "Fecha del XML inválida; se usó fecha actual."
+
 
 def parse_factura_xml(xml_bytes):
     root = ET.fromstring(xml_bytes)
+    root_name = _tag_local_name(root.tag).lower()
 
-    ns = {"ns": root.tag.split("}")[0].strip("{")}
+    numero = _find_text(root, "NumeroConsecutivo", "NumeroConsecutivoReceptor", "NumeroDocumento") or "SIN_NUM"
+    proveedor = _find_text(root, "Nombre", "NombreEmisor") or "Proveedor desconocido"
 
-    def get(path):
-        return root.findtext(path, namespaces=ns)
+    fecha_emision, alerta_fecha = _to_date(_find_text(root, "FechaEmision", "FechaEmisionDoc"))
 
-    numero = get(".//ns:NumeroConsecutivo")
+    subtotal = _to_decimal(_find_text(root, "TotalVentaNeta", "TotalVenta"))
+    iva = _to_decimal(_find_text(root, "TotalImpuesto", "TotalImpuestoAsumidoEmisor"))
+    total = _to_decimal(_find_text(root, "TotalComprobante", "TotalFactura", "MontoTotalImpuestoAcreditar"))
 
-    fecha_raw = get(".//ns:FechaEmision")
+    moneda = (
+        _find_text(root, "CodigoMoneda", "Moneda", "CodigoTipoMoneda")
+        or "CRC"
+    ).upper()
 
-    # 🛡️ PROTECCIÓN TOTAL
-    if fecha_raw:
-        try:
-            fecha_emision = datetime.fromisoformat(fecha_raw[:19]).date()
-        except Exception:
-            fecha_emision = date.today()
-    else:
-        fecha_emision = date.today()  # fallback seguro
+    alerta = alerta_fecha
+    tipo_documento = "factura_electronica"
 
-    proveedor = get(".//ns:Emisor/ns:Nombre") or "Proveedor desconocido"
-    proveedor_cedula = get(".//ns:Emisor/ns:Identificacion/ns:Numero") or ""
+    if "mensajehacienda" in root_name:
+        tipo_documento = "mensaje_hacienda"
+        if not alerta:
+            alerta = "XML tipo MensajeHacienda: revisar manualmente antes de registrar el gasto."
 
-    subtotal = get(".//ns:ResumenFactura/ns:TotalVentaNeta")
-    iva = get(".//ns:ResumenFactura/ns:TotalImpuesto")
-    total = get(".//ns:ResumenFactura/ns:TotalComprobante")
+        # En MensajeHacienda muchas veces no vienen montos completos.
+        if total == Decimal("0"):
+            alerta = (alerta + " " if alerta else "") + "No se detectó total en MensajeHacienda."
+
+    elif "notacredito" in root_name:
+        tipo_documento = "nota_credito"
+    elif "notadebito" in root_name:
+        tipo_documento = "nota_debito"
+    elif "tiqueteelectronico" in root_name:
+        tipo_documento = "tiquete_electronico"
+
+    if moneda not in {"CRC", "USD"}:
+        alerta_moneda = f"Moneda detectada no estándar ({moneda}); validar tipo de cambio/manual."
+        alerta = f"{alerta} {alerta_moneda}".strip() if alerta else alerta_moneda
 
     return {
-        "numero_factura": numero or "SIN_NUM",
-        "fecha_emision": fecha_emision,  # 👈 JAMÁS NULL
-        "subtotal": Decimal(subtotal or "0"),
-        "iva": Decimal(iva or "0"),
-        "total": Decimal(total or "0"),
+        "numero_factura": numero,
+        "fecha_emision": fecha_emision,
+        "subtotal": subtotal,
+        "iva": iva,
+        "total": total,
         "proveedor": proveedor,
-        "proveedor_cedula": proveedor_cedula,
+        "proveedor_cedula": _find_text(root, "Numero", "NumeroCedulaEmisor"),
+        "moneda": moneda,
+        "tipo_documento_xml": tipo_documento,
+        "alerta_ingesta": alerta,
     }

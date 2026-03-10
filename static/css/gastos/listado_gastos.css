@@ -111,6 +111,21 @@ form .form-select:focus {
   white-space: nowrap;
 }
 
+
+.col-acciones {
+  width: 220px;
+  min-width: 220px;
+}
+
+.table > :not(caption) > tbody > tr > td.col-acciones,
+.table > :not(caption) > thead > tr > th.col-acciones {
+  text-align: right;
+}
+
+.action-buttons form {
+  margin: 0;
+}
+
 .badge-estado {
   padding: 6px 12px;
   border-radius: 999px;

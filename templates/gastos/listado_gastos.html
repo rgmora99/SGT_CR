@@ -28,7 +28,7 @@
     </article>
   </section>
 
-  <form method="get" class="row g-2 mb-3 align-items-end" aria-label="Filtros de gastos">
+  <form id="filtrosGastosForm" method="get" class="row g-2 mb-3 align-items-end" aria-label="Filtros de gastos">
     <div class="col-md-3">
       <label for="q" class="form-label">Proveedor / factura</label>
       <input id="q" name="q" class="form-control" placeholder="Ej. ICE o 0010000101000" value="{{ filtros.q }}">
@@ -83,7 +83,7 @@
           <th>Fecha</th>
           <th>Total</th>
           <th>Estado</th>
-          <th class="text-end">Acciones</th>
+          <th class="text-end col-acciones">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -103,7 +103,7 @@
               <span class="badge-estado rechazada">Anulado</span>
             {% endif %}
           </td>
-          <td class="text-end">
+          <td class="text-end col-acciones">
             <div class="action-buttons">
               <a href="{% url 'gastos:ver_gasto' g.id %}" class="btn btn-sm btn-outline-primary">Ver</a>
 

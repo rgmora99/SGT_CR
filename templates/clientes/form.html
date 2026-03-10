@@ -44,7 +44,7 @@
     <div class="d-flex justify-content-end gap-2 mt-4">
       <a href="{% url 'clientes:listar' %}" class="btn btn-outline-secondary">Cancelar</a>
       <button class="btn btn-primary" type="submit">
-        <i class="bi bi-check2-circle me-1"></i> Guardar cliente
+        <i class="bi bi-check2-circle me-1"></i> {% if modo == 'editar' %}Actualizar cliente{% else %}Guardar cliente{% endif %}
       </button>
     </div>
   </form>
@@ -57,6 +57,7 @@
 <script>
   window.CLIENTES_VALIDAR_IDENTIFICACION_URL = "{% url 'clientes:validar_identificacion' %}";
   window.CLIENTE_ID = "{% if cliente %}{{ cliente.id }}{% endif %}";
+  window.CLIENTE_MODO = "{{ modo }}";
 </script>
 <script src="{% static 'js/clientes/form.js' %}"></script>
 {% endblock %}

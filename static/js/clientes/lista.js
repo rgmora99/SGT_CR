@@ -8,6 +8,14 @@
     return 'info';
   };
 
+  const mapTitle = (text) => {
+    const normalized = String(text || '').toLowerCase();
+    if (normalized.includes('creado')) return 'Cliente guardado';
+    if (normalized.includes('actualizado')) return 'Cliente actualizado';
+    if (normalized.includes('eliminado')) return 'Cliente eliminado';
+    return 'Clientes';
+  };
+
   const msgNode = document.getElementById('clientes-messages');
   if (msgNode && hasSwal) {
     try {
@@ -19,7 +27,8 @@
           timer: 2800,
           showConfirmButton: false,
           icon: mapIcon(m.tags),
-          title: m.text,
+          title: mapTitle(m.text),
+          text: m.text,
         });
       });
     } catch (_) {}

@@ -105,6 +105,13 @@
           <tr>
             <td>
               <div class="fw-semibold proveedor-name">{{ f.proveedor }}</div>
+              <div class="small mt-1">
+                {% if f.proveedor_registrado %}
+                  <span class="badge bg-success-subtle text-success border">Proveedor registrado</span>
+                {% else %}
+                  <span class="badge bg-warning-subtle text-warning border">Proveedor pendiente</span>
+                {% endif %}
+              </div>
               <div class="text-muted small text-truncate" style="max-width:360px;">{{ f.email_from|default:"Sin correo origen" }}</div>
               {% if f.alerta_ingesta %}
                 <div class="ingesta-alert validation-pill" title="{{ f.alerta_ingesta }}">⚠ {{ f.tipo_documento_xml|default:"xml"|title }}</div>
@@ -127,6 +134,7 @@
 
               {% if f.estado == "pendiente" %}
                 <a class="btn btn-sm btn-success action-btn" href="{% url 'gastos:registrar' f.id %}" title="Registrar gasto de esta factura">Registrar</a>
+                <a class="btn btn-sm btn-outline-secondary action-btn" href="{% url 'gastos:crear_proveedor' %}?factura={{ f.id }}" title="Editar o completar proveedor">Proveedor</a>
                 <form method="post" action="{% url 'gastos:rechazar_factura' f.id %}" class="reject-form d-inline" data-proveedor="{{ f.proveedor|default:'Proveedor desconocido'|escape }}" data-factura="{{ f.numero_factura|default:'Sin número'|escape }}">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-sm btn-danger action-btn" title="Rechazar factura">Rechazar</button>
